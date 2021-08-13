@@ -1,0 +1,19 @@
+{
+  "name": "dp-auth",
+  "version": "0.0.1",
+  "description": "Autentiseringsmodul for NextJS appene til dagpengeteamet",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/navikt/dp-auth.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/navikt/dp-auth/issues"
+  },
+  "homepage": "https://github.com/navikt/dp-auth#readme"
+}
