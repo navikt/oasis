@@ -1,5 +1,4 @@
 import useSWR from "swr";
-import { IncomingMessage } from "http";
 import { useEffect } from "react";
 import Router from "next/router";
 
@@ -11,17 +10,24 @@ export interface Session extends Record<string, unknown> {
   expires_in?: number;
 }
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-
 const fetcher = (url, options = {}) =>
   fetch(url, options).then((r) => r.json());
 
+interface SessionHookOpts {
+  enforceLogin?: boolean;
+  redirectTo?: string;
+  nextPublicBasePath?: string;
+}
+
 export const useSession = ({
-  basePath: string= "",
   enforceLogin = true,
   redirectTo = "/api/auth/signin",
-} = {}): { session: Session } => {
-  const { data: session } = useSWR(`${basePath}/api/auth/session`, fetcher);
+  nextPublicBasePath
+  
+}: SessionHookOpts = {}): { session: Session } => {
+  if(!nextPublicBasePath) throw Error("Missing `nextPublicBasePath` option for sessionHook");
+
+  const { data: session } = useSWR(`${nextPublicBasePath}/api/auth/session`, fetcher);
   useEffect(() => {
     // Waiting for data
     if (!enforceLogin || !session) return;
@@ -41,29 +47,3 @@ export const useSession = ({
     return { session: undefined };
   return { session };
 };
-
-// Server side method (APIs and getServerSideProps)
-export interface CtxOrReq {
-  req?: IncomingMessage;
-  ctx?: { req: IncomingMessage };
-}
-
-export type GetSessionOptions = CtxOrReq & {
-  event?: "storage" | "timer" | "hidden" | string;
-  triggerEvent?: boolean;
-};
-
-export async function getSession({
-  ctx,
-  req = ctx?.req,
-}: GetSessionOptions): Promise<Session> {
-  const baseUrl = _apiBaseUrl();
-  const fetchOptions = req ? { headers: { cookie: req.headers.cookie } } : {};
-  const session = await fetcher(
-    `${baseUrl}/session`,
-    fetchOptions
-  ).then((data) => (Object.keys(data).length > 0 ? data : null));
-  return session;
-}
-
-const _apiBaseUrl = () => `http://localhost:3000/api/auth`;
