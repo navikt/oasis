@@ -29,3 +29,20 @@ export interface AuthModuleConfig {
     tokenXConfig: TokenXConfig;
     sessionConfig: SessionConfig;
 }
+
+var AuthConfig = (function () {
+    var config;
+
+    const setConfigs = (c: AuthModuleConfig) => {
+        config = c;
+    }
+
+    return {
+        getInstance: function () {
+            if (!config) {
+                throw new Error("No auth configs found, please add configs using the setConfigs method")
+            }
+            return config;
+        }
+    };
+})();

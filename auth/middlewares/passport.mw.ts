@@ -3,6 +3,7 @@ import RequestHandler from "micro";
 import passport from "passport";
 import idporten from "./strategy/idporten";
 import { TokenSet } from "openid-client";
+import {ConfiguredRequest} from "../index";
 
 export type User = {
   fnr: string;
@@ -23,7 +24,7 @@ passport.deserializeUser((savedUser: User, done) => {
 });
 
 export async function initializeIdporten(
-  req: IncomingMessage,
+  req: ConfiguredRequest,
   res: ServerResponse,
   next: RequestHandler
 ): Promise<void> {
@@ -31,7 +32,7 @@ export async function initializeIdporten(
   if (passport._strategy("idporten")) {
     return next();
   }
-  passport.use("idporten", await idporten());
+  passport.use("idporten", await idporten(req.options.idPortenConfig));
   return next();
 }
 

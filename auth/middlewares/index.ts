@@ -3,6 +3,7 @@ import nc, { NextConnect } from "next-connect";
 import passport, { initializeIdporten, User } from "./passport.mw";
 import session from "./session.mw";
 import tokenx from "./tokenx.mw";
+import {ConfiguredRequest} from "../index";
 
 const middleware = nc();
 
@@ -21,7 +22,7 @@ export function withMiddleware(
   return nc().use(middleware).use(handler);
 }
 
-export interface AuthedNextApiRequest extends NextApiRequest {
+export interface AuthedNextApiRequest extends ConfiguredRequest {
   user: User;
   logout: () => void;
   logOut: () => void;

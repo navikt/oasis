@@ -1,17 +1,18 @@
 import { Client, Issuer, Strategy } from "openid-client";
 import { User } from "../passport.mw";
+import {IdPortenStrategyConfig} from "../../../auth-config";
 
-async function idporten(): Promise<Strategy<User, Client>> {
-  const issuer = await Issuer.discover(process.env.IDPORTEN_WELL_KNOWN_URL);
+async function idporten(config: IdPortenStrategyConfig): Promise<Strategy<User, Client>> {
+  const issuer = await Issuer.discover(config.wellKnownUrl);
 
-  const jwk = JSON.parse(process.env.IDPORTEN_CLIENT_JWK);
+  const jwk = JSON.parse(config.clientJwk);
   const client = new issuer.Client(
     {
-      client_id: process.env.IDPORTEN_CLIENT_ID,
+      client_id: config.clientId,
       token_endpoint_auth_method: "private_key_jwt",
       token_endpoint_auth_signing_alg: "RS256",
       redirect_uris: [
-        process.env.IDPORTEN_REDIRECT_URI ||
+        config.redirectUri ||
           "http://localhost:3000/api/auth/callback",
       ],
       response_types: ["code"],

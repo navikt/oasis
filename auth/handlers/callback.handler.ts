@@ -1,12 +1,13 @@
 import passport from "../middlewares/passport.mw";
+import {AuthedNextApiRequest} from "../middlewares";
 
-const successRedirect = process.env.LOGINSERVICE_URL
-  ? `${process.env.LOGINSERVICE_URL}?redirect=${process.env.SELF_URL}`
-  : "/";
-
-export default function callback(req, res) {
-  return passport.authenticate("idporten", {
-    successRedirect,
-    failureRedirect: "/?failure",
-  })(req, res);
+export default function callback(req: AuthedNextApiRequest, res) {
+    const {loginServiceUrl, selfUrl} = req.options
+    const successRedirect = loginServiceUrl
+        ? `${loginServiceUrl}?redirect=${selfUrl}`
+        : "/";
+    return passport.authenticate("idporten", {
+        successRedirect,
+        failureRedirect: "/?failure",
+    })(req, res);
 }

@@ -17,6 +17,7 @@ const fetcher = (url, options = {}) =>
   fetch(url, options).then((r) => r.json());
 
 export const useSession = ({
+  basePath: string= "",
   enforceLogin = true,
   redirectTo = "/api/auth/signin",
 } = {}): { session: Session } => {
