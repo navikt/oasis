@@ -42,6 +42,7 @@ async function idporten(
         tokenset,
       };
       // TODO: Finn ut av hva gi gjør med at userinfo mangler
+      if (typeof userinfo === "function") return userinfo(null, user);
       return done(null, user);
     }
   );
