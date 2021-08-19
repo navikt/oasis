@@ -6,9 +6,7 @@ import { AuthModuleConfig } from "../auth-config";
 const handler = (config: AuthModuleConfig) =>
   nc()
     .use((req: ConfiguredRequest, res, next) => {
-      console.log("req", req.options);
       req.options = config;
-      console.log(req.url);
       return next();
     })
     .get((req: NextApiRequest, res: NextApiResponse, next) => {
