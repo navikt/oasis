@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useSession } from "../auth/react/session.hook";
 
 export default function Index() {

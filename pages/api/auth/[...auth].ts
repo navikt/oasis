@@ -23,7 +23,7 @@ const config: AuthModuleConfig = {
     clientId: "foo",
     redirectUri: "http://localhost:3000/api/auth/callback",
   },
-  loginServiceUrl: "http://localhost:8080/default/authorize",
+  loginServiceUrl: "http://localhost:3000/api/fake-loginservice",
   nextPublicBasePath: "",
   redisConfig: undefined,
   selfUrl: "/",

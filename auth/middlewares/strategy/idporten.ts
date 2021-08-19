@@ -41,6 +41,7 @@ async function idporten(
         locale,
         tokenset,
       };
+      // TODO: Finn ut av hva gi gjør med at userinfo mangler
       return done(null, user);
     }
   );

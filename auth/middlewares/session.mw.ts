@@ -40,12 +40,12 @@ const getOptions = (
 
   return options;
 };
+let requestHandler;
 
 function sessionMiddleware(req: ConfiguredRequest, res, next) {
   return session(
     getOptions(req.options.sessionConfig, req.options.redisConfig)
     // @ts-ignore
-  ); //(req, res, next);
+  )(req, res, next);
 }
-
 export default sessionMiddleware;

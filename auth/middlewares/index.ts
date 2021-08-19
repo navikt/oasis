@@ -3,7 +3,7 @@ import nc, { NextConnect } from "next-connect";
 import passport, { initializeIdporten, User } from "./passport.mw";
 import session from "./session.mw";
 import tokenx from "./tokenx.mw";
-import {ConfiguredRequest} from "../index";
+import { ConfiguredRequest } from "../index";
 
 const middleware = nc();
 

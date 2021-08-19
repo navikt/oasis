@@ -26,7 +26,9 @@ describe("integrasjonstest", () => {
   });
 
   it("skal logge inn", async () => {
-    const res = await fetch("http://localhost:3000/api/auth/signin");
+    const res = await fetch("http://localhost:3000/api/auth/signin", {
+      credentials: "same-origin",
+    });
     const html = await res.text();
     console.log(html);
     expect(html).toContain("Tada");
