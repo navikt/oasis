@@ -1,7 +1,7 @@
 import { NextApiResponse } from "next";
 import { Client, GrantBody, Issuer, TokenSet } from "openid-client";
 import { AuthedNextApiRequest, env } from "./index";
-import {TokenXConfig} from "../../auth-config";
+import { TokenXConfig } from "../../auth-config";
 
 let tokenXClient: Client;
 
@@ -46,20 +46,20 @@ export default async function tokenx(
         throw err;
       });
   };
-
   return next();
 }
 
 async function getTokenXClient(config: TokenXConfig): Promise<Client> {
-  const jwk = JSON.parse(config.privateJwk);
+  const jwk = config.privateJwk;
 
   const issuer = await Issuer.discover(config.wellKnownUrl);
   const client = new issuer.Client(
     {
       client_id: config.clientId,
       token_endpoint_auth_method: "private_key_jwt",
+      token_endpoint_auth_signing_alg: "RS256",
     },
-    { keys: [jwk] }
+    { keys: jwk }
   );
 
   return client;

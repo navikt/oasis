@@ -22,12 +22,12 @@ interface SessionHookOpts {
 export const useSession = ({
   enforceLogin = true,
   redirectTo = "/api/auth/signin",
-  nextPublicBasePath
-  
+  nextPublicBasePath = "",
 }: SessionHookOpts = {}): { session: Session } => {
-  if(!nextPublicBasePath) throw Error("Missing `nextPublicBasePath` option for sessionHook");
-
-  const { data: session } = useSWR(`${nextPublicBasePath}/api/auth/session`, fetcher);
+  const { data: session } = useSWR(
+    `${nextPublicBasePath}/api/auth/session`,
+    fetcher
+  );
   useEffect(() => {
     // Waiting for data
     if (!enforceLogin || !session) return;

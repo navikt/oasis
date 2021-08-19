@@ -3,7 +3,7 @@ import RequestHandler from "micro";
 import passport from "passport";
 import idporten from "./strategy/idporten";
 import { TokenSet } from "openid-client";
-import {ConfiguredRequest} from "../index";
+import { ConfiguredRequest } from "../index";
 
 export type User = {
   fnr: string;
