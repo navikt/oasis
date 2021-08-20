@@ -1,5 +1,5 @@
 import { NextApiResponse } from "next";
-import { AuthedNextApiRequest } from "../middlewares";
+import { AuthedNextApiRequest } from "../middleware";
 import { Session } from "../react/session.hook";
 
 function makeSession(req: AuthedNextApiRequest): Session {

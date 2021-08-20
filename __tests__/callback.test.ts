@@ -1,5 +1,5 @@
 import { AuthedNextApiRequest } from "../lib/middlewares";
-import passport from "../lib/middlewares/passport.mw";
+import passport from "../lib/middleware/passport.mw";
 import callback from "../lib/handlers/callback.handler";
 
 describe("callback handler", () => {

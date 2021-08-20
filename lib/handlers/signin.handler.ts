@@ -1,4 +1,4 @@
-import passport from "../middlewares/passport.mw";
+import passport from "../middleware/passport.mw";
 import { generators } from "openid-client";
 
 export default function signin(req, res) {

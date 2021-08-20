@@ -1,6 +1,6 @@
 import { NextApiResponse } from "next";
 import { Client, GrantBody, Issuer, TokenSet } from "openid-client";
-import { AuthedNextApiRequest, env } from "./index";
+import { AuthedNextApiRequest } from "./index";
 import { TokenXConfig } from "../auth-config";
 
 let tokenXClient: Client;

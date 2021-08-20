@@ -19,11 +19,11 @@ interface SessionHookOpts {
   nextPublicBasePath?: string;
 }
 
-export const useSession = ({
+function useSession({
   enforceLogin = true,
   redirectTo = "/api/auth/signin",
   nextPublicBasePath = "",
-}: SessionHookOpts = {}): { session: Session } => {
+}: SessionHookOpts = {}): { session: Session } {
   const { data: session } = useSWR(
     `${nextPublicBasePath}/api/auth/session`,
     fetcher
@@ -46,4 +46,6 @@ export const useSession = ({
   )
     return { session: undefined };
   return { session };
-};
+}
+
+export { useSession };

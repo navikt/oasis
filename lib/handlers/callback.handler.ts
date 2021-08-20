@@ -1,5 +1,5 @@
-import passport from "../middlewares/passport.mw";
-import { AuthedNextApiRequest } from "../middlewares";
+import passport from "../middleware/passport.mw";
+import { AuthedNextApiRequest } from "../middleware";
 
 export default function callback(req: AuthedNextApiRequest, res, next) {
   const { loginServiceUrl, selfUrl } = req.options;
