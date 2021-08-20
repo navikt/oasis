@@ -26,6 +26,7 @@ async function idporten(
     {
       client,
       params: {
+        acr_values: "Level4",
         resource: "https://nav.no",
       },
       extras: {
@@ -41,7 +42,7 @@ async function idporten(
         locale,
         tokenset,
       };
-      // TODO: Finn ut av hva gi gjør med at userinfo mangler
+      // TODO: oauth2 mock server støtter ikke userinfo enda
       if (typeof userinfo === "function") return userinfo(null, user);
       return done(null, user);
     }

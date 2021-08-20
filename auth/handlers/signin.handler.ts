@@ -1,5 +1,10 @@
 import passport from "../middlewares/passport.mw";
+import { generators } from "openid-client";
 
 export default function signin(req, res) {
-  return passport.authenticate("idporten")(req, res);
+  // @ts-ignore: Passport sender ukjente options videre til underliggende Strategy
+  return passport.authenticate("idporten", { nonce: generators.nonce() })(
+    req,
+    res
+  );
 }

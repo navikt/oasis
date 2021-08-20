@@ -50,7 +50,6 @@ describe("integrasjonstest", () => {
       }
     );
     const html = await res.text();
-    console.log(html);
     expect(html).toContain("Tada");
   });
 });
