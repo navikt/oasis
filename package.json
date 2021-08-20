@@ -8,7 +8,6 @@
     "build": "tsc --noEmit false",
     "test": "jest",
     "lint": "next lint",
-    "prepare": "npm run build",
     "prepublishOnly": "npm test",
     "prepack": "npm run build"
   },
