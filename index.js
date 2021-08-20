@@ -1,2 +1,2 @@
-import auth from "auth";
+import auth from "lib";
 export default auth;

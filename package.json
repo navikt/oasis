@@ -2,14 +2,15 @@
   "name": "dp-auth",
   "version": "0.0.1",
   "description": "Autentiseringsmodul for NextJS appene til dagpengeteamet",
-  "main": "index.js",
+  "main": "dist/lib/index.js",
   "scripts": {
     "dev": "next",
-    "build": "tsc",
+    "build": "tsc --noEmit false",
     "test": "jest",
     "lint": "next lint",
     "prepare": "npm run build",
-    "prepublishOnly": "npm test"
+    "prepublishOnly": "npm test",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -53,6 +54,6 @@
     "typescript": "^4.3.5"
   },
   "files": [
-    "lib/**/*"
+    "dist/**/*"
   ]
 }

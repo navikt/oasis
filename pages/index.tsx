@@ -1,6 +1,6 @@
-import { useSession } from "../auth/react/session.hook";
+import { useSession } from "../lib/react/session.hook";
 
-export default function Index() {
+export default function Index(): JSX.Element {
   const { session } = useSession();
 
   if (!session) return <p>Du er ikke innlogget</p>;

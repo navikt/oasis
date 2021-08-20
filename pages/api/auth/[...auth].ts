@@ -1,5 +1,5 @@
-import auth from "../../../auth";
-import { AuthModuleConfig } from "../../../auth-config";
+import auth from "../../../lib";
+import { AuthModuleConfig } from "../../../lib/auth-config";
 
 const config: AuthModuleConfig = {
   idPortenConfig: {

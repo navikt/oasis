@@ -1,1 +1,1 @@
-require("next");
+import next from "next";

@@ -1,5 +1,10 @@
-export default function FakeLoginservice(req, res) {
+import { NextApiRequest, NextApiResponse } from "next";
+
+export default function FakeLoginservice(
+  req: NextApiRequest,
+  res: NextApiResponse
+): NextApiResponse {
   const { redirect } = req.query;
 
-  return res.redirect(redirect);
+  return res.redirect(<string>redirect);
 }

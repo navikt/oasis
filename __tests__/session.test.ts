@@ -1,5 +1,5 @@
-import session from "../auth/handlers/session.handler";
-import { AuthedNextApiRequest } from "../auth/middlewares";
+import session from "../lib/handlers/session.handler";
+import { AuthedNextApiRequest } from "../lib/middlewares";
 import { NextApiResponse } from "next";
 
 describe("session handler", () => {
