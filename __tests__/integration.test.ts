@@ -38,8 +38,8 @@ describe("integrasjonstest", () => {
     server.listen(3000, console.error);
   }, 20000);
 
-  afterEach(() => {
-    server.close();
+  afterEach((done) => {
+    server.close(done);
   });
 
   it("skal logge inn", async () => {
