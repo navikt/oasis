@@ -30,7 +30,7 @@
     "connect-redis": "^5.1.0",
     "express-session": "^1.17.1",
     "micro": "^9.3.4",
-    "next": "^11.0.1",
+    "next": "~11.0.1",
     "next-connect": "^0.10.0",
     "openid-client": "^4.7.3",
     "passport": "^0.4.1",
