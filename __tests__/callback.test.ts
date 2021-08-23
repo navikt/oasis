@@ -1,4 +1,4 @@
-import { AuthedNextApiRequest } from "../lib/middlewares";
+import { AuthedNextApiRequest } from "../lib/middleware";
 import passport from "../lib/middleware/passport.mw";
 import callback from "../lib/handlers/callback.handler";
 
