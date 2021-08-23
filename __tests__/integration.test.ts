@@ -38,8 +38,9 @@ describe("integrasjonstest", () => {
     server.listen(3000, console.error);
   }, 20000);
 
-  afterEach((done) => {
-    server.close(done);
+  afterEach(async () => {
+    await app.close();
+    await server.close();
   });
 
   it("skal logge inn", async () => {
