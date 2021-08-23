@@ -1,6 +1,6 @@
 {
   "name": "dp-auth",
-  "version": "0.0.14",
+  "version": "0.0.20",
   "description": "Autentiseringsmodul for NextJS appene til dagpengeteamet",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

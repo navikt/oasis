@@ -1,4 +1,3 @@
-import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import nc, { NextConnect } from "next-connect";
 import passport, { initializeIdporten, User } from "./passport.mw";
 import session from "./session.mw";
@@ -15,12 +14,6 @@ middleware
   .use(tokenx);
 
 export default middleware;
-
-export function withMiddleware(
-  handler: NextApiHandler
-): NextConnect<NextApiRequest, NextApiResponse> {
-  return nc().use(middleware).use(handler);
-}
 
 export interface AuthedNextApiRequest extends ConfiguredRequest {
   user: User;

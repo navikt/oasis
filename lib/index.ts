@@ -2,18 +2,14 @@ import nc from "next-connect";
 import { NextApiRequest, NextApiResponse } from "next";
 import handlers from "./handlers";
 import { AuthModuleConfig } from "./auth-config";
+import { withAuth } from "./middleware/with-auth.mw";
 
 function auth(config: AuthModuleConfig) {
-  return nc()
-    .use((req: ConfiguredRequest, res, next) => {
-      req.options = config;
-      return next();
-    })
-    .get((req: NextApiRequest, res: NextApiResponse, next) => {
+  return withAuth(config)(
+    nc().get((req: NextApiRequest, res: NextApiResponse, next) => {
       const { auth } = req.query;
       if (!auth) {
         throw new Error("Fila må kalles [...auth].js");
-        return next();
       }
       const delegatedHandler = handlers[req.query.auth[0]];
 
@@ -22,7 +18,8 @@ function auth(config: AuthModuleConfig) {
       }
 
       return res.status(404).end();
-    });
+    })
+  );
 }
 
 export interface ConfiguredRequest extends NextApiRequest {
@@ -30,4 +27,5 @@ export interface ConfiguredRequest extends NextApiRequest {
 }
 
 export type { AuthModuleConfig };
+export { withAuth };
 export default auth;
