@@ -51,5 +51,5 @@ describe("integrasjonstest", () => {
     );
     const html = await res.text();
     expect(html).toContain("Tada");
-  });
+  }, 20000);
 });
