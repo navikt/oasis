@@ -21,6 +21,7 @@ jobs:
         env:
           JSON_CONFIG: "{\"interactiveLogin\":false}"
           SERVER_HOSTNAME: "mock-oauth2-server"
+        options: "--hostname: mock-oauth2-server"
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16.x
