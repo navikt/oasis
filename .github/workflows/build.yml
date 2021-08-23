@@ -33,6 +33,7 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: cat node_modules/next/package.json
+      - run: cat node_modules/next/dist/next-server/server/render.js
       - run: npm test
 
   publish:
