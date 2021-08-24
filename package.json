@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "github.com:navikt/dp-auth"
+    "url": "https://github.com/navikt/dp-auth.git"
   },
   "author": "",
   "license": "MIT",
