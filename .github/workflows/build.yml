@@ -44,9 +44,9 @@ jobs:
             ${{ runner.os }}-
       - run: sudo echo "127.0.0.1 mock-oauth2-server" | sudo tee -a /etc/hosts
       - run: npm ci
-      - if: ${{ github.event_name != "release" }}
+      - if: ${{ github.event_name != 'release' }}
         run: npm test
-      - if: ${{ github.event_name == "release" }}
+      - if: ${{ github.event_name == 'release' }}
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
