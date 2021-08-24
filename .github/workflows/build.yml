@@ -47,14 +47,6 @@ jobs:
       - if: ${{ github.event_name != "release" }}
         run: npm test
       - if: ${{ github.event_name == "release" }}
-        run: |
-          npm version ${{ VERSION }}
-          npm publish --help
-          git config user.name teamdagpenger
-          git config user.email teamdagpenger@nav.no
-          git add .
-          git commit -m "Release ${{ VERSION }}"
-          git push
+        run: npm publish
         env:
-          VERSION: ${{ github.ref/refs\/tags\// }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
