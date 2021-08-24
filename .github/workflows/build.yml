@@ -42,8 +42,6 @@ jobs:
             ${{ runner.os }}-
       - run: sudo echo "127.0.0.1 mock-oauth2-server" | sudo tee -a /etc/hosts
       - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
