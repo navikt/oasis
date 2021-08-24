@@ -5,6 +5,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  release:
+    types: [created]
 
 jobs:
   build:
@@ -42,6 +44,17 @@ jobs:
             ${{ runner.os }}-
       - run: sudo echo "127.0.0.1 mock-oauth2-server" | sudo tee -a /etc/hosts
       - run: npm ci
-      - run: npm publish
+      - if: ${{ github.event_name != "release" }}
+        run: npm test
+      - if: ${{ github.event_name == "release" }}
+        run: |
+          npm version ${{ VERSION }}
+          npm publish --help
+          git config user.name teamdagpenger
+          git config user.email teamdagpenger@nav.no
+          git add .
+          git commit -m "Release ${{ VERSION }}"
+          git push
         env:
+          VERSION: ${{ github.ref/refs\/tags\// }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
