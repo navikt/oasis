@@ -1,6 +1,6 @@
 {
   "name": "@navikt/dp-auth",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Autentiseringsmodul for NextJS appene til dagpengeteamet",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
