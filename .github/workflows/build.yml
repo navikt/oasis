@@ -46,7 +46,7 @@ jobs:
       - run: npm ci
       - if: ${{ github.event_name != 'release' }}
         run: npm test
-      - run: npm build
+      - run: npm run build
       - if: ${{ github.event_name == 'release' }}
         run: npm publish
         env:
