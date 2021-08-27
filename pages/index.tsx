@@ -1,4 +1,4 @@
-import { useSession } from "../lib/react/session.hook";
+import { useSession } from "../lib/client";
 
 export default function Index(): JSX.Element {
   const { session } = useSession();

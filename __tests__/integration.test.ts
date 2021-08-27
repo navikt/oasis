@@ -5,7 +5,7 @@ import { parse } from "url";
 
 const fetchWithCookies = fetchCookie(fetch);
 
-describe("integrasjonstest", () => {
+describe.skip("integrasjonstest", () => {
   let server;
   const app = next({ dev: true, quiet: true });
   const handle = app.getRequestHandler();
