@@ -46,8 +46,9 @@ jobs:
       - run: npm ci
       - if: ${{ github.event_name != 'release' }}
         run: npm test
-      - run: npm run build
       - if: ${{ github.event_name == 'release' }}
-        run: npm publish
+        run: |
+          npm run build
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
