@@ -9,8 +9,8 @@ const session: NextApiHandler = async (req: NextApiRequest, res) => {
     return;
   }
 
-  const expiresIn = payload.exp - Date.now();
-  res.json({ expires_in: expiresIn });
+  const expires_in = payload.exp - Date.now() / 1000;
+  res.json({ expires_in });
 };
 
 export default session;
