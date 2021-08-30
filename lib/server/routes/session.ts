@@ -9,7 +9,7 @@ const session: NextApiHandler = async (req: NextApiRequest, res) => {
     return;
   }
 
-  const expires_in = payload.exp - Date.now() / 1000;
+  const expires_in = Math.round(payload.exp - Date.now() / 1000);
   res.json({ expires_in });
 };
 
