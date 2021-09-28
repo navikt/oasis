@@ -71,3 +71,5 @@ async function getToken(subject_token: string, audience: string) {
 export default {
   getToken,
 };
+
+export { getToken };

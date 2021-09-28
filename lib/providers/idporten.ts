@@ -5,7 +5,7 @@ import {
   jwtVerify,
 } from "jose/jwt/verify";
 import { createRemoteJWKSet } from "jose/jwks/remote";
-import { FlattenedJWSInput } from "jose/webcrypto/types";
+import { FlattenedJWSInput } from "jose/types";
 
 let _issuer: Issuer<Client>;
 let _remoteJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
@@ -37,3 +37,5 @@ async function issuer() {
 export default {
   validerToken,
 };
+
+export { validerToken };

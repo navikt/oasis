@@ -1,8 +1,8 @@
-import { JWTPayload } from "jose/webcrypto/types";
 import idporten from "../providers/idporten";
 import tokenx from "../providers/tokenx";
 import { IncomingMessage } from "http";
 import useSWR from "swr";
+import { JWTPayload } from "jose/types";
 
 export type Session = {
   token?: string;
@@ -25,12 +25,13 @@ export async function getSession({
   ctx,
   req = ctx?.req,
 }: CtxOrReq = {}): Promise<Session> {
-  // @ts-ignore asdfasdfasfd
   const { authorization } = req.headers;
   if (!authorization) return {};
+
   const token = authorization.split(" ")[1];
   const { payload } = await idporten.validerToken(token);
-  // @ts-ignore dafsdfasdfasdf
+  if (!payload) return {};
+
   return { token, payload, apiToken: apiToken(token) };
 }
 
