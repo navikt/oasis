@@ -1,7 +1,11 @@
 import { NextApiHandler, NextApiRequest } from "next";
-import { getSession } from "../../client";
+import { getSession } from "../../server";
+import { Session } from "../../client";
 
-const session: NextApiHandler = async (req: NextApiRequest, res) => {
+const sessionHandler: NextApiHandler<Session> = async (
+  req: NextApiRequest,
+  res
+) => {
   const { token, payload } = await getSession({ req });
 
   if (!token) {
@@ -13,4 +17,4 @@ const session: NextApiHandler = async (req: NextApiRequest, res) => {
   res.json({ expires_in });
 };
 
-export default session;
+export default sessionHandler;

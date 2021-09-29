@@ -1,9 +1,9 @@
 import { createRequest } from "node-mocks-http";
 import { NextApiRequest } from "next";
 import { Request } from "express";
-import { getSession } from "../../lib/client";
 import { validerToken } from "../../lib/providers/idporten";
 import { getToken } from "../../lib/providers/tokenx";
+import { getSession } from "../../lib/server/get-session";
 
 jest.mock("../../lib/providers/idporten");
 jest.mock("../../lib/providers/tokenx");
@@ -11,19 +11,19 @@ jest.mock("../../lib/providers/tokenx");
 const mockValider = validerToken as jest.MockedFunction<typeof validerToken>;
 const mockGetToken = getToken as jest.MockedFunction<typeof getToken>;
 
-afterEach(() => {
-  mockValider.mockClear();
-});
+describe("server/getSession()", () => {
+  afterEach(() => {
+    mockValider.mockClear();
+  });
 
-describe("getSession()", () => {
-  test("returns empty object if authorization header is missing", async () => {
+  test("returnerer tomt objekt om authorization header mangler", async () => {
     const req = createRequest<NextApiRequest & Request>();
     const session = await getSession({ req });
 
     expect(session).toEqual({});
   });
 
-  test("returns empty object if authorization header does not validate", async () => {
+  test("returnerer tomt objekt om authorization header ikke kan valideres", async () => {
     mockValider.mockResolvedValue({
       payload: undefined,
       protectedHeader: undefined,
@@ -40,7 +40,7 @@ describe("getSession()", () => {
     expect(session).toEqual({});
   });
 
-  test("returns session object if authorization header does validate", async () => {
+  test("returnerer gyldig session objekt om authorization header valideres", async () => {
     const pid = "123";
     const token = "foo";
 
@@ -66,7 +66,7 @@ describe("getSession()", () => {
     });
   });
 
-  test("returns session object with function for getting API token", async () => {
+  test("returnerer gyldig session objekt med funksjon for å lage API token", async () => {
     const pid = "123";
     const token = "foo";
     const audience = "test";

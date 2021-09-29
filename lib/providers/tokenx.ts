@@ -1,4 +1,7 @@
-import { Client, GrantBody, Issuer, TokenSet } from "openid-client";
+import { Client, errors, GrantBody, Issuer, TokenSet } from "openid-client";
+import { RequestError } from "got";
+
+const OPError = errors.OPError;
 
 let _issuer: Issuer<Client>;
 let _client: Client;
@@ -6,7 +9,9 @@ let _client: Client;
 async function issuer() {
   if (typeof _issuer === "undefined") {
     if (!process.env.TOKEN_X_WELL_KNOWN_URL)
-      throw new Error(`Miljøvariabelen "TOKEN_X_WELL_KNOWN_URL må være satt`);
+      throw new TypeError(
+        `Miljøvariabelen "TOKEN_X_WELL_KNOWN_URL må være satt`
+      );
     _issuer = await Issuer.discover(process.env.TOKEN_X_WELL_KNOWN_URL);
   }
   return _issuer;
@@ -14,14 +19,14 @@ async function issuer() {
 
 function jwk() {
   if (!process.env.TOKEN_X_PRIVATE_JWK)
-    throw new Error(`Miljøvariabelen "TOKEN_X_PRIVATE_JWK må være satt`);
+    throw new TypeError(`Miljøvariabelen "TOKEN_X_PRIVATE_JWK må være satt`);
   return JSON.parse(process.env.TOKEN_X_PRIVATE_JWK);
 }
 
 async function client() {
   if (typeof _client === "undefined") {
     if (!process.env.TOKEN_X_CLIENT_ID)
-      throw new Error(`Miljøvariabelen "TOKEN_X_CLIENT_ID må være satt`);
+      throw new TypeError(`Miljøvariabelen "TOKEN_X_CLIENT_ID må være satt`);
 
     const _jwk = jwk();
     const _issuer = await issuer();
@@ -60,10 +65,20 @@ async function getToken(subject_token: string, audience: string) {
     .grant(grantBody, additionalClaims)
     .then((tokenSet: TokenSet) => tokenSet.access_token)
     .catch((err) => {
-      console.error(
-        `Error while exchanging IDporten token with TokenX: ${err}. Response from TokenX:`,
-        err.response.body
-      );
+      switch (err.constructor) {
+        case RequestError:
+          console.error("Kunne ikke koble til TokenX", err);
+          break;
+        case OPError:
+          console.error(
+            `Noe gikk galt med token exchange mot TokenX. 
+            Feilmelding fra openid-client: (${err}). 
+            HTTP Status fra TokenX: (${err.response.statusCode} ${err.response.statusMessage})
+            Body fra TokenX:`,
+            err.response.body
+          );
+          break;
+      }
       throw err;
     });
 }

@@ -7,8 +7,12 @@ module.exports = {
     "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
   },
   moduleNameMapper: {
-    "^jose/(.*)$": "identity-obj-proxy",
+    "^jose/(.*)$": "<rootDir>/node_modules/jose/dist/node/cjs/$1",
   },
+  testPathIgnorePatterns: ["/node_modules/", "__utils__"],
+  coveragePathIgnorePatterns: ["/node_modules/", "__utils__"],
+  testEnvironment: "node",
+  collectCoverage: false,
   transformIgnorePatterns: [
     "/node_modules/",
     "^.+\\.module\\.(css|sass|scss)$",
