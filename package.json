@@ -1,6 +1,6 @@
 {
   "name": "@navikt/dp-auth",
-  "version": "0.0.32",
+  "version": "0.0.30",
   "description": "Autentiseringsmodul for NextJS appene til dagpengeteamet",
   "scripts": {
     "build": "tsc --noEmit false",
@@ -51,13 +51,13 @@
     "whatwg-fetch": "^3.6.2"
   },
   "exports": {
-    "./": "./dist/index.js",
+    ".": "./dist/api/index.js",
     "./client": "./dist/client/index.js",
     "./server": "./dist/server/index.js"
   },
   "typesVersions": {
     "*": {
-      "api": [
+      ".": [
         "dist/api/index.d.ts"
       ],
       "client": [
