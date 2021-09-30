@@ -50,6 +50,7 @@
     "typescript": "^4.4.3",
     "whatwg-fetch": "^3.6.2"
   },
+  "main": "./dist/api/index.js",
   "exports": {
     ".": "./dist/api/index.js",
     "./client": "./dist/client/index.js",
@@ -57,7 +58,7 @@
   },
   "typesVersions": {
     "*": {
-      ".": [
+      "api": [
         "dist/api/index.d.ts"
       ],
       "client": [
@@ -70,7 +71,8 @@
   },
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "dist/**/*.js.map"
   ],
   "lint-staged": {
     "**/*.(ts|js)?(x)": [
