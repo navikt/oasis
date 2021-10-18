@@ -254,5 +254,6 @@ dist
 # Ignore all local history of files
 .history
 .ionide
-
 # End of https://www.toptal.com/developers/gitignore/api/node,intellij+all,visualstudiocode,git
+
+.husky/prepare-commit-msg
