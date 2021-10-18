@@ -1,6 +1,7 @@
 import { NextApiHandler, NextApiRequest } from "next";
 import { CookieSerializeOptions, serialize } from "cookie";
 import { getSession } from "../../server";
+import { validerToken } from "../../providers/loginservice";
 
 const { NEXT_PUBLIC_BASE_PATH, LOGINSERVICE_URL, SELF_URL } = process.env;
 const MY_URL = `${SELF_URL}/api/auth/signin`;
@@ -45,9 +46,13 @@ const signinHandler: NextApiHandler = async (req: NextApiRequest, res) => {
   }
 
   const selvbetjeningIdtoken = req.cookies["selvbetjening-idtoken"];
-  if (token && !selvbetjeningIdtoken) {
-    res.redirect(LOGINSERVICE_LOGIN);
-    return;
+  if (token) {
+    try {
+      await validerToken(selvbetjeningIdtoken);
+    } catch {
+      res.redirect(LOGINSERVICE_LOGIN);
+      return;
+    }
   }
 
   const destinationFromCookie =
