@@ -26,6 +26,11 @@ Pakken baserer seg på konvensjoner fra NAIS-plattformen og trenger i utgangspun
 
 Variabelen må hete `LOGINSERVICE_WELL_KNOWN_URL`.
 
+Eksempel for produksjon:
+```
+LOGINSERVICE_WELL_KNOWN_URL=https://navnob2c.b2clogin.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten
+```
+
 ## Testing
 
 ```bash
