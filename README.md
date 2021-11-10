@@ -20,7 +20,14 @@ export default DpAuthHandler;
 
 ## Konfigurasjon
 
-Pakken baserer seg på konvensjoner fra NAIS-plattformen og trenger i utgangspunktet ikke noe configurasjon
+Applikasjonen må eksponere henholdsvis miljøvariablene: 
+
+- SELF_URL - som er en peker på applikasjonens ingress, som er hele url. feks https://arbeid.nav.no/arbeid/dagpenger/quizshow
+- NEXT_PUBLIC_BASE_PATH - som er applikasjonens egen "base path", feks arbeid/dagpenger/quizshow
+
+
+
+Pakken baserer seg på konvensjoner fra NAIS-plattformen og trenger i utgangspunktet ikke noe mere konfigurasjon
 
 [URL til "Well-known / Discovery URL" for Loginservice](https://security.labs.nais.io/pages/legacy/loginservice/idprovider.html) settes ikke av NAIS. Det ligger en default-verdi for produksjon i koden, men det anbefales at du legger til en verdi selv.
 
@@ -29,7 +36,9 @@ Variabelen må hete `LOGINSERVICE_WELL_KNOWN_URL`.
 Eksempel for produksjon:
 ```
 LOGINSERVICE_WELL_KNOWN_URL=https://navnob2c.b2clogin.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten
+LOGINSERVICE_URL - som er en url til loginservice i nav, feks https://loginservice.nav.no/login
 ```
+
 
 ## Testing
 
