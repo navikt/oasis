@@ -39,6 +39,7 @@ LOGINSERVICE_WELL_KNOWN_URL=https://navnob2c.b2clogin.com/navnob2c.onmicrosoft.c
 LOGINSERVICE_URL - som er en url til loginservice i nav, feks https://loginservice.nav.no/login
 ```
 
+Husk også at appens url må whitelistes av loginservice i nav https://github.com/navikt/loginservice#allowlist-of-redirect-urls
 
 ## Testing
 
