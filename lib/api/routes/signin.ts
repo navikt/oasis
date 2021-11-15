@@ -2,6 +2,7 @@ import { NextApiHandler, NextApiRequest } from "next";
 import { CookieSerializeOptions, serialize } from "cookie";
 import { getSession } from "../../server";
 import { validerToken } from "../../providers/loginservice";
+import { DpAuthConfig } from "../index";
 
 const { NEXT_PUBLIC_BASE_PATH, LOGINSERVICE_URL, SELF_URL } = process.env;
 const MY_URL = `${SELF_URL}/api/auth/signin`;
@@ -21,8 +22,6 @@ const setCookie = (res, name, payload, options: CookieSerializeOptions = {}) =>
     serialize(name, payload, { ...cookieOptions, ...options })
   );
 
-const allowedDestinations = ["/", "/utslagskriterier", "/routing"];
-
 /**
  * Logger inn bruker
  *
@@ -31,7 +30,10 @@ const allowedDestinations = ["/", "/utslagskriterier", "/routing"];
  * 3. Sørger for at vi logger inn i dekoratøren om det mangler
  * 4. Sender bruker til enten start eller til destinasjonen satt i cookie (om tillatt
  */
-const signinHandler: NextApiHandler = async (req: NextApiRequest, res) => {
+const signinHandler: NextApiHandler = async (
+  req: NextApiRequest & { options: DpAuthConfig },
+  res
+) => {
   const { token } = await getSession({ req });
   const { destination } = req.query;
 
@@ -64,10 +66,19 @@ const signinHandler: NextApiHandler = async (req: NextApiRequest, res) => {
     expires: new Date(0),
   });
 
-  res.redirect(SELF_URL + whitelistDestination(destinationFromCookie));
+  res.redirect(
+    SELF_URL +
+      whitelistDestination(
+        req.options.allowedDestinations,
+        destinationFromCookie
+      )
+  );
 };
 
-function whitelistDestination(destination: string): string {
+function whitelistDestination(
+  allowedDestinations: string[],
+  destination: string
+): string {
   if (!destination) return "";
   if (!destination.startsWith("/")) return "";
   const url = new URL("http://not.valid" + destination);

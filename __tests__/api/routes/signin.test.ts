@@ -7,7 +7,7 @@ import { getSession } from "../../../lib/server";
 import { createNextMocks } from "../../__utils__/createNextMocks";
 import { gyldigSession } from "../../__utils__/session";
 import { validerToken } from "../../../lib/providers/loginservice";
-import { JWTVerifyResult, KeyLike, ResolvedKey } from "jose/types";
+import { JWTVerifyResult, ResolvedKey } from "jose/types";
 import generateSecret from "jose/util/generate_secret";
 
 const { SELF_URL } = process.env;
@@ -19,6 +19,8 @@ jest.mock("../../../lib/providers/loginservice");
 const mockLoginservice = validerToken as jest.MockedFunction<
   typeof validerToken
 >;
+
+const allowedDestinations = ["/routing"];
 
 describe("server/routes/signin", () => {
   beforeEach(() => {
@@ -59,7 +61,11 @@ describe("server/routes/signin", () => {
   });
 
   test("Redirecter til SELF_URL når innlogget", async () => {
-    const { req, res } = createNextMocks();
+    const { req, res } = createNextMocks({
+      options: {
+        allowedDestinations,
+      },
+    });
 
     await signinHandler(req, res);
 
@@ -86,6 +92,9 @@ describe("server/routes/signin", () => {
       cookies: {
         destination: encodeURIComponent(destination),
       },
+      options: {
+        allowedDestinations,
+      },
     });
 
     await signinHandler(req, res);
@@ -102,6 +111,9 @@ describe("server/routes/signin", () => {
       cookies: {
         destination,
       },
+      options: {
+        allowedDestinations,
+      },
     });
 
     mockIdporten.mockResolvedValue(gyldigSession());
@@ -116,6 +128,9 @@ describe("server/routes/signin", () => {
     const { req, res } = createNextMocks({
       cookies: {
         destination,
+      },
+      options: {
+        allowedDestinations,
       },
     });
 
