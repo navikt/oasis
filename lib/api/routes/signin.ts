@@ -21,7 +21,7 @@ const setCookie = (res, name, payload, options: CookieSerializeOptions = {}) =>
     serialize(name, payload, { ...cookieOptions, ...options })
   );
 
-const allowedDestinations = ["/", "/routing"];
+const allowedDestinations = ["/", "/utslagskriterier", "/routing"];
 
 /**
  * Logger inn bruker
