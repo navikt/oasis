@@ -1,6 +1,6 @@
 {
   "name": "@navikt/dp-auth",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "description": "Autentiseringsmodul for NextJS appene til dagpengeteamet",
   "scripts": {
     "build": "tsc --noEmit false",
