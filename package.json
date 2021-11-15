@@ -21,9 +21,11 @@
     "url": "https://github.com/navikt/dp-auth/issues"
   },
   "homepage": "https://github.com/navikt/dp-auth#readme",
+  "peerDependencies": {
+    "next": "^11.1.2 || ^12"
+  },
   "dependencies": {
     "jose": "^3.19.0",
-    "next": "^11.1.2",
     "openid-client": "^4.9.0",
     "react": "^17.0.2",
     "swr": "^1.0.1"
