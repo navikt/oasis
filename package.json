@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "jose": "^3.19.0",
+    "cookie": "^0.4.1",
     "openid-client": "^4.9.0",
     "react": "^17.0.2",
     "swr": "^1.0.1"
