@@ -22,8 +22,8 @@ export default DpAuthHandler;
 
 Applikasjonen må eksponere henholdsvis miljøvariablene: 
 
-- SELF_URL - som er en peker på applikasjonens ingress, som er hele url. feks https://arbeid.nav.no/arbeid/dagpenger/quizshow
-- NEXT_PUBLIC_BASE_PATH - som er applikasjonens egen "base path", feks arbeid/dagpenger/quizshow
+- SELF_URL - som er en peker på applikasjonens ingress, som er hele url. feks https://arbeid.nav.no/arbeid/dagpenger/soknad
+- NEXT_PUBLIC_BASE_PATH - som er applikasjonens egen "base path", feks arbeid/dagpenger/soknad
 
 
 
