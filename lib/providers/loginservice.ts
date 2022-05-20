@@ -27,18 +27,20 @@ async function jwks() {
 
 async function issuer() {
   if (typeof _issuer === "undefined") {
-    if (!process.env.LOGINSERVICE_WELL_KNOWN_URL) {
+    if (!process.env.LOGINSERVICE_IDPORTEN_DISCOVERY_URL) {
       console.warn(
-        `Miljøvariabelen "LOGINSERVICE_WELL_KNOWN_URL" bør være satt. Du finner mulige verdier her: https://security.labs.nais.io/pages/legacy/loginservice/idprovider.html`
+          `Miljøvariabelen "LOGINSERVICE_IDPORTEN_DISCOVERY_URL" bør være satt. Du finner mulige verdier her: https://security.labs.nais.io/pages/legacy/loginservice/idprovider.html`
       );
     }
+
     _issuer = await Issuer.discover(
-      process.env.LOGINSERVICE_WELL_KNOWN_URL || defaultLoginserviceWellKnownURL
+      process.env.LOGINSERVICE_IDPORTEN_DISCOVERY_URL || defaultLoginserviceWellKnownURL
     );
   }
   return _issuer;
 }
 
+//TODO: fjerne/oppdatere?
 const defaultLoginserviceWellKnownURL =
   "https://navnob2c.b2clogin.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten";
 

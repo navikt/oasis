@@ -29,13 +29,14 @@ Applikasjonen må eksponere henholdsvis miljøvariablene:
 
 Pakken baserer seg på konvensjoner fra NAIS-plattformen og trenger i utgangspunktet ikke noe mere konfigurasjon
 
-[URL til "Well-known / Discovery URL" for Loginservice](https://security.labs.nais.io/pages/legacy/loginservice/idprovider.html) settes ikke av NAIS. Det ligger en default-verdi for produksjon i koden, men det anbefales at du legger til en verdi selv.
+## URL til "Well-known / Discovery URL" for Loginservice
+Ligger i ett config map som er er tilgjengelig i alle cluster. Dette configmappet må mountes in av alle apper som bruker denne pakken. 
+For detaljer se [loginservice på github](https://github.com/navikt/loginservice#metadata)
 
-Variabelen må hete `LOGINSERVICE_WELL_KNOWN_URL`.
+
 
 Eksempel for produksjon:
 ```
-LOGINSERVICE_WELL_KNOWN_URL=https://navnob2c.b2clogin.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten
 LOGINSERVICE_URL - som er en url til loginservice i nav, feks https://loginservice.nav.no/login
 ```
 
