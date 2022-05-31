@@ -1,6 +1,16 @@
-import { idporten, tokenx } from "../providers";
 import { IncomingMessage } from "http";
-import { Session } from "./index";
+import tokenx from "../issuers/tokenx";
+import { AuthProvider } from "./middleware";
+
+export interface User {
+  sub: string;
+}
+
+export interface Session {
+  user: User;
+  expires_in: number;
+  apiToken: (audience: string) => Promise<string | undefined>;
+}
 
 export interface CtxOrReq {
   req?: IncomingMessage;
@@ -8,25 +18,39 @@ export interface CtxOrReq {
 }
 
 /**
- * Helper for å hente token, sesjon, og helper for å hente nøkler for APIer bakover
+ * Helper for å hente session og helper for å hente nøkler for APIer bakover
  *
  * 1. API routes: getSession({ req })
  * 2. SSR data fetcher: getSession(context)
  */
-export async function getSession({
-  ctx,
-  req = ctx?.req,
-}: CtxOrReq = {}): Promise<Session> {
-  const { authorization } = req.headers;
-  if (!authorization) return {};
+export async function getSession(
+  provider: AuthProvider,
+  { ctx, req = ctx?.req }: CtxOrReq = {}
+): Promise<Session> {
+  const { authorization } = req!.headers;
+  if (!authorization)
+    throw new Error("No valid authorization header was found");
 
-  const token = authorization.split(" ")[1];
-  const { payload } = await idporten.validerToken(token);
-  if (!payload) return {};
+  try {
+    const token = authorization.split(" ")[1];
+    const { payload } = await provider.verifyToken(token);
 
-  return { token, payload, apiToken: apiToken(token) };
+    return {
+      user: {
+        sub: payload.sub as string,
+      },
+      expires_in: expiresIn(payload.exp!),
+      apiToken: apiToken(token),
+    };
+  } catch (err) {
+    throw err;
+  }
 }
 
 function apiToken(subject_token: string) {
   return async (audience: string) => tokenx.getToken(subject_token, audience);
+}
+
+function expiresIn(timestamp: number): number {
+  return timestamp - Math.round(Date.now() / 1000);
 }

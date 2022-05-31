@@ -6,9 +6,10 @@
 /build
 
 # local env files
-.env.local
+.env.development
 .env.development.local
 .env.test.local
+.env.production
 .env.production.local
 
 # Created by https://www.toptal.com/developers/gitignore/api/node,intellij+all,visualstudiocode,git

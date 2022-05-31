@@ -4,7 +4,9 @@ Autentiseringsmodul for NextJS appene til dagpengeteamet
 
 ## Quick start
 
-Pakken må installeres fra [GitHubs npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry).
+Pakken må installeres
+fra [GitHubs npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry)
+.
 
 ```
 npm i dp-auth
@@ -22,8 +24,8 @@ export default DpAuthHandler;
 
 Applikasjonen må eksponere henholdsvis miljøvariablene: 
 
-- SELF_URL - som er en peker på applikasjonens ingress, som er hele url. feks https://arbeid.nav.no/arbeid/dagpenger/soknad
-- NEXT_PUBLIC_BASE_PATH - som er applikasjonens egen "base path", feks arbeid/dagpenger/soknad
+- SELF_URL - som er en peker på applikasjonens ingress, som er hele url. feks https://arbeid.nav.no/arbeid/dagpenger/quizshow
+- NEXT_PUBLIC_BASE_PATH - som er applikasjonens egen "base path", feks arbeid/dagpenger/quizshow
 
 
 
@@ -36,11 +38,13 @@ For detaljer se [loginservice på github](https://github.com/navikt/loginservice
 
 
 Eksempel for produksjon:
+
 ```
 LOGINSERVICE_URL - som er en url til loginservice i nav, feks https://loginservice.nav.no/login
 ```
 
-Husk også at appens url må whitelistes av loginservice i nav https://github.com/navikt/loginservice#allowlist-of-redirect-urls
+Husk også at appens url må whitelistes av loginservice i
+nav https://github.com/navikt/loginservice#allowlist-of-redirect-urls
 
 ## Testing
 

@@ -1,0 +1,40 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: dp-auth-idporten
+  namespace: teamdagpenger
+  labels:
+    team: teamdagpenger
+spec:
+  image: {{image}}
+  port: 3000
+  liveness:
+    path: "/api/isalive"
+    initialDelay: 1
+  readiness:
+    path: "/api/isready"
+    initialDelay: 1
+  replicas:
+    min: 2
+    max: 5
+    cpuThresholdPercentage: 80
+  prometheus:
+    enabled: false
+  resources:
+    limits:
+      cpu: 400m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+  ingresses:
+    - https://dp-auth-idporten.dev.nav.no
+  env:
+    - name: PROVIDER
+      value: idporten
+  tokenx:
+    enabled: true
+  idporten:
+    enabled: true
+    sidecar:
+      enabled: true

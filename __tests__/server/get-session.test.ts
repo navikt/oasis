@@ -1,92 +1,59 @@
 import { createRequest } from "node-mocks-http";
-import { NextApiRequest } from "next";
 import { Request } from "express";
-import { validerToken } from "../../lib/providers/idporten";
-import { getToken } from "../../lib/providers/tokenx";
-import { getSession } from "../../lib/server/get-session";
+import { NextRequest } from "next/server";
+import { token } from "../__utils__/test-provider";
+import { idporten } from "../../lib/providers";
+import { CtxOrReq, getSession } from "../../lib/server/get-session";
 
-jest.mock("../../lib/providers/idporten");
-jest.mock("../../lib/providers/tokenx");
-
-const mockValider = validerToken as jest.MockedFunction<typeof validerToken>;
-const mockGetToken = getToken as jest.MockedFunction<typeof getToken>;
+const getIdportenSession = (ctx: CtxOrReq) => getSession(idporten, ctx);
 
 describe("server/getSession()", () => {
-  afterEach(() => {
-    mockValider.mockClear();
+  test("returns empty object if authorization header is missing", async () => {
+    const req = createNextRequest();
+    await expect(getIdportenSession({ req })).rejects.toThrow();
   });
 
-  test("returnerer tomt objekt om authorization header mangler", async () => {
-    const req = createRequest<NextApiRequest & Request>();
-    const session = await getSession({ req });
-
-    expect(session).toEqual({});
+  test("returns empty object if authorization header is not valid", async () => {
+    const req = createNextRequest("foo");
+    await expect(getIdportenSession({ req })).rejects.toThrow();
   });
 
-  test("returnerer tomt objekt om authorization header ikke kan valideres", async () => {
-    mockValider.mockResolvedValue({
-      payload: undefined,
-      protectedHeader: undefined,
-      key: undefined,
-    });
-
-    const req = createRequest<NextApiRequest & Request>({
-      headers: {
-        authorization: "Bearer foo",
-      },
-    });
-    const session = await getSession({ req });
-
-    expect(session).toEqual({});
-  });
-
-  test("returnerer gyldig session objekt om authorization header valideres", async () => {
+  test("returns valid session object if authorization header is valid", async () => {
     const pid = "123";
-    const token = "foo";
+    const testToken = await token(pid);
 
-    mockValider.mockResolvedValue({
-      payload: { pid },
-      protectedHeader: { alg: "rsa" },
-      key: undefined,
-    });
-
-    const req = createRequest<NextApiRequest & Request>({
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-    const session = await getSession({ req });
+    const req = createNextRequest(testToken);
+    const session = await getIdportenSession({ req });
 
     expect(session).toMatchObject({
       apiToken: expect.any(Function),
-      payload: {
-        pid,
+      user: {
+        sub: expect.any(String),
       },
-      token,
+      expires_in: expect.any(Number),
     });
   });
 
-  test("returnerer gyldig session objekt med funksjon for å lage API token", async () => {
-    const pid = "123";
-    const token = "foo";
+  test("returns valid session object with function to exhange API scoped token", async () => {
+    const testToken = await token("123");
     const audience = "test";
-    const expectedApiToken = `${audience}:${token}`;
+    const expectedApiToken = `${audience}:${testToken}`;
 
-    mockValider.mockResolvedValue({
-      payload: { pid },
-      protectedHeader: { alg: "rsa" },
-      key: undefined,
-    });
+    const req = createNextRequest(testToken);
+    const { apiToken } = await getIdportenSession({ req });
 
-    mockGetToken.mockResolvedValue(expectedApiToken);
-
-    const req = createRequest<NextApiRequest & Request>({
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-    const { apiToken } = await getSession({ req });
-
-    expect(await apiToken(audience)).toBe(expectedApiToken);
+    if (apiToken) {
+      expect(await apiToken(audience)).toBe(expectedApiToken);
+    }
   });
 });
+
+function createNextRequest(token?: string) {
+  const headers = token ? { authorization: `Bearer ${token}` } : {};
+  const request = createRequest<NextRequest & Request>();
+
+  //@ts-ignore
+  request.headers = headers;
+
+  return request;
+}
