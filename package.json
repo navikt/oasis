@@ -1,6 +1,6 @@
 {
   "name": "@navikt/dp-auth",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Autentiseringsmodul for NextJS appene til dagpengeteamet",
   "scripts": {
     "build-lib": "tsc --noEmit false",
@@ -57,31 +57,23 @@
     "ts-node": "^10.8.2",
     "typescript": "^4.7.4"
   },
-  "main": "./dist/api/index.js",
+  "main": "./dist/index.js",
   "exports": {
-    ".": "./dist/api/index.js",
-    "./client": "./dist/client/index.js",
-    "./server": "./dist/server/index.js"
+    ".": "./dist/index.js",
+    "./session": "./dist/server/get-session.js"
   },
   "typesVersions": {
     "*": {
-      "api": [
-        "dist/api/index.d.ts"
+      ".": [
+        "./dist/index.d.ts"
       ],
-      "client": [
-        "dist/client/index.d.ts"
-      ],
-      "server": [
-        "dist/server/index.d.ts"
+      "session": [
+        "./dist/server/get-session.d.ts"
       ]
     }
   },
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts",
-    "dist/**/*.js.map"
-  ],
-  "msw": {
-    "workerDirectory": "public"
-  }
+    "dist/**/*.d.ts"
+  ]
 }
