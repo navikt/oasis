@@ -7,11 +7,16 @@ export type VerifyAuth = (
 ) => Promise<JWTVerifyResult>;
 export type Redirect = (request: NextRequest) => NextResponse;
 export type GetToken = (req: NextRequest) => string | null;
+export type ExchangeToken = (
+  subject_token: string,
+  audience: string
+) => Promise<string | undefined>;
 
 export type AuthProvider = {
   getToken: GetToken;
   verifyToken: VerifyAuth;
   redirect: Redirect;
+  exchangeToken: ExchangeToken;
 };
 
 export type AuthMiddlewareOptions = {

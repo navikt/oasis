@@ -1,5 +1,4 @@
 import { IncomingMessage } from "http";
-import tokenx from "../issuers/tokenx";
 import { AuthProvider } from "./middleware";
 
 export interface User {
@@ -40,15 +39,16 @@ export async function getSession(
         sub: payload.sub as string,
       },
       expires_in: expiresIn(payload.exp!),
-      apiToken: apiToken(token),
+      apiToken: apiToken(provider, token),
     };
   } catch (err) {
     throw err;
   }
 }
 
-function apiToken(subject_token: string) {
-  return async (audience: string) => tokenx.getToken(subject_token, audience);
+function apiToken(provider: AuthProvider, subject_token: string) {
+  return async (audience: string) =>
+    provider.exchangeToken(subject_token, audience);
 }
 
 function expiresIn(timestamp: number): number {

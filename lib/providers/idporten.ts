@@ -9,6 +9,7 @@ import {
 import { AuthProvider } from "../server/middleware";
 import { GetKeyFunction } from "jose/dist/types/types";
 import { getToken, redirect } from "./wonderwall";
+import tokenx from "../issuers/tokenx";
 
 let remoteJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
 
@@ -34,10 +35,13 @@ async function verifyToken(
   return verifyResult;
 }
 
+const exchangeToken = tokenx.getToken;
+
 const idporten: AuthProvider = {
   getToken,
   verifyToken,
   redirect,
+  exchangeToken,
 };
 
 export default idporten;
