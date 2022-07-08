@@ -3,7 +3,7 @@ import env from "env-var";
 import { JWK } from "jose/dist/types/types";
 import { memoize } from "lodash";
 import { TokenIssuer } from "../index";
-import { GrantBody, GrantExtras } from "openid-client";
+import { Client, GrantBody, GrantExtras, Issuer } from "openid-client";
 
 const options = () => ({
   clientId: env.get("AZURE_APP_CLIENT_ID").required().asString(),
@@ -26,6 +26,22 @@ class AzureTokenExchange extends TokenExchange {
   constructor(config: AzureClientConfig) {
     super(config);
     this._azureConfig = config;
+  }
+
+  getClient(): Client {
+    const issuer = new Issuer({
+      issuer: this._config.issuer,
+      token_endpoint: this._config.tokenEndpoint,
+      token_endpoint_auth_signing_alg_values_supported: ["RS256"],
+    });
+    const jwk = this._config.privateJWK;
+    return new issuer.Client(
+      {
+        client_id: this._config.clientId,
+        token_endpoint_auth_method: "client_secret_basic",
+      },
+      { keys: [jwk] }
+    );
   }
 
   grantBody(audience: string, subject_token: string): GrantBody {
