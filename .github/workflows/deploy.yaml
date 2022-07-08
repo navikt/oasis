@@ -1,6 +1,8 @@
 name: Deploy test-app
 
-on: [ push ]
+on:
+  push:
+    branches:
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
