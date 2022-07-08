@@ -1,6 +1,6 @@
 import { IncomingMessage } from "http";
 import { AuthProvider } from "./middleware";
-import { azureAd, tokenx } from "../issuers";
+import { apiToken } from "../issuers";
 
 export interface User {
   sub: string;
@@ -44,19 +44,6 @@ export async function getSession(
     };
   } catch (err) {
     throw err;
-  }
-}
-
-function apiToken(provider: AuthProvider, subject_token: string) {
-  switch (provider.name) {
-    case "idporten":
-      return async (audience: string) =>
-        tokenx.exchangeToken(subject_token, audience);
-    case "azureAd":
-      return async (audience: string) =>
-        azureAd.exchangeToken(subject_token, audience);
-    default:
-      throw new Error("Missing token issuer for this provider");
   }
 }
 

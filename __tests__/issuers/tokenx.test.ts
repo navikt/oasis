@@ -11,7 +11,7 @@ describe("issuers/tokenx/getToken()", () => {
     const subjectToken = "token";
     const access_token = `${audience}:${subjectToken}`;
 
-    const apiToken = await exchangeToken(subjectToken, audience);
+    const apiToken = await exchangeToken()(subjectToken, audience);
 
     expect(apiToken).toBe(access_token);
   });
@@ -23,7 +23,7 @@ describe("issuers/tokenx/getToken()", () => {
       })
     );
 
-    await expect(exchangeToken("token", "api audience")).rejects.toThrow();
+    await expect(exchangeToken()("token", "api audience")).rejects.toThrow();
   });
 
   test("throws OPError for domain errors in the exchange", async () => {
@@ -38,7 +38,7 @@ describe("issuers/tokenx/getToken()", () => {
       })
     );
 
-    await expect(exchangeToken("token", "api audience")).rejects.toThrow(
+    await expect(exchangeToken()("token", "api audience")).rejects.toThrow(
       errors.OPError
     );
   });
