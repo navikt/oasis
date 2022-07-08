@@ -8,7 +8,6 @@ import {
 import { AuthProvider } from "../server/middleware";
 import { GetKeyFunction } from "jose/dist/types/types";
 import { getToken, redirect } from "./wonderwall";
-import azureAdIssuer from "../issuers/azure-ad";
 
 let remoteJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
 
@@ -27,13 +26,11 @@ function verifyToken(token: string | Uint8Array): Promise<JWTVerifyResult> {
   });
 }
 
-const exchangeToken = azureAdIssuer.getToken;
-
 const azureAd: AuthProvider = {
+  name: "azureAd",
   getToken,
   verifyToken,
   redirect,
-  exchangeToken,
 };
 
 export default azureAd;

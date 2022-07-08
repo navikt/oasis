@@ -54,6 +54,7 @@ export type getToken = (
 
 export function createGetToken(options: () => ClientConfig): getToken {
   const _client = memoize(() => client(options()));
+
   return async function getToken(
     subject_token: string,
     audience: string

@@ -1,5 +1,5 @@
 import { rest } from "msw";
-import { getToken } from "../../lib/issuers/tokenx";
+import { exchangeToken } from "../../lib/issuers/tokenx";
 import { errors } from "openid-client";
 import { server } from "../../lib/mocks/server";
 
@@ -11,7 +11,7 @@ describe("issuers/tokenx/getToken()", () => {
     const subjectToken = "token";
     const access_token = `${audience}:${subjectToken}`;
 
-    const apiToken = await getToken(subjectToken, audience);
+    const apiToken = await exchangeToken(subjectToken, audience);
 
     expect(apiToken).toBe(access_token);
   });
@@ -23,7 +23,7 @@ describe("issuers/tokenx/getToken()", () => {
       })
     );
 
-    await expect(getToken("token", "api audience")).rejects.toThrow();
+    await expect(exchangeToken("token", "api audience")).rejects.toThrow();
   });
 
   test("throws OPError for domain errors in the exchange", async () => {
@@ -32,12 +32,14 @@ describe("issuers/tokenx/getToken()", () => {
         return res(
           ctx.status(401),
           ctx.json({
-            feilmelding: "foo"
+            feilmelding: "foo",
           })
         );
       })
     );
 
-    await expect(getToken("token", "api audience")).rejects.toThrow(errors.OPError);
+    await expect(exchangeToken("token", "api audience")).rejects.toThrow(
+      errors.OPError
+    );
   });
 });

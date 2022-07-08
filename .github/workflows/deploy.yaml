@@ -1,4 +1,4 @@
-name: Build and deploy
+name: Deploy test-app
 
 on: [ push ]
 
