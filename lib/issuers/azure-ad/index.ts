@@ -3,7 +3,7 @@ import env from "env-var";
 import { JWK } from "jose/dist/types/types";
 import { memoize } from "lodash";
 import { TokenIssuer } from "../index";
-import { GrantBody } from "openid-client";
+import { GrantBody, GrantExtras } from "openid-client";
 
 const options = () => ({
   clientId: env.get("AZURE_APP_CLIENT_ID").required().asString(),
@@ -37,6 +37,10 @@ class AzureTokenExchange extends TokenExchange {
       scope: audience,
       requested_token_use: "on_behalf_of",
     };
+  }
+
+  additionalClaims(): GrantExtras {
+    return {};
   }
 }
 
