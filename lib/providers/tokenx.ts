@@ -34,6 +34,7 @@ async function client() {
       {
         client_id: process.env.TOKEN_X_CLIENT_ID,
         token_endpoint_auth_method: "private_key_jwt",
+        token_endpoint_auth_signing_alg: "RS256",
       },
       { keys: [_jwk] }
     );
