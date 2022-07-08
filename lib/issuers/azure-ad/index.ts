@@ -3,7 +3,7 @@ import env from "env-var";
 import { JWK } from "jose/dist/types/types";
 import { memoize } from "lodash";
 import { TokenIssuer } from "../index";
-import { Client, GrantBody, GrantExtras, Issuer } from "openid-client";
+import { Client, GrantBody, Issuer } from "openid-client";
 
 const options = () => ({
   clientId: env.get("AZURE_APP_CLIENT_ID").required().asString(),
@@ -38,6 +38,7 @@ class AzureTokenExchange extends TokenExchange {
     return new issuer.Client(
       {
         client_id: this._config.clientId,
+        client_secret: this._azureConfig.clientSecret,
         token_endpoint_auth_method: "client_secret_basic",
       },
       { keys: [jwk] }
@@ -47,16 +48,10 @@ class AzureTokenExchange extends TokenExchange {
   grantBody(audience: string, subject_token: string): GrantBody {
     return {
       grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      client_id: this._config.clientId,
-      client_secret: this._azureConfig.clientSecret,
       assertion: subject_token,
       scope: audience,
       requested_token_use: "on_behalf_of",
     };
-  }
-
-  additionalClaims(): GrantExtras {
-    return {};
   }
 }
 
