@@ -15,7 +15,7 @@ interface SessionBase {
 }
 
 export interface SessionWithOboProvider extends SessionBase {
-  getTokenFor: (audience: string) => string;
+  getTokenFor: (audience: string) => Promise<string>;
 }
 
 export type Session = SessionBase | SessionWithOboProvider | null;

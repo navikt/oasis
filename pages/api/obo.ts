@@ -9,13 +9,7 @@ export default async function authenticatedHandler(
 
   if (!session) return res.status(401);
 
-  let audience: string;
-  if (process.env.PROVIDER == "idporten") {
-    audience = "dp-auth-azure";
-  } else {
-    audience = "dp-auth-idporten";
-  }
-  const obo = session.getTokenFor(audience);
-  console.log({ obo });
-  res.status(200).send(`Made obo-token for ${audience}. Size=${obo.length}`);
+  const obo = await session.getTokenFor("dummy audience that fails");
+
+  res.status(200).send(`Made obo-token request`);
 }
