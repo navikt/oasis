@@ -4,7 +4,7 @@ import getTokenXOBO from "./obo/tokenx";
 import { getAzureToken } from "./oidc/getAzureToken";
 
 export let getSession: GetSession;
-if (process.env.PROVIDER == "idporten" || true) {
+if (process.env.PROVIDER == "idporten") {
   getSession = makeSession({
     identityProvider: getIdportenToken,
     oboProvider: getTokenXOBO,

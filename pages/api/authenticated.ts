@@ -7,10 +7,10 @@ export default async function authenticatedHandler(
   res: NextApiResponse<string>
 ) {
   const session = await getSession(req);
-  console.log(session);
+
   if (!session) return res.status(401);
 
-  const { sub } = decodeJwt("session.payload");
+  const { sub } = decodeJwt(session.token);
 
   res.status(200).send(`Authenticated as ${sub}`);
 }
