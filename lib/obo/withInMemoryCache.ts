@@ -25,7 +25,7 @@ export interface CacheOptions {
   minExpire: number;
 }
 
-export function withCache(
+export function withInMemoryCache(
   oboProvider: OboProvider,
   { minExpire }: CacheOptions = { minExpire: 0 }
 ): OboProvider {

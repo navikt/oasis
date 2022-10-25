@@ -2,7 +2,7 @@ import { IncomingMessage } from "http";
 import { Token } from "../index";
 import { getTokenFromHeader } from "../utils/getTokenFromHeader";
 import { errors, jwtVerify, JWTVerifyResult } from "jose";
-import { cachedRemoteJWKSet } from "../utlis/cachedRemoteJWKSet";
+import { cachedRemoteJWKSet } from "../utils/cachedRemoteJWKSet";
 
 const idportenJWKSet = () =>
   cachedRemoteJWKSet(process.env.IDPORTEN_JWKS_URI as string);

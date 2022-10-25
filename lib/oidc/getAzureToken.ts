@@ -2,7 +2,7 @@ import { IncomingMessage } from "http";
 import { Token } from "../index";
 import { getTokenFromHeader } from "../utils/getTokenFromHeader";
 import { jwtVerify, JWTVerifyResult } from "jose";
-import { cachedRemoteJWKSet } from "../utlis/cachedRemoteJWKSet";
+import { cachedRemoteJWKSet } from "../utils/cachedRemoteJWKSet";
 
 const azureJWKSet = () =>
   cachedRemoteJWKSet(process.env.AZURE_OPENID_CONFIG_JWKS_URI as string);

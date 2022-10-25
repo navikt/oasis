@@ -1,7 +1,7 @@
 import { decodeJwt, makeSession, OboProvider } from "../lib";
 import { createRequest } from "node-mocks-http";
 import { getIdportenToken } from "../lib/oidc/getIdportenToken";
-import { withCache } from "../lib/obo/withCache";
+import { withInMemoryCache } from "../lib/obo/withInMemoryCache";
 import getTokenXOBO from "../lib/obo/tokenx";
 import { token } from "./__utils__/test-provider";
 
@@ -58,7 +58,7 @@ describe("getSession", () => {
   it("can be composed with caching of OBO tokens", async () => {
     const getSession = makeSession({
       identityProvider: getIdportenToken,
-      oboProvider: withCache(getTokenXOBO),
+      oboProvider: withInMemoryCache(getTokenXOBO),
     });
     const jwt = await token("123");
     const session = await getSession(
@@ -80,7 +80,7 @@ describe("getSession", () => {
   it("can be composed with metrics and caching of OBO exchange", async () => {
     const getSession = makeSession({
       identityProvider: getIdportenToken,
-      oboProvider: withMetrics(withCache(getTokenXOBO)),
+      oboProvider: withMetrics(withInMemoryCache(getTokenXOBO)),
     });
     const jwt = await token("123");
     const session = await getSession(
@@ -102,7 +102,7 @@ describe("getSession", () => {
   it("can be composed with metrics and caching of OBO exchange depending of what you want to measure", async () => {
     const getSession = makeSession({
       identityProvider: getIdportenToken,
-      oboProvider: withCache(withMetrics(getTokenXOBO)),
+      oboProvider: withInMemoryCache(withMetrics(getTokenXOBO)),
     });
     const jwt = await token("123");
     const session = await getSession(
