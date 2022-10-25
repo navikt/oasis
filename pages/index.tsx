@@ -1,10 +1,10 @@
-import { token } from "../__tests__/__utils__/test-provider";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { token } from "../__tests__/__utils__/test-provider";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const testToken = await token("123");
+  const testToken = await token("213");
 
   return {
     props: { testToken },

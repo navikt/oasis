@@ -44,7 +44,7 @@ jobs:
   deploy-azure:
     name: Deploy with Azure AD
     needs: [ test, build ]
-    if: github.ref == 'refs/heads/feature/v1'
+    if: github.ref == 'refs/heads/feature/v2'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -58,7 +58,7 @@ jobs:
   deploy-idporten:
     name: Deploy with IDporten
     needs: [ test, build ]
-    if: github.ref == 'refs/heads/feature/v1'
+    if: github.ref == 'refs/heads/feature/v2'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

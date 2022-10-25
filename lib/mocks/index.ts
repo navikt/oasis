@@ -1,7 +1,11 @@
-if (process.env.NEXT_RUNTIME == "nodejs") {
-  import("./server").then(({ server }) => {
+async function initMocks() {
+  if (typeof window === "undefined") {
+    const { server } = await import("./server");
     server.listen();
-  });
+    server.printHandlers();
+  }
 }
 
-export default {};
+initMocks();
+
+export {};

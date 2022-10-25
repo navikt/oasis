@@ -1,14 +1,23 @@
 import { GetServerSideProps } from "next";
-import { idporten } from "../lib/providers";
-import { getSession } from "../lib/server/get-session";
+import { decodeJwt } from "../lib";
+import { getSession } from "../lib/provider";
 
 export const getServerSideProps: GetServerSideProps<ClosedPageProps> = async (
   context
 ) => {
-  const session = await getSession(idporten, context);
+  const session = await getSession(context.req);
 
+  if (!session)
+    return {
+      redirect: {
+        destination: "/oauth2/login",
+        permanent: false,
+      },
+    };
+
+  const payload = decodeJwt(session.token);
   return {
-    props: { sub: session.user.sub as string },
+    props: { sub: payload.sub as string },
   };
 };
 
