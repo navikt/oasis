@@ -1,9 +1,10 @@
-import { GetSession, makeSession } from "./index";
+import { GetSessionWithOboProvider, makeSession } from "./index";
 import { getIdportenToken } from "./oidc/getIdportenToken";
 import getTokenXOBO from "./obo/tokenx";
 import { getAzureToken } from "./oidc/getAzureToken";
+import getAzureOBO from "./obo/azure";
 
-export let getSession: GetSession;
+export let getSession: GetSessionWithOboProvider;
 if (process.env.PROVIDER == "idporten") {
   getSession = makeSession({
     identityProvider: getIdportenToken,
@@ -12,6 +13,6 @@ if (process.env.PROVIDER == "idporten") {
 } else if (process.env.PROVIDER == "azure") {
   getSession = makeSession({
     identityProvider: getAzureToken,
-    // oboProvider: getAzureOBO,
+    oboProvider: getAzureOBO,
   });
 }
