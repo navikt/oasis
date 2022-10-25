@@ -16,6 +16,6 @@ export default async function authenticatedHandler(
     audience = "dp-auth-idporten";
   }
   const obo = session.getTokenFor(audience);
-
+  console.log({ obo });
   res.status(200).send(`Made obo-token for ${audience}. Size=${obo.length}`);
 }
