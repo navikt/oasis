@@ -1,8 +1,8 @@
 import { decodeJwt, makeSession, OboProvider } from "../lib";
 import { createRequest } from "node-mocks-http";
-import { getIdportenToken } from "../lib/oidc/getIdportenToken";
+import { idporten } from "../lib/oidc/idporten";
 import { withInMemoryCache } from "../lib/obo/withInMemoryCache";
-import getTokenXOBO from "../lib/obo/tokenx";
+import tokenX from "../lib/obo/tokenx";
 import { token } from "./__utils__/test-provider";
 
 // Example function for solving metrics
@@ -18,7 +18,7 @@ function withMetrics(oboProvider: OboProvider): OboProvider {
 describe("getSession", () => {
   it("can be composed without OBO", async () => {
     const getSession = makeSession({
-      identityProvider: getIdportenToken,
+      identityProvider: idporten,
     });
     const jwt = await token("123");
     const session = await getSession(
@@ -32,13 +32,13 @@ describe("getSession", () => {
     expect(session?.token).toBe(jwt);
     expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
     // @ts-ignore
-    expect(session?.getTokenFor).toBeUndefined();
+    expect(session?.apiToken).toBeUndefined();
   });
 
   it("can be composed with OBO", async () => {
     const getSession = makeSession({
-      identityProvider: getIdportenToken,
-      oboProvider: getTokenXOBO,
+      identityProvider: idporten,
+      oboProvider: tokenX,
     });
     const jwt = await token("123");
     const session = await getSession(
@@ -51,14 +51,14 @@ describe("getSession", () => {
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
     expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
-    const oboToken = decodeJwt(await session?.getTokenFor("fo"));
+    const oboToken = decodeJwt(await session?.apiToken("fo"));
     expect(oboToken.iss).toBe(`urn:tokenx:dings`);
   });
 
   it("can be composed with caching of OBO tokens", async () => {
     const getSession = makeSession({
-      identityProvider: getIdportenToken,
-      oboProvider: withInMemoryCache(getTokenXOBO),
+      identityProvider: idporten,
+      oboProvider: withInMemoryCache(tokenX),
     });
     const jwt = await token("123");
     const session = await getSession(
@@ -72,15 +72,15 @@ describe("getSession", () => {
     expect(session?.token).toBe(jwt);
     expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
 
-    const oboToken = await session?.getTokenFor("fo");
+    const oboToken = await session?.apiToken("fo");
     const payload = decodeJwt(oboToken);
     expect(payload.iss).toContain(`urn:tokenx:dings`);
   });
 
   it("can be composed with metrics and caching of OBO exchange", async () => {
     const getSession = makeSession({
-      identityProvider: getIdportenToken,
-      oboProvider: withMetrics(withInMemoryCache(getTokenXOBO)),
+      identityProvider: idporten,
+      oboProvider: withMetrics(withInMemoryCache(tokenX)),
     });
     const jwt = await token("123");
     const session = await getSession(
@@ -94,15 +94,15 @@ describe("getSession", () => {
     expect(session?.token).toBe(jwt);
     expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
 
-    const oboToken = await session?.getTokenFor("fo");
+    const oboToken = await session?.apiToken("fo");
     const payload = decodeJwt(oboToken);
     expect(payload.iss).toContain(`urn:tokenx:dings`);
   });
 
   it("can be composed with metrics and caching of OBO exchange depending of what you want to measure", async () => {
     const getSession = makeSession({
-      identityProvider: getIdportenToken,
-      oboProvider: withInMemoryCache(withMetrics(getTokenXOBO)),
+      identityProvider: idporten,
+      oboProvider: withInMemoryCache(withMetrics(tokenX)),
     });
     const jwt = await token("123");
     const session = await getSession(
@@ -116,7 +116,7 @@ describe("getSession", () => {
     expect(session?.token).toBe(jwt);
     expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
 
-    const oboToken = await session?.getTokenFor("fo");
+    const oboToken = await session?.apiToken("fo");
     const payload = decodeJwt(oboToken);
     expect(payload.iss).toContain(`urn:tokenx:dings`);
   });

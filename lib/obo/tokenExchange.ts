@@ -1,7 +1,7 @@
 import { Client, errors, GrantBody, GrantExtras } from "openid-client";
 import OPError = errors.OPError;
 
-export async function getOBOToken(
+export async function tokenExchange(
   client: Client,
   grantBody: GrantBody,
   additionalClaims: GrantExtras

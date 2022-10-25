@@ -32,9 +32,7 @@ async function verify(token: string): Promise<JWTVerifyResult> {
   return result;
 }
 
-export async function getIdportenToken(
-  req: IncomingMessage
-): Promise<Token | null> {
+export async function idporten(req: IncomingMessage): Promise<Token | null> {
   const token = getTokenFromHeader(req.headers);
   if (!token) return null;
   await verify(token);

@@ -1,6 +1,6 @@
 import { Client, errors, GrantBody } from "openid-client";
 import { getAdditionalClaims, getClient } from "./client";
-import { getOBOToken } from "../getOBOToken";
+import { tokenExchange } from "../tokenExchange";
 import OPError = errors.OPError;
 
 function getGrantBody(subject_token: string, audience: string): GrantBody {
@@ -40,11 +40,11 @@ function cachedClient() {
   return _cached;
 }
 
-export default async function getTokenXOBO(
+export default async function tokenX(
   token: string,
   audience: string
 ): Promise<string | null> {
-  return getOBOToken(
+  return tokenExchange(
     cachedClient(),
     getGrantBody(token, audience),
     getAdditionalClaims()

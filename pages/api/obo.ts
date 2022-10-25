@@ -9,7 +9,7 @@ export default async function authenticatedHandler(
 
   if (!session) return res.status(401);
 
-  const obo = await session.getTokenFor("dummy audience that fails");
+  const obo = await session.apiToken("dummy audience that fails");
 
   res.status(200).send(`Made obo-token request`);
 }

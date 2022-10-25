@@ -1,12 +1,12 @@
 import { token } from "../__utils__/test-provider";
 import { decodeJwt, OboProvider } from "../../lib";
 import { errorAudience } from "../../lib/mocks/handlers";
-import getAzureOBO from "../../lib/obo/azure";
-import getTokenXOBO from "../../lib/obo/tokenx";
+import azureOBO from "../../lib/obo/azure";
+import tokenX from "../../lib/obo/tokenx";
 
 describe.each([
-  ["tokenX", getTokenXOBO, "urn:tokenx:dings"],
-  ["azure", getAzureOBO, "urn:azure:dings"],
+  ["tokenX", tokenX, "urn:tokenx:dings"],
+  ["azure", azureOBO, "urn:azure:dings"],
 ])("%s", (_, oboProvider: OboProvider, issuer: string) => {
   it("returns token when exchanges succeeds", async () => {
     const jwt = await oboProvider(await token("pid"), "audience");
