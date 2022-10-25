@@ -54,7 +54,6 @@ if (process.env.GENERATE_DEV_JWK == "enabled") {
   const { serverRuntimeConfig } = getConfig();
   cachedKeyPair = serverRuntimeConfig.key;
 } else {
-  console.log("IKKE LOL ");
   cachedKeyPair = generateKeyPair(alg);
 }
 
