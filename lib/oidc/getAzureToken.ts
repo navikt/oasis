@@ -1,18 +1,14 @@
 import { IncomingMessage } from "http";
 import { Token } from "../index";
 import { getTokenFromHeader } from "../utils/getTokenFromHeader";
-import _ from "lodash";
-import { createRemoteJWKSet, jwtVerify, JWTVerifyResult } from "jose";
+import { jwtVerify, JWTVerifyResult } from "jose";
+import { cachedRemoteJWKSet } from "../utlis/cachedRemoteJWKSet";
 
-const cachedRemoteJWKSet = _.memoize(createRemoteJWKSet);
-
-// TODO: Unngå at dette skjer on startup
-const remoteJWKSet = cachedRemoteJWKSet(
-  new URL(process.env.AZURE_OPENID_CONFIG_JWKS_URI as string)
-);
+const azureJWKSet = () =>
+  cachedRemoteJWKSet(process.env.AZURE_OPENID_CONFIG_JWKS_URI as string);
 
 async function verify(token: string): Promise<JWTVerifyResult> {
-  const result = await jwtVerify(token, remoteJWKSet, {
+  const result = await jwtVerify(token, azureJWKSet(), {
     issuer: process.env.AZURE_OPENID_CONFIG_ISSUER,
   });
   return result;

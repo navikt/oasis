@@ -1,18 +1,14 @@
 import { IncomingMessage } from "http";
 import { Token } from "../index";
 import { getTokenFromHeader } from "../utils/getTokenFromHeader";
-import { createRemoteJWKSet, errors, jwtVerify, JWTVerifyResult } from "jose";
-import _ from "lodash";
+import { errors, jwtVerify, JWTVerifyResult } from "jose";
+import { cachedRemoteJWKSet } from "../utlis/cachedRemoteJWKSet";
 
-const cachedRemoteJWKSet = _.memoize(createRemoteJWKSet);
-
-// TODO: Unngå at dette skjer on startup
-export const remoteJWKSet = cachedRemoteJWKSet(
-  new URL(process.env.IDPORTEN_JWKS_URI as string)
-);
+const idportenJWKSet = () =>
+  cachedRemoteJWKSet(process.env.IDPORTEN_JWKS_URI as string);
 
 async function verify(token: string): Promise<JWTVerifyResult> {
-  const result = await jwtVerify(token, remoteJWKSet, {
+  const result = await jwtVerify(token, idportenJWKSet(), {
     issuer: process.env.IDPORTEN_ISSUER,
   });
   if (
