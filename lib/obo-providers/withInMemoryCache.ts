@@ -2,6 +2,7 @@ import { OboProvider } from "../index";
 import NodeCache from "node-cache";
 import { decodeJwt, JWTPayload } from "jose";
 import { secondsUntil } from "../utils/secondsUntil";
+import EventEmitter from "events";
 
 let cache: NodeCache;
 
@@ -22,25 +23,36 @@ function getSecondsToExpire(payload: JWTPayload) {
 }
 
 export interface CacheOptions {
-  minExpire: number;
+  minExpire?: number;
+  cacheHit?: (key: string) => void;
+  cacheMiss?: (key: string) => void;
 }
 
 export function withInMemoryCache(
   oboProvider: OboProvider,
-  { minExpire }: CacheOptions = { minExpire: 0 }
+  { minExpire, cacheHit, cacheMiss }: CacheOptions = {}
 ): OboProvider {
   const cache = getCache();
+  const emitter = new EventEmitter();
+
+  if (cacheHit) emitter.on("cache-hit", cacheHit);
+  if (cacheMiss) emitter.on("cache-miss", cacheMiss);
+
   return async (token, audience) => {
     const key = `${token}-${audience}`;
     const cachedToken = cache.get<string>(key);
-    if (cachedToken) return cachedToken;
+    if (cachedToken) {
+      emitter.emit("cache-hit", key);
+      return cachedToken;
+    }
+    emitter.emit("cache-miss", key);
 
     const oboToken = await oboProvider(token, audience);
     if (!oboToken) return null;
 
     const payload = decodeJwt(oboToken);
     const ttl = getSecondsToExpire(payload);
-    if (ttl > minExpire) {
+    if (ttl > (minExpire ?? 0)) {
       cache.set(key, oboToken, ttl);
     }
 

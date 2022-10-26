@@ -2,7 +2,7 @@ import { OboProvider } from "../../lib";
 import { token } from "../__utils__/test-provider";
 import { withInMemoryCache } from "../../lib/obo-providers/withInMemoryCache";
 
-describe("withCache", () => {
+describe("withInMemoryCache", () => {
   it("caches token + audience", async () => {
     const oboProvider: OboProvider = async (_, audience) =>
       await token(audience);
@@ -44,5 +44,23 @@ describe("withCache", () => {
     expect(obo1).toBe(null);
     expect(obo2).toBe(null);
     expect(obo3).not.toBe(null);
+  });
+
+  it("provides callbacks to track cache hit/miss", async () => {
+    const hits = [];
+    const misses = [];
+    const oboProvider: OboProvider = async (_, audience) =>
+      await token(audience);
+    const cachedProvider = withInMemoryCache(oboProvider, {
+      cacheHit: (key) => hits.push(key),
+      cacheMiss: (key) => misses.push(key),
+    });
+    await cachedProvider("token-cache-1", "audience");
+    await cachedProvider("token-cache-2", "audience");
+    await cachedProvider("token-cache-3", "audience");
+    await cachedProvider("token-cache-2", "audience");
+
+    expect(hits).toHaveLength(1);
+    expect(misses).toHaveLength(3);
   });
 });
