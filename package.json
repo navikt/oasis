@@ -1,6 +1,6 @@
 {
   "name": "@navikt/dp-auth",
-  "version": "0.2.0-alpha.5",
+  "version": "0.2.0-alpha.6",
   "description": "Autentiseringsmodul for NextJS appene til dagpengeteamet",
   "scripts": {
     "build-lib": "tsc --noEmit false",
@@ -60,8 +60,14 @@
   "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
-      "*": [
+      "*/": [
         "dist/*"
+      ],
+      "obo-providers/*": [
+        "dist/obo-providers/*/index.d.ts"
+      ],
+      "identity-providers/*": [
+        "dist/identity-providers/*"
       ]
     }
   },
