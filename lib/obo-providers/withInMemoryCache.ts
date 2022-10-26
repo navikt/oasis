@@ -24,8 +24,8 @@ function getSecondsToExpire(payload: JWTPayload) {
 
 export interface CacheOptions {
   minExpire?: number;
-  cacheHit?: (key: string) => void;
-  cacheMiss?: (key: string) => void;
+  cacheHit?: (token: string, audience: string) => void;
+  cacheMiss?: (token: string, audience: string) => void;
 }
 
 export function withInMemoryCache(
@@ -42,10 +42,10 @@ export function withInMemoryCache(
     const key = `${token}-${audience}`;
     const cachedToken = cache.get<string>(key);
     if (cachedToken) {
-      emitter.emit("cache-hit", key);
+      emitter.emit("cache-hit", token, audience);
       return cachedToken;
     }
-    emitter.emit("cache-miss", key);
+    emitter.emit("cache-miss", token, audience);
 
     const oboToken = await oboProvider(token, audience);
     if (!oboToken) return null;

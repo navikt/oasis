@@ -1,7 +1,7 @@
 {
   "name": "@navikt/dp-auth",
-  "version": "0.2.0-alpha.8",
-  "description": "Autentiseringsmodul for NextJS appene til dagpengeteamet",
+  "version": "0.2.0",
+  "description": "Autentiseringsmodul for node apper som bruker IncomingMessage som request-objekt til dagpengeteamet",
   "scripts": {
     "build-lib": "tsc --noEmit false",
     "test": "jest",

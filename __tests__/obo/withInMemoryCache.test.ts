@@ -49,11 +49,14 @@ describe("withInMemoryCache", () => {
   it("provides callbacks to track cache hit/miss", async () => {
     const hits = [];
     const misses = [];
+    const audiences = [];
     const oboProvider: OboProvider = async (_, audience) =>
       await token(audience);
     const cachedProvider = withInMemoryCache(oboProvider, {
-      cacheHit: (key) => hits.push(key),
-      cacheMiss: (key) => misses.push(key),
+      cacheHit: (token, audience) =>
+        hits.push(token) && audiences.push(audience),
+      cacheMiss: (token, audience) =>
+        misses.push(token) && audiences.push(audience),
     });
     await cachedProvider("token-cache-1", "audience");
     await cachedProvider("token-cache-2", "audience");
@@ -62,5 +65,6 @@ describe("withInMemoryCache", () => {
 
     expect(hits).toHaveLength(1);
     expect(misses).toHaveLength(3);
+    expect(audiences).toHaveLength(4);
   });
 });

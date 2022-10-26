@@ -1,6 +1,13 @@
 # dp-auth
 
-Autentiseringsmodul for NextJS appene til dagpengeteamet
+Opinionated bibliotek for å verifisere tokens fra Wonderwall på NAIS-plattformen.
+
+Kommer med støtte for både Idporten og AzureAD som OIDC-providers, og henter automatisk ut konfigurasjon fra miljøet.
+
+Støtter On-Behalf-Of(OBO) utveksling mot både TokenX (for Idporten) og Azure.
+
+Støtter alle rammeverk hvor `request`-objekt utledes
+fra NodeJS sin [IncomingMessage](https://nodejs.org/api/http.html#class-httpincomingmessage).
 
 ## Quick start
 
@@ -12,42 +19,63 @@ fra [GitHubs npm registry](https://docs.github.com/en/packages/working-with-a-gi
 npm i dp-auth
 ```
 
-Lag en fil i `pages/api/auth` som heter `[...auth].js`
+Lag en fil et sted, `lib/getSession.js` og kall `makeSession()` med den identity og OBO provider du vil ha.
 
 ```javascript
-import DpAuthHandler from "@navikt/dp-auth";
+import { makeSession } from "@navikt/dp-auth";
+import { idporten } from "@navikt/dp-auth/identity-providers";
+import { tokenX, withInMemoryCache } from "@navikt/dp-auth/obo-providers";
 
-export default DpAuthHandler;
+export const getSession = makeSession({
+  identityProvider: idporten,
+  oboProvider: tokenX,
+});
 ```
 
-## Konfigurasjon
+## Caching av OBO tokens
 
-Applikasjonen må eksponere henholdsvis miljøvariablene: 
+For å cache OBO-tokens kan du wrappe provideren med `withInMemoryCache()` slik:
 
-- SELF_URL - som er en peker på applikasjonens ingress, som er hele url. feks https://arbeid.nav.no/arbeid/dagpenger/quizshow
-- NEXT_PUBLIC_BASE_PATH - som er applikasjonens egen "base path", feks arbeid/dagpenger/quizshow
-
-
-
-Pakken baserer seg på konvensjoner fra NAIS-plattformen og trenger i utgangspunktet ikke noe mere konfigurasjon
-
-## URL til "Well-known / Discovery URL" for Loginservice
-Ligger i ett config map som er er tilgjengelig i alle cluster. Dette configmappet må mountes in av alle apper som bruker denne pakken. 
-For detaljer se [loginservice på github](https://github.com/navikt/loginservice#metadata)
-
-
-
-Eksempel for produksjon:
-
-```
-LOGINSERVICE_URL - som er en url til loginservice i nav, feks https://loginservice.nav.no/login
+```javascript
+export const getSession = makeSession({
+  identityProvider: idporten,
+  oboProvider: withInMemoryCache(tokenX),
+});
 ```
 
-Husk også at appens url må whitelistes av loginservice i
-nav https://github.com/navikt/loginservice#allowlist-of-redirect-urls
+For å måle cache hitrate kan du sende med `cacheHit` og `cacheMiss`.
 
-## Testing
+```javascript
+export const getSession = makeSession({
+  identityProvider: idporten,
+  oboProvider: withInMemoryCache(tokenX, {
+    cacheHit: (key) => metrics.add("cache-hit"),
+    cacheMiss: (key) => metrics.add("cache-miss")
+  }),
+});
+```
 
-```bash
-npm run test 
+## Måling av tid brukt
+
+Vil du måle hvor mye tid noe tar kan du lage en egen wrapper. Du kan velge selv om du vil måle med eller uten cache
+hits, eller begge deler, avhengig av hvor du plasserer `withMetrics()`.
+
+```javascript
+function withMetrics(oboProvider: OboProvider): OboProvider {
+  return async (token, audience) => {
+    const stopMeasure = jest.fn();
+    const oboToken = (await oboProvider(token, audience)) + "-instrumented";
+    stopMeasure();
+    return oboToken;
+  };
+}
+
+export const getSession = makeSession({
+  identityProvider: idporten,
+  oboProvider: withInMemoryCache(withMetrics(tokenX), {
+    cacheHit: (key) => metrics.add("cache-hit"),
+    cacheMiss: (key) => metrics.add("cache-miss")
+  }),
+});
+
 ```
