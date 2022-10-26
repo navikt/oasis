@@ -1,6 +1,7 @@
 import _ from "lodash";
-import { createRemoteJWKSet } from "jose";
+import { createRemoteJWKSet, JWTVerifyGetKey } from "jose";
 
-export const cachedRemoteJWKSet = _.memoize((remoteJWKS: string) => {
-  return createRemoteJWKSet(new URL(remoteJWKS));
-});
+export const cachedRemoteJWKSet: (remoteJWKS: string) => JWTVerifyGetKey =
+  _.memoize((remoteJWKS: string) => {
+    return createRemoteJWKSet(new URL(remoteJWKS));
+  });

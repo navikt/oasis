@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "target": "es5",
+    "target": "es2019",
     "lib": [
       "dom",
       "dom.iterable",
@@ -14,7 +14,7 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
@@ -27,6 +27,6 @@
   "exclude": [
     "node_modules",
     "lib/mocks",
-    "**/__tests__/*"
+    "**/__tests__"
   ]
 }

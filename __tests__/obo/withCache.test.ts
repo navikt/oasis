@@ -1,6 +1,6 @@
 import { OboProvider } from "../../lib";
-import { withInMemoryCache } from "../../lib/obo/withInMemoryCache";
 import { token } from "../__utils__/test-provider";
+import { withInMemoryCache } from "../../lib/obo-providers/withInMemoryCache";
 
 describe("withCache", () => {
   it("caches token + audience", async () => {

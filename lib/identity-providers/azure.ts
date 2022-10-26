@@ -14,7 +14,9 @@ async function verify(token: string): Promise<JWTVerifyResult> {
   return result;
 }
 
-export async function azure(req: IncomingMessage): Promise<Token | null> {
+export default async function azure(
+  req: IncomingMessage
+): Promise<Token | null> {
   const token = getTokenFromHeader(req.headers);
   if (!token) return null;
   await verify(token);

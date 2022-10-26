@@ -1,8 +1,8 @@
 import { GetSessionWithOboProvider, makeSession } from "./index";
-import { idporten } from "./oidc/idporten";
-import { azure } from "./oidc/azure";
-import azureOBO from "./obo/azure";
-import tokenX from "./obo/tokenx";
+import idporten from "./identity-providers/idporten";
+import azure from "./identity-providers/azure";
+import azureOBO from "./obo-providers/azure";
+import tokenX from "./obo-providers/tokenx";
 
 export let getSession: GetSessionWithOboProvider;
 if (process.env.PROVIDER == "idporten") {

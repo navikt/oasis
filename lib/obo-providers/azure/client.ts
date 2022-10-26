@@ -1,4 +1,4 @@
-import { JWK } from "jose/dist/types/types";
+import { JWK } from "jose";
 import _ from "lodash";
 import { Client, Issuer } from "openid-client";
 

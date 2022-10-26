@@ -1,7 +1,7 @@
-import { idporten } from "../../lib/oidc/idporten";
 import { createRequest } from "node-mocks-http";
 import { token } from "../__utils__/test-provider";
 import { decodeJwt } from "jose";
+import idporten from "../../lib/identity-providers/idporten";
 
 describe("getIdportenToken", () => {
   it("handles missing authorization header", async () => {
