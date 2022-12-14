@@ -16,6 +16,14 @@ function withMetrics(oboProvider: OboProvider): OboProvider {
 }
 
 describe("getSession", () => {
+  it("can be destructured", async () => {
+    const getSession = makeSession({
+      identityProvider: idporten,
+    });
+    const { token, expiresIn } = (await getSession(createRequest())) || {};
+    expect(token).toBeUndefined();
+    expect(expiresIn).toBeUndefined();
+  });
   it("can be composed without OBO", async () => {
     const getSession = makeSession({
       identityProvider: idporten,
