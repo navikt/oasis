@@ -1,5 +1,4 @@
-import { IncomingMessage } from "http";
-import { Token } from "../index";
+import { SupportedRequestType, Token } from "../index";
 import { getTokenFromHeader } from "../utils/getTokenFromHeader";
 import { jwtVerify, JWTVerifyResult } from "jose";
 import { cachedRemoteJWKSet } from "../utils/cachedRemoteJWKSet";
@@ -15,7 +14,7 @@ async function verify(token: string): Promise<JWTVerifyResult> {
 }
 
 export default async function azure(
-  req: IncomingMessage | Request
+  req: SupportedRequestType
 ): Promise<Token | null> {
   const token = getTokenFromHeader(req.headers);
   if (!token) return null;

@@ -2,8 +2,12 @@ import { IncomingMessage } from "http";
 import { decodeJwt } from "jose";
 import { secondsUntil } from "./utils/secondsUntil";
 
+export type SupportedRequestType = IncomingMessage | Request;
+
 export type Token = string;
-export type IdentityProvider = (req: IncomingMessage) => Promise<Token | null>;
+export type IdentityProvider = (
+  req: SupportedRequestType
+) => Promise<Token | null>;
 export type OboProvider = (
   token: string,
   audience: string
@@ -20,13 +24,13 @@ export interface SessionWithOboProvider extends SessionBase {
 
 export type Session = SessionBase | SessionWithOboProvider | null;
 
-export type GetSession = (req: IncomingMessage) => Promise<Session>;
+export type GetSession = (req: SupportedRequestType) => Promise<Session>;
 
 export type GetSessionWithoutOboProvider = (
-  req: IncomingMessage
+  req: SupportedRequestType
 ) => Promise<SessionBase>;
 export type GetSessionWithOboProvider = (
-  req: IncomingMessage
+  req: SupportedRequestType
 ) => Promise<SessionWithOboProvider>;
 
 export interface MakeSessionWithoutOboProvider {
