@@ -33,7 +33,7 @@ async function verify(token: string): Promise<JWTVerifyResult> {
 }
 
 export default async function idporten(
-  req: IncomingMessage
+  req: IncomingMessage | Request
 ): Promise<Token | null> {
   const token = getTokenFromHeader(req.headers);
   if (!token) return null;

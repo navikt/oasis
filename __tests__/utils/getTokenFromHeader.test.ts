@@ -11,4 +11,9 @@ describe("getTokenFromHeader", () => {
     const headers: IncomingHttpHeaders = { authorization: "Bearer jwt" };
     expect(getTokenFromHeader(headers)).toBe("jwt");
   });
+
+  it("extracts from authorization header for a Fetch Request type", () => {
+    const headers: Headers = new Headers({ authorization: "Bearer jwt" });
+    expect(getTokenFromHeader(headers)).toBe("jwt");
+  });
 });
