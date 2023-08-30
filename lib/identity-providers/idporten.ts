@@ -20,8 +20,8 @@ async function verify(token: string): Promise<JWTVerifyResult> {
       "check_failed"
     );
   }
-  const acr = process.env.IDPORTEN_REQUIRED_ACR ?? "Level4";
-  if (result.payload["acr"] != acr) {
+  const acr = process.env.IDPORTEN_REQUIRED_ACR ? [ process.env.IDPORTEN_REQUIRED_ACR ] : [ "Level4", "idporten-loa-high" ];
+  if (result.payload["acr"] in acr) {
     throw new errors.JWTClaimValidationFailed(
       `unexpected "acr" claim value, expected "${acr}", recieved"${result.payload["acr"]}"`,
       "acr",
