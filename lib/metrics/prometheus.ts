@@ -1,10 +1,6 @@
-import { collectDefaultMetrics, Counter, Histogram } from "prom-client";
+import { Counter, Histogram } from "prom-client";
 
 export class AuthMetrics {
-  constructor() {
-    collectDefaultMetrics();
-  }
-
   public tokenExchangeDurationHistogram = new Histogram({
     name: "dp_auth_token_exchange_duration_seconds",
     help: "Duration of token exchange in seconds",
