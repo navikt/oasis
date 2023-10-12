@@ -17,6 +17,6 @@ export function withPrometheus(oboProvider: OboProvider): OboProvider {
       return oboToken;
     }
 
-    return token;
+    return oboToken;
   };
 }

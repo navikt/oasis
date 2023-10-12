@@ -37,6 +37,7 @@ describe("withPrometheus", () => {
 
     // Expect an exhanged token
     expect(obo1).not.toBeNull();
+    expect(obo1).not.toBe("token1");
   });
 
   it("measures errors in token exchange", async () => {
@@ -71,6 +72,7 @@ describe("withPrometheus", () => {
 
     // Expect no token
     expect(obo1).toBeNull();
+    expect(obo1).not.toBe("token1");
   });
 });
 
