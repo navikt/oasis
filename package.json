@@ -1,6 +1,6 @@
 {
   "name": "@navikt/dp-auth",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "Autentiseringsmodul for node apper som bruker IncomingMessage som request-objekt til dagpengeteamet",
   "scripts": {
     "build-lib": "tsc --noEmit false",
@@ -25,7 +25,10 @@
   },
   "homepage": "https://github.com/navikt/dp-auth#readme",
   "peerDependencies": {
-    "next": "^12.0.0 || ^13.0.0"
+    "next": ">=12"
+  },
+  "optionalDependencies": {
+    "prom-client": ">=13"
   },
   "dependencies": {
     "jose": "^4.9.1",
@@ -64,7 +67,8 @@
         "dist/*"
       ],
       "obo-providers": [
-        "dist/obo-providers/index.d.ts"
+        "dist/obo-providers/index.d.ts",
+        "dist/obo-providers/withPrometheus.d.ts"
       ],
       "identity-providers": [
         "dist/identity-providers/index.d.ts"
@@ -74,6 +78,7 @@
   "exports": {
     ".": "./dist/index.js",
     "./obo-providers": "./dist/obo-providers/index.js",
+    "./obo-providers/withPrometheus": "./dist/obo-providers/withPrometheus.js",
     "./identity-providers": "./dist/identity-providers/index.js"
   },
   "files": [
