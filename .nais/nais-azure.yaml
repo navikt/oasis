@@ -33,8 +33,6 @@ spec:
   env:
     - name: PROVIDER
       value: azure
-  tokenx:
-    enabled: true
   azure:
     application:
       enabled: true
