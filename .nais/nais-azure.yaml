@@ -40,3 +40,7 @@ spec:
       allowAllUsers: true
     sidecar:
       enabled: true
+  accessPolicy:
+    inbound:
+      rules:
+        - application: dp-auth-idporten
