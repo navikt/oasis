@@ -1,6 +1,6 @@
 {
   "name": "@navikt/dp-auth",
-  "version": "0.3.8",
+  "version": "0.3.10",
   "description": "Autentiseringsmodul for node apper som bruker IncomingMessage som request-objekt til dagpengeteamet",
   "scripts": {
     "build-lib": "tsc --noEmit false",
