@@ -48,11 +48,12 @@ const CurlForLocalhost = ({ token }: { token: string }) => {
 };
 
 export default function Index({ testToken }: IndexProps) {
-  const doAuthenticatedRequest = async () => {
+  const doAuthenticatedRequest = (obo: boolean) => async () => {
     const headers = isLocalhost()
       ? { authorization: `Bearer ${testToken}` }
       : undefined;
-    const res = await fetch("/api/authenticated", {
+    const endpoint = obo ? "/api/obo" : "/api/authenticated";
+    const res = await fetch(endpoint, {
       headers,
       redirect: "manual",
     });
@@ -77,7 +78,12 @@ export default function Index({ testToken }: IndexProps) {
       <CurlForLocalhost token={testToken} />
 
       <h1>Perform authenticated API request</h1>
-      <button onClick={doAuthenticatedRequest}>Perform API request</button>
+      <button onClick={doAuthenticatedRequest(false)}>
+        Perform API request
+      </button>
+      <button onClick={doAuthenticatedRequest(true)}>
+        Perform API request with token exchange
+      </button>
     </>
   );
 }
