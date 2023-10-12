@@ -14,12 +14,13 @@ spec:
   readiness:
     path: "/api/internal/isready"
     initialDelay: 1
+  prometheus:
+    enabled: true
+    path: "/api/internal/metrics"
   replicas:
     min: 2
     max: 5
     cpuThresholdPercentage: 80
-  prometheus:
-    enabled: false
   resources:
     limits:
       cpu: 400m
