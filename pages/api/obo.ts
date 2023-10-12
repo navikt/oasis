@@ -13,7 +13,9 @@ export default async function authenticatedHandler(
   if (process.env.PROVIDER == "idporten") {
     obo = await session.apiToken("dev-gcp:teamdagpenger:dp-auth-idporten");
   } else if (process.env.PROVIDER == "azure") {
-    obo = await session.apiToken("dev-gcp.teamdagpenger.dp-auth-azure");
+    obo = await session.apiToken(
+      "api://dev-gcp.teamdagpenger.dp-auth-azure/.default"
+    );
   }
 
   res.status(200).send(`Made obo-token request: got ${obo.length}`);
