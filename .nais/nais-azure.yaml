@@ -43,4 +43,4 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: dp-auth-idporten
+        - application: dp-auth-azure
