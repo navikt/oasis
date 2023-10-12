@@ -1,10 +1,5 @@
 import { collectDefaultMetrics, Counter, Histogram } from "prom-client";
 
-declare global {
-  // eslint-disable-next-line no-var
-  var _metrics: AuthMetrics;
-}
-
 export class AuthMetrics {
   constructor() {
     collectDefaultMetrics();
@@ -27,6 +22,13 @@ export class AuthMetrics {
   });
 }
 
-global._metrics = global._metrics || new AuthMetrics();
+const authMetricsSymbol: unique symbol = Symbol("AuthMetrics");
 
-export default global._metrics;
+type AuthMetricsGlobal = typeof global & {
+  [authMetricsSymbol]: AuthMetrics;
+};
+
+(global as AuthMetricsGlobal)[authMetricsSymbol] =
+  (global as AuthMetricsGlobal)[authMetricsSymbol] || new AuthMetrics();
+
+export default (global as AuthMetricsGlobal)[authMetricsSymbol];
