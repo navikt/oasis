@@ -67,7 +67,9 @@
         "dist/*"
       ],
       "obo-providers": [
-        "dist/obo-providers/index.d.ts",
+        "dist/obo-providers/index.d.ts"
+      ],
+      "obo-providers/withPrometheus": [
         "dist/obo-providers/withPrometheus.d.ts"
       ],
       "identity-providers": [
