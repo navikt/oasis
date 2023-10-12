@@ -14,6 +14,6 @@ if (process.env.PROVIDER == "idporten") {
 } else if (process.env.PROVIDER == "azure") {
   getSession = makeSession({
     identityProvider: azure,
-    oboProvider: azureOBO,
+    oboProvider: withPrometheus(azureOBO),
   });
 }
