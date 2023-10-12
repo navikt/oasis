@@ -22,7 +22,7 @@ export class AuthMetrics {
   });
 }
 
-const authMetricsSymbol: unique symbol = Symbol("AuthMetrics");
+const authMetricsSymbol: unique symbol = Symbol.for("AuthMetrics");
 
 type AuthMetricsGlobal = typeof global & {
   [authMetricsSymbol]: AuthMetrics;
