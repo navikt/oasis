@@ -9,7 +9,12 @@ export default async function authenticatedHandler(
 
   if (!session) return res.status(401);
 
-  const obo = await session.apiToken("dummy audience that fails");
+  let obo = "";
+  if (process.env.PROVIDER == "idporten") {
+    obo = await session.apiToken("dev-gcp:teamdagpenger:dp-auth-idporten");
+  } else if (process.env.PROVIDER == "azure") {
+    obo = await session.apiToken("dev-gcp.teamdagpenger.dp-auth-idporten");
+  }
 
-  res.status(200).send(`Made obo-token request`);
+  res.status(200).send(`Made obo-token request: got ${obo.length}`);
 }
