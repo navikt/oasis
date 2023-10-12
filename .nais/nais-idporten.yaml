@@ -28,7 +28,7 @@ spec:
       cpu: 50m
       memory: 128Mi
   ingresses:
-    - https://dp-auth-idporten.dev.nav.no
+    - https://dp-auth-idporten.intern.dev.nav.no
   env:
     - name: PROVIDER
       value: idporten

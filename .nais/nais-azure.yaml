@@ -28,7 +28,7 @@ spec:
       cpu: 50m
       memory: 128Mi
   ingresses:
-    - https://dp-auth-azure.dev.intern.nav.no
+    - https://dp-auth-azure.intern.dev.nav.no
   env:
     - name: PROVIDER
       value: azure
