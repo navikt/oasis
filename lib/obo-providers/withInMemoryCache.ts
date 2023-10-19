@@ -3,6 +3,7 @@ import NodeCache from "node-cache";
 import { decodeJwt, JWTPayload } from "jose";
 import { secondsUntil } from "../utils/secondsUntil";
 import EventEmitter from "events";
+import { splitJwt } from "../utils/splitJwt";
 
 let cache: NodeCache;
 
@@ -37,9 +38,9 @@ export function withInMemoryCache(
 
   if (cacheHit) emitter.on("cache-hit", cacheHit);
   if (cacheMiss) emitter.on("cache-miss", cacheMiss);
-
   return async (token, audience) => {
-    const key = `${token}-${audience}`;
+    const { signature } = splitJwt(token);
+    const key = `${signature}-${audience}`;
     const cachedToken = cache.get<string>(key);
     if (cachedToken) {
       emitter.emit("cache-hit", token, audience);

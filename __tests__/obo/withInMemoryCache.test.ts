@@ -1,15 +1,17 @@
 import { OboProvider } from "../../lib";
 import { token } from "../__utils__/test-provider";
-import { withInMemoryCache } from "../../lib/obo-providers/withInMemoryCache";
+import { withInMemoryCache } from "../../lib/obo-providers";
+import { mockToken } from "../__utils__/mockToken";
 
 describe("withInMemoryCache", () => {
   it("caches token + audience", async () => {
     const oboProvider: OboProvider = async (_, audience) =>
       await token(audience);
     const cachedProvider = withInMemoryCache(oboProvider);
-    const obo1 = await cachedProvider("token1", "audience");
-    const obo2 = await cachedProvider("token1", "audience");
-    const obo3 = await cachedProvider("token2", "audience");
+    const token1 = mockToken();
+    const obo1 = await cachedProvider(token1, "audience");
+    const obo2 = await cachedProvider(token1, "audience");
+    const obo3 = await cachedProvider(mockToken(), "audience");
 
     expect(obo1).not.toBeNull();
     expect(obo2).not.toBeNull();
@@ -22,8 +24,9 @@ describe("withInMemoryCache", () => {
     const oboProvider: OboProvider = async (_, audience) =>
       await token(audience, { expirationTime: "30s" });
     const cachedProvider = withInMemoryCache(oboProvider, { minExpire: 45 });
-    const obo1 = await cachedProvider("token3", "audience");
-    const obo2 = await cachedProvider("token3", "audience");
+    const token1 = mockToken();
+    const obo1 = await cachedProvider(token1, "audience");
+    const obo2 = await cachedProvider(token1, "audience");
 
     expect(obo1).not.toEqual(obo2);
   });
@@ -36,9 +39,10 @@ describe("withInMemoryCache", () => {
       return null;
     };
     const cachedProvider = withInMemoryCache(oboProvider);
-    const obo1 = await cachedProvider("token3", "audience");
-    const obo2 = await cachedProvider("token3", "audience");
-    const obo3 = await cachedProvider("token3", "audience");
+    const token2 = mockToken();
+    const obo1 = await cachedProvider(token2, "audience");
+    const obo2 = await cachedProvider(token2, "audience");
+    const obo3 = await cachedProvider(token2, "audience");
 
     expect(calls).toBe(3);
     expect(obo1).toBe(null);
@@ -47,24 +51,21 @@ describe("withInMemoryCache", () => {
   });
 
   it("provides callbacks to track cache hit/miss", async () => {
-    const hits = [];
-    const misses = [];
-    const audiences = [];
+    let hits = 0;
+    let misses = 0;
     const oboProvider: OboProvider = async (_, audience) =>
       await token(audience);
     const cachedProvider = withInMemoryCache(oboProvider, {
-      cacheHit: (token, audience) =>
-        hits.push(token) && audiences.push(audience),
-      cacheMiss: (token, audience) =>
-        misses.push(token) && audiences.push(audience),
+      cacheHit: (token, audience) => hits++,
+      cacheMiss: (token, audience) => misses++,
     });
-    await cachedProvider("token-cache-1", "audience");
-    await cachedProvider("token-cache-2", "audience");
-    await cachedProvider("token-cache-3", "audience");
-    await cachedProvider("token-cache-2", "audience");
+    const cachedToken = mockToken();
+    await cachedProvider(cachedToken, "audience");
+    await cachedProvider(mockToken(), "audience");
+    await cachedProvider(mockToken(), "audience");
+    await cachedProvider(cachedToken, "audience");
 
-    expect(hits).toHaveLength(1);
-    expect(misses).toHaveLength(3);
-    expect(audiences).toHaveLength(4);
+    expect(hits).toBe(1);
+    expect(misses).toBe(3);
   });
 });
