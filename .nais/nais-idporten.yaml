@@ -19,15 +19,13 @@ spec:
     path: "/api/internal/metrics"
   replicas:
     min: 2
-    max: 5
-    cpuThresholdPercentage: 80
+    max: 2
   resources:
     limits:
-      cpu: 400m
       memory: 256Mi
     requests:
-      cpu: 50m
-      memory: 128Mi
+      cpu: 10m
+      memory: 64Mi
   ingresses:
     - https://dp-auth-idporten.intern.dev.nav.no
   env:
