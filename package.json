@@ -31,7 +31,7 @@
     "next": ">=12"
   },
   "optionalDependencies": {
-    "prom-client": ">=14"
+    "prom-client": ">=15"
   },
   "dependencies": {
     "jose": "^4.9.1",
