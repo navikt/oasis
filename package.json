@@ -24,6 +24,9 @@
     "url": "https://github.com/navikt/dp-auth/issues"
   },
   "homepage": "https://github.com/navikt/dp-auth#readme",
+  "engines": {
+    "node": ">=18"
+  },
   "peerDependencies": {
     "next": ">=12"
   },
