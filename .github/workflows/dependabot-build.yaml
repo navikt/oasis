@@ -1,0 +1,82 @@
+name: Test Dependabot PRs
+
+on:
+  push:
+    branches:
+      - 'dependabot/**'
+
+jobs:
+  gradle_check:
+    runs-on: ubuntu-latest
+    outputs:
+        gradle_detected: ${{ steps.gradle-check.outputs.gradle_detected }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for build.gradle.kts
+        id: gradle-check
+        run: |
+          if [ -f "build.gradle.kts" ]; then
+            echo "Detected build.gradle.kts"
+            echo "gradle_detected=true" >> $GITHUB_OUTPUT
+          else
+            echo "No build.gradle.kts found"
+            echo "gradle_detected=false" >> $GITHUB_OUTPUT
+          fi
+
+  npm_check:
+    runs-on: ubuntu-latest
+    outputs:
+        npm_detected: ${{ steps.npm-check.outputs.npm_detected }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for package.json
+        id: npm-check
+        run: |
+          if [ -f "package.json" ]; then
+            echo "Detected package.json"
+            echo "npm_detected=true" >> $GITHUB_OUTPUT
+          else
+            echo "No package.json found"
+            echo "npm_detected=false" >> $GITHUB_OUTPUT
+          fi
+
+  build_gradle:
+    needs: [gradle_check]
+    if: needs.gradle_check.outputs.gradle_detected == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/gradle-build-action@v2.10.0
+        env:
+          ORG_GRADLE_PROJECT_githubUser: x-access-token
+          ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          arguments: --configuration-cache test
+
+  build_npm:
+    needs: [npm_check]
+    if: needs.npm_check.outputs.npm_detected == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+        with:
+          node-version: "18.x"
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - run: npm build
+      - run: npm test
