@@ -6,7 +6,7 @@ on:
       - 'dependabot/**'
 
 jobs:
-  build_tool:
+  build-tool:
     runs-on: ubuntu-latest
     outputs:
       gradle_detected: ${{ steps.gradle-check.outputs.gradle_detected }}
@@ -37,9 +37,9 @@ jobs:
             echo "npm_detected=false" >> $GITHUB_OUTPUT
           fi
 
-  build_gradle:
+  build-gradle:
     needs: [ build_tool ]
-    if: needs.build_tool.outputs.gradle_detected == 'true'
+    if: needs.build-tool.outputs.gradle_detected == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -54,9 +54,9 @@ jobs:
         with:
           arguments: --configuration-cache test
 
-  build_npm:
+  build-npm:
     needs: [ build_tool ]
-    if: needs.build_tool.outputs.npm_detected == 'true'
+    if: needs.build-tool.outputs.npm_detected == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
