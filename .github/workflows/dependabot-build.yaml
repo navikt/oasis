@@ -38,7 +38,7 @@ jobs:
           fi
 
   build-gradle:
-    needs: [ build_tool ]
+    needs: [ build-tool ]
     if: needs.build-tool.outputs.gradle_detected == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -55,7 +55,7 @@ jobs:
           arguments: --configuration-cache test
 
   build-npm:
-    needs: [ build_tool ]
+    needs: [ build-tool ]
     if: needs.build-tool.outputs.npm_detected == 'true'
     runs-on: ubuntu-latest
     steps:
