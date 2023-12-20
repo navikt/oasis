@@ -1,4 +1,4 @@
-name: Test Dependabot PRs
+name: Dependabot - Test
 
 on:
   push:
@@ -9,7 +9,7 @@ jobs:
   gradle_check:
     runs-on: ubuntu-latest
     outputs:
-        gradle_detected: ${{ steps.gradle-check.outputs.gradle_detected }}
+      gradle_detected: ${{ steps.gradle-check.outputs.gradle_detected }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -28,7 +28,7 @@ jobs:
   npm_check:
     runs-on: ubuntu-latest
     outputs:
-        npm_detected: ${{ steps.npm-check.outputs.npm_detected }}
+      npm_detected: ${{ steps.npm-check.outputs.npm_detected }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -45,7 +45,7 @@ jobs:
           fi
 
   build_gradle:
-    needs: [gradle_check]
+    needs: [ gradle_check ]
     if: needs.gradle_check.outputs.gradle_detected == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -63,7 +63,7 @@ jobs:
           arguments: --configuration-cache test
 
   build_npm:
-    needs: [npm_check]
+    needs: [ npm_check ]
     if: needs.npm_check.outputs.npm_detected == 'true'
     runs-on: ubuntu-latest
     steps:
