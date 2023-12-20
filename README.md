@@ -12,7 +12,7 @@ fra NodeJS sin [IncomingMessage](https://nodejs.org/api/http.html#class-httpinco
 ## Quick start
 
 Pakken må installeres
-fra [GitHubs npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry)
+fra [GitHub NPM Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry)
 .
 
 ```
