@@ -38,8 +38,8 @@ jobs:
           fi
 
   build_gradle:
-    needs: [ gradle_check ]
-    if: needs.gradle_check.outputs.gradle_detected == 'true'
+    needs: [ build_tool ]
+    if: needs.build_tool.outputs.gradle_detected == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -55,8 +55,8 @@ jobs:
           arguments: --configuration-cache test
 
   build_npm:
-    needs: [ npm_check ]
-    if: needs.npm_check.outputs.npm_detected == 'true'
+    needs: [ build_tool ]
+    if: needs.build_tool.outputs.npm_detected == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -65,4 +65,5 @@ jobs:
           node-version-file: package.json
           cache: npm
 
+      - run: npm install
       - run: npm test
