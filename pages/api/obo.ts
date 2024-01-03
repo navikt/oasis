@@ -3,7 +3,7 @@ import { getSession } from "../../lib/provider";
 
 export default async function authenticatedHandler(
   req: NextApiRequest,
-  res: NextApiResponse<string>
+  res: NextApiResponse<string>,
 ) {
   const session = await getSession(req);
 
@@ -14,7 +14,7 @@ export default async function authenticatedHandler(
     obo = await session.apiToken("dev-gcp:teamdagpenger:dp-auth-idporten");
   } else if (process.env.PROVIDER == "azure") {
     obo = await session.apiToken(
-      "api://dev-gcp.teamdagpenger.dp-auth-azure/.default"
+      "api://dev-gcp.teamdagpenger.dp-auth-azure/.default",
     );
   }
 

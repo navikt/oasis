@@ -3,7 +3,7 @@ import { decodeJwt } from "../lib";
 import { getSession } from "../lib/provider";
 
 export const getServerSideProps: GetServerSideProps<ClosedPageProps> = async (
-  context
+  context,
 ) => {
   const session = await getSession(context.req);
 

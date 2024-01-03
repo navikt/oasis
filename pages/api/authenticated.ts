@@ -4,7 +4,7 @@ import { getSession } from "../../lib/provider";
 
 export default async function authenticatedHandler(
   req: NextApiRequest,
-  res: NextApiResponse<string>
+  res: NextApiResponse<string>,
 ) {
   const session = await getSession(req);
 

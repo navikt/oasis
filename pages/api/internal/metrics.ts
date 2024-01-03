@@ -3,7 +3,7 @@ import { register } from "prom-client";
 
 async function prometheus(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> {
   res.setHeader("Content-type", register.contentType);
   res.send(await register.metrics());
