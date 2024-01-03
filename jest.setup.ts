@@ -1,4 +1,3 @@
-import "@testing-library/jest-dom/extend-expect";
 import { server } from "./lib/mocks/server";
 import { exportJWK, generateKeyPair } from "jose";
 import { jwkPrivate } from "./__tests__/__utils__/test-provider";
