@@ -1,15 +1,20 @@
 import { OboProvider } from "../index";
-import NodeCache from "node-cache";
 import { decodeJwt, JWTPayload } from "jose";
 import { secondsUntil } from "../utils/secondsUntil";
 import EventEmitter from "events";
 import { splitJwt } from "../utils/splitJwt";
+import SieveCache from "../cache/sieve";
 
-let cache: NodeCache;
+let cache: SieveCache;
+
+const averageJwtSize = 1024; // bytes
+const maxCacheSize = 128 /* MB */ * 1024 /* KB */ * 1024; /* bytes */
+const maxCacheCapacity = Math.floor(maxCacheSize / averageJwtSize);
 
 function getCache() {
   if (cache == undefined) {
-    cache = new NodeCache();
+    console.log(`Initializing cache with capacity: ${maxCacheCapacity}`);
+    cache = new SieveCache(maxCacheCapacity);
   }
   return cache;
 }

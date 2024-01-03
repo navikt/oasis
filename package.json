@@ -1,6 +1,6 @@
 {
   "name": "@navikt/dp-auth",
-  "version": "0.3.13",
+  "version": "0.3.16",
   "description": "Autentiseringsmodul for node apper som bruker IncomingMessage som request-objekt til dagpengeteamet",
   "scripts": {
     "build-lib": "tsc --noEmit false",
@@ -36,7 +36,6 @@
   "dependencies": {
     "jose": "^4.9.1",
     "lodash": "^4.17.21",
-    "node-cache": "^5.1.2",
     "openid-client": "^5.1.9",
     "react": "^18.2.0"
   },
