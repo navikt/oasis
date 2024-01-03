@@ -17,7 +17,7 @@ async function verify(token: string): Promise<JWTVerifyResult> {
     throw new errors.JWTClaimValidationFailed(
       `unexpected "client_id" claim value`,
       "client_id",
-      "check_failed"
+      "check_failed",
     );
   }
   const acr = process.env.IDPORTEN_REQUIRED_ACR
@@ -28,14 +28,14 @@ async function verify(token: string): Promise<JWTVerifyResult> {
     throw new errors.JWTClaimValidationFailed(
       `unexpected "acr" claim value, expected "${acr}", recieved"${result.payload["acr"]}"`,
       "acr",
-      "check_failed"
+      "check_failed",
     );
   }
   return result;
 }
 
 export default async function idporten(
-  req: SupportedRequestType
+  req: SupportedRequestType,
 ): Promise<Token | null> {
   const token = getTokenFromHeader(req.headers);
   if (!token) return null;

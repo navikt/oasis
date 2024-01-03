@@ -4,7 +4,7 @@ import OPError = errors.OPError;
 export async function tokenExchange(
   client: Client,
   grantBody: GrantBody,
-  additionalClaims: GrantExtras
+  additionalClaims: GrantExtras,
 ): Promise<string | null> {
   try {
     const tokenset = await client.grant(grantBody, additionalClaims);

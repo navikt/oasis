@@ -1,7 +1,7 @@
 import { IncomingHttpHeaders } from "http";
 
 export function getTokenFromHeader(
-  headers: IncomingHttpHeaders | Headers
+  headers: IncomingHttpHeaders | Headers,
 ): string | null {
   const bearer = getBearer(headers);
   if (bearer == null) return null;

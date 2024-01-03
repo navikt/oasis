@@ -6,11 +6,11 @@ export type SupportedRequestType = IncomingMessage | Request;
 
 export type Token = string;
 export type IdentityProvider = (
-  req: SupportedRequestType
+  req: SupportedRequestType,
 ) => Promise<Token | null>;
 export type OboProvider = (
   token: string,
-  audience: string
+  audience: string,
 ) => Promise<string | null>;
 
 interface SessionBase {
@@ -27,10 +27,10 @@ export type Session = SessionBase | SessionWithOboProvider | null;
 export type GetSession = (req: SupportedRequestType) => Promise<Session>;
 
 export type GetSessionWithoutOboProvider = (
-  req: SupportedRequestType
+  req: SupportedRequestType,
 ) => Promise<SessionBase>;
 export type GetSessionWithOboProvider = (
-  req: SupportedRequestType
+  req: SupportedRequestType,
 ) => Promise<SessionWithOboProvider>;
 
 export interface MakeSessionWithoutOboProvider {
@@ -43,11 +43,11 @@ export interface MakeSessionWithOboProvider
 }
 
 export function makeSession(
-  options: MakeSessionWithoutOboProvider
+  options: MakeSessionWithoutOboProvider,
 ): GetSessionWithoutOboProvider;
 
 export function makeSession(
-  options: MakeSessionWithOboProvider
+  options: MakeSessionWithOboProvider,
 ): GetSessionWithOboProvider;
 export function makeSession({
   identityProvider,

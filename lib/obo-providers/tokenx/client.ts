@@ -35,7 +35,7 @@ export function getClient(): Client {
       client_id,
       token_endpoint_auth_method: "private_key_jwt",
     },
-    { keys: [jwk] }
+    { keys: [jwk] },
   );
 }
 
