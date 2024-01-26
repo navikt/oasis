@@ -21,12 +21,12 @@ export const getSession: (
       throw new Error(
         "Both AZURE_OPENID_CONFIG_ISSUER and IDPORTEN_ISSUER are present as env variables. If you need both, you have to configure token exchange manually.",
       );
-    } else if (process.env.AZURE_OPENID_CONFIG_ISSUER) {
+    } else if (process.env.IDPORTEN_ISSUER) {
       session = makeSession({
         identityProvider: idporten,
         oboProvider: withInMemoryCache(withPrometheus(tokenX)),
       });
-    } else if (process.env.IDPORTEN_ISSUER) {
+    } else if (process.env.AZURE_OPENID_CONFIG_ISSUER) {
       session = makeSession({
         identityProvider: azure,
         oboProvider: withInMemoryCache(withPrometheus(azureOBO)),
