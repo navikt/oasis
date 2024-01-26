@@ -1,4 +1,10 @@
-import { GetSessionWithOboProvider, makeSession } from "./index";
+import {
+  GetSessionWithOboProvider,
+  Session,
+  SessionWithOboProvider,
+  SupportedRequestType,
+  makeSession,
+} from "./index";
 import idporten from "./identity-providers/idporten";
 import azure from "./identity-providers/azure";
 import azureOBO from "./obo-providers/azure";
@@ -8,7 +14,9 @@ import { withInMemoryCache } from "./obo-providers";
 
 let session: GetSessionWithOboProvider;
 
-export const getSession: () => GetSessionWithOboProvider = () => {
+export const getSession: (
+  req: SupportedRequestType,
+) => Promise<SessionWithOboProvider> = (req) => {
   if (!session) {
     if (process.env.AZURE_OPENID_CONFIG_ISSUER && process.env.IDPORTEN_ISSUER) {
       throw new Error(
@@ -27,5 +35,5 @@ export const getSession: () => GetSessionWithOboProvider = () => {
     }
   }
 
-  return session;
+  return session(req);
 };
