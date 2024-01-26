@@ -5,7 +5,7 @@ export default async function authenticatedHandler(
   req: NextApiRequest,
   res: NextApiResponse<string>,
 ) {
-  const session = await getSession(req);
+  const session = await getSession()(req);
 
   if (!session) return res.status(401);
 

@@ -5,7 +5,7 @@ import { getSession } from "../lib/provider";
 export const getServerSideProps: GetServerSideProps<ClosedPageProps> = async (
   context,
 ) => {
-  const session = await getSession(context.req);
+  const session = await getSession()(context.req);
 
   if (!session)
     return {

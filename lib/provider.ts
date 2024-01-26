@@ -6,15 +6,26 @@ import tokenX from "./obo-providers/tokenx";
 import { withPrometheus } from "./obo-providers/withPrometheus";
 import { withInMemoryCache } from "./obo-providers";
 
-export let getSession: GetSessionWithOboProvider;
-if (process.env.PROVIDER == "idporten") {
-  getSession = makeSession({
-    identityProvider: idporten,
-    oboProvider: withInMemoryCache(withPrometheus(tokenX)),
-  });
-} else if (process.env.PROVIDER == "azure") {
-  getSession = makeSession({
-    identityProvider: azure,
-    oboProvider: withInMemoryCache(withPrometheus(azureOBO)),
-  });
-}
+let session: GetSessionWithOboProvider;
+
+export const getSession: () => GetSessionWithOboProvider = () => {
+  if (!session) {
+    if (process.env.AZURE_OPENID_CONFIG_ISSUER && process.env.IDPORTEN_ISSUER) {
+      throw new Error(
+        "Both AZURE_OPENID_CONFIG_ISSUER and IDPORTEN_ISSUER are present as env variables. If you need both, you have to configure token exchange manually.",
+      );
+    } else if (process.env.AZURE_OPENID_CONFIG_ISSUER) {
+      session = makeSession({
+        identityProvider: idporten,
+        oboProvider: withInMemoryCache(withPrometheus(tokenX)),
+      });
+    } else if (process.env.IDPORTEN_ISSUER) {
+      session = makeSession({
+        identityProvider: azure,
+        oboProvider: withInMemoryCache(withPrometheus(azureOBO)),
+      });
+    }
+  }
+
+  return session;
+};
