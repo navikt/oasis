@@ -74,3 +74,5 @@ export function makeSession({
 }
 
 export { decodeJwt } from "jose";
+
+export { getSession } from "./provider";
