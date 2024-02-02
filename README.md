@@ -1,10 +1,10 @@
 # @navikt/oasis
 
-Opinionated bibliotek for å verifisere tokens fra Wonderwall på NAIS-plattformen.
+Opinionated bibliotek for å verifisere tokens fra [Wonderwall](https://doc.nais.io/addons/wonderwall/) på NAIS-plattformen.
 
-Kommer med støtte for både Idporten og AzureAD som OIDC-providers, og henter automatisk ut konfigurasjon fra miljøet.
+Kommer med støtte for både [Idporten](https://doc.nais.io/security/auth/idporten/) og [AzureAD](https://doc.nais.io/security/auth/azure-ad/) som OIDC-providers, og henter automatisk ut konfigurasjon fra miljøet.
 
-Støtter On-Behalf-Of(OBO) utveksling mot både TokenX (for Idporten) og Azure.
+Støtter On-Behalf-Of(OBO) utveksling mot både [TokenX](https://doc.nais.io/security/auth/tokenx/) (for Idporten) og Azure.
 
 Støtter alle rammeverk hvor `request`-objekt utledes
 fra NodeJS sin [IncomingMessage](https://nodejs.org/api/http.html#class-httpincomingmessage).
@@ -54,6 +54,9 @@ export const getSession = makeSession({
   }),
 });
 ```
+
+> [!NOTE]
+> Cachen er i det lokale minnet, så dersom du kjører flere instanser av appen din (a.k.a. flere pods) så vil du kun få treff i cachen de gangene etterfølgende requests treffer på samme pod.
 
 ## Måling av tid brukt
 
