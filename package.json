@@ -1,7 +1,7 @@
 {
-  "name": "@navikt/dp-auth",
+  "name": "@navikt/oasis",
   "version": "0.3.16",
-  "description": "Autentiseringsmodul for node apper som bruker IncomingMessage som request-objekt til dagpengeteamet",
+  "description": "Javascriptbibliotek for håntering av tokens fra Wonderwall",
   "scripts": {
     "build-lib": "tsc --noEmit false",
     "test": "jest",
@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/navikt/dp-auth.git"
+    "url": "https://github.com/navikt/oasis.git"
   },
   "author": "NAV",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/navikt/dp-auth/issues"
+    "url": "https://github.com/navikt/oasis/issues"
   },
-  "homepage": "https://github.com/navikt/dp-auth#readme",
+  "homepage": "https://github.com/navikt/oasis#readme",
   "engines": {
     "node": ">=18"
   },

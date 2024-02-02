@@ -1,4 +1,4 @@
-# dp-auth
+# @navikt/oasis
 
 Opinionated bibliotek for å verifisere tokens fra Wonderwall på NAIS-plattformen.
 
@@ -16,15 +16,15 @@ fra [GitHub NPM Registry](https://docs.github.com/en/packages/working-with-a-git
 .
 
 ```
-npm i dp-auth
+npm i @navikt/oasis
 ```
 
 Lag en fil et sted, `lib/getSession.js` og kall `makeSession()` med den identity og OBO provider du vil ha.
 
 ```javascript
-import { makeSession } from "@navikt/dp-auth";
-import { idporten } from "@navikt/dp-auth/identity-providers";
-import { tokenX, withInMemoryCache } from "@navikt/dp-auth/obo-providers";
+import { makeSession } from "@navikt/oasis";
+import { idporten } from "@navikt/oasis/identity-providers";
+import { tokenX, withInMemoryCache } from "@navikt/oasis/obo-providers";
 
 export const getSession = makeSession({
   identityProvider: idporten,
@@ -50,7 +50,7 @@ export const getSession = makeSession({
   identityProvider: idporten,
   oboProvider: withInMemoryCache(tokenX, {
     cacheHit: (key) => metrics.add("cache-hit"),
-    cacheMiss: (key) => metrics.add("cache-miss")
+    cacheMiss: (key) => metrics.add("cache-miss"),
   }),
 });
 ```

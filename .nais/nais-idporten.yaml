@@ -1,7 +1,7 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: dp-auth-idporten
+  name: oasis-idporten
   namespace: teamdagpenger
   labels:
     team: teamdagpenger
@@ -27,7 +27,7 @@ spec:
       cpu: 10m
       memory: 64Mi
   ingresses:
-    - https://dp-auth-idporten.intern.dev.nav.no
+    - https://oasis-idporten.intern.dev.nav.no
   env:
     - name: PROVIDER
       value: idporten
@@ -40,4 +40,4 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: dp-auth-idporten
+        - application: oasis-idporten

@@ -2,17 +2,17 @@ import { Counter, Histogram } from "prom-client";
 
 export class AuthMetrics {
   public tokenExchangeDurationHistogram = new Histogram({
-    name: "dp_auth_token_exchange_duration_seconds",
+    name: "oasis_token_exchange_duration_seconds",
     help: "Duration of token exchange in seconds",
     labelNames: ["provider"],
   });
   public tokenExchangeFailures = new Counter({
-    name: "dp_auth_token_exchange_failures",
+    name: "oasis_token_exchange_failures",
     help: "Number of failed token exchanges",
     labelNames: ["provider"],
   });
   public tokenExchanges = new Counter({
-    name: "dp_auth_token_exchanges",
+    name: "oasis_token_exchanges",
     help: "Number of token exchanges",
     labelNames: ["provider"],
   });
