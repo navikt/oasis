@@ -22,11 +22,11 @@
     "jsx": "preserve"
   },
   "include": [
-    "lib/**/*.ts",
+    "src/**/*.ts",
   ],
   "exclude": [
     "node_modules",
-    "lib/mocks",
+    "src/mocks",
     "**/__tests__"
   ]
 }

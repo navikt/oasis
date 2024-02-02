@@ -1,9 +1,9 @@
-import { decodeJwt, makeSession, OboProvider } from "../lib";
+import { decodeJwt, makeSession, OboProvider } from "../src";
 import { createRequest } from "node-mocks-http";
 import { token } from "./__utils__/test-provider";
-import idporten from "../lib/identity-providers/idporten";
-import tokenX from "../lib/obo-providers/tokenx";
-import { withInMemoryCache } from "../lib/obo-providers/withInMemoryCache";
+import idporten from "../src/identity-providers/idporten";
+import tokenX from "../src/obo-providers/tokenx";
+import { withInMemoryCache } from "../src/obo-providers/withInMemoryCache";
 
 // Example function for solving metrics
 function withMetrics(oboProvider: OboProvider): OboProvider {

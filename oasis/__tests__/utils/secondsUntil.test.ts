@@ -1,4 +1,4 @@
-import { secondsUntil } from "../../lib/utils/secondsUntil";
+import { secondsUntil } from "../../src/utils/secondsUntil";
 
 test("calculates seconds until timestamp given microseconds", () => {
   const now = Date.now();

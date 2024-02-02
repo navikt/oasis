@@ -1,6 +1,6 @@
-import { OboProvider } from "../../lib";
+import { OboProvider } from "../../src";
 import { token } from "../__utils__/test-provider";
-import { withInMemoryCache } from "../../lib/obo-providers";
+import { withInMemoryCache } from "../../src/obo-providers";
 import { mockToken } from "../__utils__/mockToken";
 
 describe("withInMemoryCache", () => {

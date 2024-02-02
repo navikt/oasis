@@ -1,4 +1,4 @@
-import { splitJwt } from "../../lib/utils/splitJwt";
+import { splitJwt } from "../../src/utils/splitJwt";
 
 it("splits a token into its components", () => {
   expect(splitJwt("a.b.c")).toMatchObject({

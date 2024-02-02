@@ -1,4 +1,4 @@
-import { getTokenFromHeader } from "../../lib/utils/getTokenFromHeader";
+import { getTokenFromHeader } from "../../src/utils/getTokenFromHeader";
 import { IncomingHttpHeaders } from "http";
 
 describe("getTokenFromHeader", () => {

@@ -1,8 +1,8 @@
 import { token } from "../__utils__/test-provider";
-import { decodeJwt, OboProvider } from "../../lib";
-import { errorAudience } from "../../lib/mocks/handlers";
-import tokenX from "../../lib/obo-providers/tokenx";
-import azureOBO from "../../lib/obo-providers/azure";
+import { decodeJwt, OboProvider } from "../../src";
+import { errorAudience } from "../../src/mocks/handlers";
+import tokenX from "../../src/obo-providers/tokenx";
+import azureOBO from "../../src/obo-providers/azure";
 
 describe.each([
   ["tokenX", tokenX, "urn:tokenx:dings"],

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "../../lib/provider";
+import { getSession } from "@navikt/oasis";
 
 export default async function authenticatedHandler(
   req: NextApiRequest,

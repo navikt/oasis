@@ -1,4 +1,4 @@
-import SieveCache from "../../lib/cache/sieve";
+import SieveCache from "../../src/cache/sieve";
 
 describe("SieveCache", () => {
   describe("Initialization", () => {

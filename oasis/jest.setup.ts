@@ -1,4 +1,4 @@
-import { server } from "./lib/mocks/server";
+import { server } from "./src/mocks/server";
 import { exportJWK, generateKeyPair } from "jose";
 import { jwkPrivate } from "./__tests__/__utils__/test-provider";
 

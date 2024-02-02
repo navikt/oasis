@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
-import { decodeJwt } from "../lib";
-import { getSession } from "../lib/provider";
+import { decodeJwt } from "@navikt/oasis";
+import { getSession } from "@navikt/oasis";
 
 export const getServerSideProps: GetServerSideProps<ClosedPageProps> = async (
   context,

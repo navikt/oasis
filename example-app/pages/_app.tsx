@@ -1,7 +1,7 @@
 import { AppProps } from "next/app";
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
-  require("../lib/mocks");
+  //require("../../oasis/src/mocks");
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
