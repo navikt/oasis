@@ -40,7 +40,7 @@ jobs:
   deploy-azure:
     name: Deploy with Azure AD
     needs: [test, build]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/oasisify'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -55,7 +55,7 @@ jobs:
   deploy-idporten:
     name: Deploy with IDporten
     needs: [test, build]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/oasisify'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
