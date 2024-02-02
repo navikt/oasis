@@ -8,6 +8,7 @@ COPY oasis/ /usr/src/app/oasis/
 
 RUN npm ci --prefer-offline --no-audit
 
+RUN npm run build-lib
 RUN npm run build
 
 FROM node:20-alpine AS runtime
