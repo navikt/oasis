@@ -2,8 +2,8 @@ name: Deploy test-app
 
 on:
   push:
-    branches-ignore:
-      - "dependabot/**"
+    branches:
+      - "main"
 
 jobs:
   test:
@@ -40,7 +40,6 @@ jobs:
   deploy-azure:
     name: Deploy with Azure AD
     needs: [test, build]
-    if: github.ref == 'refs/heads/oasisify'
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -57,7 +56,6 @@ jobs:
   deploy-idporten:
     name: Deploy with IDporten
     needs: [test, build]
-    if: github.ref == 'refs/heads/oasisify'
     runs-on: ubuntu-latest
     permissions:
       id-token: write
