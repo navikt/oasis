@@ -29,7 +29,7 @@ jobs:
       - uses: nais/docker-build-push@v0
         id: docker-build-push
         with:
-          team: teamdagpenger
+          team: oasis-maintainers
           tag: ${{ github.sha }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
@@ -40,7 +40,7 @@ jobs:
   deploy-azure:
     name: Deploy with Azure AD
     needs: [test, build]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/oasisify'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -55,7 +55,7 @@ jobs:
   deploy-idporten:
     name: Deploy with IDporten
     needs: [test, build]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/oasisify'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

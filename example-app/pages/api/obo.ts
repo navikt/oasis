@@ -11,10 +11,10 @@ export default async function authenticatedHandler(
 
   let obo = "";
   if (process.env.PROVIDER == "idporten") {
-    obo = await session.apiToken("dev-gcp:teamdagpenger:oasis-idporten");
+    obo = await session.apiToken("dev-gcp:oasis-maintainers:oasis-idporten");
   } else if (process.env.PROVIDER == "azure") {
     obo = await session.apiToken(
-      "api://dev-gcp.teamdagpenger.oasis-azure/.default",
+      "api://dev-gcp.oasis-maintainers.oasis-azure/.default",
     );
   }
 
