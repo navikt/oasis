@@ -1,5 +1,5 @@
 {
-  "extends": ["next", "plugin:prettier/recommended", "prettier"],
+  "extends": ["next", "prettier"],
   "settings": {
     "next": {
       "rootDir": "examples-app/"
