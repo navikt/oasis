@@ -1,0 +1,21 @@
+name: Test PRs
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches-ignore:
+      - 'dependabot/**'
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: npm
+
+      - run: npm install
+      - run: npm test
