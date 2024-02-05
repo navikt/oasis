@@ -1,10 +1,10 @@
 FROM node:20 AS builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package*.json /usr/src/app/
-COPY example-app/ /usr/src/app/example-app/
-COPY oasis/ /usr/src/app/oasis/
+COPY package*.json /app/
+COPY example-app /app/example-app
+COPY oasis /app/oasis
 
 RUN npm ci --prefer-offline --no-audit
 
@@ -13,15 +13,14 @@ RUN npm run build
 
 FROM node:20-alpine AS runtime
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-ENV PORT=3000 \
-    NODE_ENV=production
+ENV PORT=3000 NODE_ENV=production
 
-COPY --from=builder /usr/src/app/example-app/.next/standalone /usr/src/app/example-app/.next/standalone
-COPY --from=builder /usr/src/app/example-app/.next/static /usr/src/app/example-app/.next/standalone/example-app/.next/static
+COPY --from=builder /app/example-app/.next/standalone/ /app/standalone
+COPY --from=builder /app/example-app/.next/static/ /app/standalone/example-app/.next/static
 
 EXPOSE 3000
 USER node
 
-CMD ["node", "example-app/.next/standalone/example-app/server.js"]
+CMD ["node", "standalone/example-app/server.js"]
