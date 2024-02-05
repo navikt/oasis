@@ -2,6 +2,9 @@
 
 Opinionated bibliotek for å verifisere tokens fra [Wonderwall](https://doc.nais.io/addons/wonderwall/) på NAIS-plattformen.
 
+> [!NOTE]
+> Ja, navnet er inspirert av at biblioteket brukes sammen med Wonderwall og bedriver OAuth-greier.
+
 Kommer med støtte for både [Idporten](https://doc.nais.io/security/auth/idporten/) og [AzureAD](https://doc.nais.io/security/auth/azure-ad/) som OIDC-providers, og henter automatisk ut konfigurasjon fra miljøet.
 
 Støtter On-Behalf-Of(OBO) utveksling mot både [TokenX](https://doc.nais.io/security/auth/tokenx/) (for Idporten) og Azure.
@@ -9,15 +12,32 @@ Støtter On-Behalf-Of(OBO) utveksling mot både [TokenX](https://doc.nais.io/sec
 Støtter alle rammeverk hvor `request`-objekt utledes
 fra NodeJS sin [IncomingMessage](https://nodejs.org/api/http.html#class-httpincomingmessage).
 
+## Installasjon i prosjektet ditt
+
+```bash 
+npm install @navikt/oasis
+```
+
+> [!NOTE]
+> @navikt-scopede pakker hentes fra GitHubs NPM-register, tilgang dit må [konfigureres](https://github.com/navikt/frontend#github-npm-registry).
+
 ## Quick start
 
-Pakken må installeres
-fra [GitHub NPM Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry)
-.
+```javascript
+import { getSession } from "@navikt/oasis";
 
+const session = await getSession(req);
+const onBehalfOfToken = session.apiToken(audience);
+// call a service using this token
 ```
-npm i @navikt/oasis
-```
+
+... hvor `req` er requesten fra Next.js, og audience er applikasjonen du skal kalle på formen `cluster:namespace:app`, feks `dev-gcp:mitteam:minapp`.
+
+For at dette skal virke må du ha konfigurert bruk av [AzureAd](https://doc.nais.io/security/auth/azure-ad/) eller [ID-porten](https://doc.nais.io/security/auth/idporten/) i nais-manifestet ditt.
+
+## Tilpasninger man kan gjøre
+
+Hvis du ønsker å ha mere kontroll på konfigurasjonen selv
 
 Lag en fil et sted, `lib/getSession.js` og kall `makeSession()` med den identity og OBO provider du vil ha.
 
@@ -32,7 +52,7 @@ export const getSession = makeSession({
 });
 ```
 
-## Caching av OBO tokens
+### Caching av OBO tokens
 
 For å cache OBO-tokens kan du wrappe provideren med `withInMemoryCache()` slik:
 
@@ -58,7 +78,7 @@ export const getSession = makeSession({
 > [!NOTE]
 > Cachen er i det lokale minnet, så dersom du kjører flere instanser av appen din (a.k.a. flere pods) så vil du kun få treff i cachen de gangene etterfølgende requests treffer på samme pod.
 
-## Måling av tid brukt
+### Måling av tid brukt
 
 Vil du måle hvor mye tid noe tar kan du lage en egen wrapper. Du kan velge selv om du vil måle med eller uten cache
 hits, eller begge deler, avhengig av hvor du plasserer `withMetrics()`.
