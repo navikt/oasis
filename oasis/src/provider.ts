@@ -33,6 +33,10 @@ export const getSession: (
         identityProvider: azure,
         oboProvider: withInMemoryCache(withPrometheus(azureOBO)),
       });
+    } else {
+      throw new Error(
+        "None of AZURE_OPENID_CONFIG_ISSUER and IDPORTEN_ISSUER are present as env variables. You need to set one of them in your nais.yaml.",
+      );
     }
   }
 
