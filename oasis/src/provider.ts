@@ -17,8 +17,6 @@ export const getSession: (
   req: SupportedRequestType,
 ) => Promise<SessionWithOboProvider> = (req) => {
   if (!session) {
-    console.log(`AZURE: ${process.env.AZURE_OPENID_CONFIG_ISSUER}`);
-    console.log(`IDPORTEN: ${process.env.IDPORTEN_ISSUER}`);
     if (process.env.AZURE_OPENID_CONFIG_ISSUER && process.env.IDPORTEN_ISSUER) {
       throw new Error(
         "Both AZURE_OPENID_CONFIG_ISSUER and IDPORTEN_ISSUER are present as env variables. If you need both, you have to configure token exchange manually.",
