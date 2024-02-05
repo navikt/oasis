@@ -18,8 +18,8 @@ WORKDIR /usr/src/app
 ENV PORT=3000 \
     NODE_ENV=production
 
-COPY --from=builder /usr/src/app/example-app/.next/static /usr/src/app/example-app/.next/static
 COPY --from=builder /usr/src/app/example-app/.next/standalone /usr/src/app/example-app/.next/standalone
+COPY --from=builder /usr/src/app/example-app/.next/static /usr/src/app/example-app/.next/standalone/example-app/.next/static
 
 EXPOSE 3000
 USER node
