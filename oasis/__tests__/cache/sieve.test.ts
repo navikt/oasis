@@ -11,10 +11,10 @@ describe("SieveCache", () => {
 
     it("should throw an error if capacity is less than or equal to 0", () => {
       expect(() => new SieveCache(0)).toThrowError(
-        "Capacity must be greater than 0"
+        "Capacity must be greater than 0",
       );
       expect(() => new SieveCache(-1)).toThrowError(
-        "Capacity must be greater than 0"
+        "Capacity must be greater than 0",
       );
     });
   });

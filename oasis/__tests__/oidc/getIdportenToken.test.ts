@@ -11,7 +11,7 @@ describe("getIdportenToken", () => {
   it("verifies token", async () => {
     const jwt = await token("123123123");
     const actual = await idporten(
-      createRequest({ headers: { authorization: `Bearer ${jwt}` } })
+      createRequest({ headers: { authorization: `Bearer ${jwt}` } }),
     );
     expect(actual).not.toBeNull();
     const payload = decodeJwt(actual!);

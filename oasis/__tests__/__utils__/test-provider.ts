@@ -16,7 +16,7 @@ export type tokenOptions = {
 
 export async function token(
   pid: string,
-  options?: tokenOptions
+  options?: tokenOptions,
 ): Promise<string> {
   const { issuer, expirationTime } = {
     expirationTime: "2h",

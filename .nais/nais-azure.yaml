@@ -6,7 +6,7 @@ metadata:
   labels:
     team: oasis-maintainers
 spec:
-  image: {{image}}
+  image: { { image } }
   port: 3000
   liveness:
     path: "/api/internal/isalive"

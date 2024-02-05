@@ -34,7 +34,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      })
+      }),
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
@@ -54,7 +54,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      })
+      }),
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
@@ -74,7 +74,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      })
+      }),
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
@@ -96,7 +96,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      })
+      }),
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
@@ -118,7 +118,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      })
+      }),
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);

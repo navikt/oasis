@@ -1,11 +1,5 @@
 {
-  "extends": [
-    "next",
-    "plugin:prettier/recommended"
-  ],
-  "rules": {
-    "@next/next/no-server-import-in-page": "off"
-  },
+  "extends": ["next", "plugin:prettier/recommended", "prettier"],
   "settings": {
     "next": {
       "rootDir": "examples-app/"
