@@ -14,7 +14,7 @@ fra NodeJS sin [IncomingMessage](https://nodejs.org/api/http.html#class-httpinco
 
 ## Installasjon i prosjektet ditt
 
-```bash 
+```bash
 npm install @navikt/oasis
 ```
 
@@ -31,7 +31,7 @@ const onBehalfOfToken = session.apiToken(audience);
 // call a service using this token
 ```
 
-... hvor `req` er requesten fra Next.js, og audience er applikasjonen du skal kalle på formen `cluster:namespace:app`, feks `dev-gcp:mitteam:minapp`.
+... hvor `req` er en `IncomingMessage | Request`, og audience er applikasjonen du skal kalle på formen `cluster:namespace:app`, feks `dev-gcp:mitteam:minapp`.
 
 For at dette skal virke må du ha konfigurert bruk av [AzureAd](https://doc.nais.io/security/auth/azure-ad/) eller [ID-porten](https://doc.nais.io/security/auth/idporten/) i nais-manifestet ditt.
 
@@ -102,4 +102,3 @@ export const getSession = makeSession({
 });
 
 ```
-
