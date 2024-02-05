@@ -1,5 +1,5 @@
-import { server } from "./src/mocks/server";
 import { exportJWK, generateKeyPair } from "jose";
+import { server } from "./__tests__/__utils__/mocks/server";
 import { jwkPrivate } from "./__tests__/__utils__/test-provider";
 
 beforeAll(async () => {

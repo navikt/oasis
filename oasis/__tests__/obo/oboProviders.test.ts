@@ -1,6 +1,5 @@
 import { token } from "../__utils__/test-provider";
 import { decodeJwt, OboProvider } from "../../src";
-import { errorAudience } from "../../src/mocks/handlers";
 import tokenX from "../../src/obo-providers/tokenx";
 import azureOBO from "../../src/obo-providers/azure";
 
@@ -16,7 +15,7 @@ describe.each([
     expect(payload.iss).toBe(issuer);
   });
   it("returns null when exchange fails", async () => {
-    const jwt = await oboProvider(await token("pid"), errorAudience);
+    const jwt = await oboProvider(await token("pid"), "error-audience");
     expect(jwt).toBeNull();
   });
 });

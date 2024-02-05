@@ -10,6 +10,5 @@
     "incremental": true,
     "resolveJsonModule": true
   },
-  "include": ["./src"],
-  "exclude": ["src/mocks"]
+  "include": ["./src"]
 }
