@@ -1,5 +1,5 @@
 import { JWK } from "jose";
-import _ from "lodash";
+import memoize from "lodash.memoize";
 import { Client, GrantExtras, Issuer } from "openid-client";
 
 export interface ClientConfig {
@@ -9,7 +9,7 @@ export interface ClientConfig {
   jwk: JWK;
 }
 
-const getClientConfig = _.memoize((): ClientConfig => {
+const getClientConfig = memoize((): ClientConfig => {
   return {
     issuer: process.env.TOKEN_X_ISSUER as string,
     token_endpoint: process.env.TOKEN_X_TOKEN_ENDPOINT as string,
@@ -35,7 +35,7 @@ export function getClient(): Client {
       client_id,
       token_endpoint_auth_method: "private_key_jwt",
     },
-    { keys: [jwk] },
+    { keys: [jwk] }
   );
 }
 
