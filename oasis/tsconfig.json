@@ -1,22 +1,15 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "target": "es2019",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    "target": "ES6",
     "skipLibCheck": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
     "esModuleInterop": true,
-    "module": "commonjs",
-    "moduleResolution": "node16",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "incremental": true,
-    "declaration": true,
-    "jsx": "preserve"
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "src/mocks", "**/__tests__"]
+  "include": ["./src"],
+  "exclude": ["src/mocks"]
 }
