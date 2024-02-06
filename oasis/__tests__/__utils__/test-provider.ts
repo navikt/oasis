@@ -4,57 +4,29 @@ import {
   GenerateKeyPairResult,
   SignJWT,
 } from "jose";
-import { JWK } from "jose/dist/types/types";
-import getConfig from "next/config";
 
 const alg = "RS256";
 
-export type tokenOptions = {
-  expirationTime?: string | number;
-  issuer?: string;
-};
+const cachedKeyPair: Promise<GenerateKeyPairResult> = generateKeyPair(alg);
+const privateKey = async () => (await cachedKeyPair).privateKey;
 
-export async function token(
+export const jwk = async () => exportJWK((await cachedKeyPair).publicKey);
+export const jwkPrivate = async () => exportJWK(await privateKey());
+
+export const token = async (
   pid: string,
-  options?: tokenOptions,
-): Promise<string> {
-  const { issuer, expirationTime } = {
-    expirationTime: "2h",
-    issuer: "urn:example:issuer",
-    ...options,
-  };
-  const { privateKey } = await cachedKeyPair;
-  const payload = {
+  options: {
+    issuer?: string;
+    expirationTime?: string;
+  } = {}
+) =>
+  new SignJWT({
     pid,
-    acr: "Level4",
     client_id: process.env.IDPORTEN_CLIENT_ID,
-  };
-  return new SignJWT(payload)
-    .setSubject(Math.random().toString(36).slice(2, 7))
+  })
+    .setSubject(Math.random().toString())
     .setProtectedHeader({ alg })
     .setIssuedAt()
-    .setIssuer(<string>issuer)
-    .setExpirationTime(<string | number>expirationTime)
-    .sign(privateKey);
-}
-
-export async function jwk(): Promise<JWK> {
-  const { publicKey } = await cachedKeyPair;
-  return exportJWK(publicKey);
-}
-
-export async function jwkPrivate(): Promise<JWK> {
-  const { privateKey } = await cachedKeyPair;
-  return exportJWK(privateKey);
-}
-
-let cachedKeyPair: Promise<GenerateKeyPairResult>;
-
-if (process.env.GENERATE_DEV_JWK == "enabled") {
-  const { serverRuntimeConfig } = getConfig();
-  cachedKeyPair = serverRuntimeConfig.key;
-} else {
-  cachedKeyPair = generateKeyPair(alg);
-}
-
-export default cachedKeyPair;
+    .setIssuer(options.issuer ?? "urn:example:issuer")
+    .setExpirationTime(options.expirationTime ?? "2h")
+    .sign(await privateKey());

@@ -1,7 +1,12 @@
 import { OboProvider } from "../../src";
 import { token } from "../__utils__/test-provider";
 import { withInMemoryCache } from "../../src/obo-providers";
-import { mockToken } from "../__utils__/mockToken";
+
+let tokenId = 0;
+
+export function mockToken() {
+  return `token.test.${tokenId++}`;
+}
 
 describe("withInMemoryCache", () => {
   it("caches token + audience", async () => {
