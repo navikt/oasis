@@ -1,9 +1,23 @@
 import { createRequest } from "node-mocks-http";
-import { token } from "../__utils__/test-provider";
+import { jwk, token } from "../__utils__/test-provider";
 import { decodeJwt } from "jose";
 import idporten from "../../src/identity-providers/idporten";
+import { SetupServer, setupServer } from "msw/node";
+import { HttpResponse, http } from "msw";
 
 describe("getIdportenToken", () => {
+  let server: SetupServer;
+  beforeAll(() => {
+    server = setupServer(
+      http.get(process.env.IDPORTEN_JWKS_URI!, async () =>
+        HttpResponse.json({ keys: [await jwk()] })
+      )
+    );
+    server.listen();
+  });
+
+  afterAll(() => server.close());
+
   it("handles missing authorization header", async () => {
     expect(await idporten(createRequest())).toBeNull();
   });
@@ -11,7 +25,7 @@ describe("getIdportenToken", () => {
   it("verifies token", async () => {
     const jwt = await token("123123123");
     const actual = await idporten(
-      createRequest({ headers: { authorization: `Bearer ${jwt}` } }),
+      createRequest({ headers: { authorization: `Bearer ${jwt}` } })
     );
     expect(actual).not.toBeNull();
     const payload = decodeJwt(actual!);

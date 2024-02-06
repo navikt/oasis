@@ -1,9 +1,11 @@
 import { decodeJwt, makeSession, OboProvider } from "../src";
 import { createRequest } from "node-mocks-http";
-import { token } from "./__utils__/test-provider";
+import { jwk, token } from "./__utils__/test-provider";
 import idporten from "../src/identity-providers/idporten";
 import tokenX from "../src/obo-providers/tokenx";
 import { withInMemoryCache } from "../src/obo-providers/withInMemoryCache";
+import { setupServer, SetupServer } from "msw/node";
+import { http, HttpResponse } from "msw";
 
 // Example function for solving metrics
 function withMetrics(oboProvider: OboProvider): OboProvider {
@@ -16,6 +18,25 @@ function withMetrics(oboProvider: OboProvider): OboProvider {
 }
 
 describe("getSession", () => {
+  let server: SetupServer;
+  beforeAll(() => {
+    server = setupServer(
+      http.get(process.env.IDPORTEN_JWKS_URI!, async () =>
+        HttpResponse.json({ keys: [await jwk()] })
+      ),
+      http.post(process.env.TOKEN_X_TOKEN_ENDPOINT!, async ({ request }) =>
+        HttpResponse.json({
+          access_token: await token(
+            new URLSearchParams(await request.text()).get("subject_Token")!,
+            { issuer: "urn:tokenx:dings" }
+          ),
+        })
+      )
+    );
+    server.listen();
+  });
+  afterAll(() => server.close());
+
   it("can be destructured", async () => {
     const getSession = makeSession({
       identityProvider: idporten,
@@ -34,7 +55,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      }),
+      })
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
@@ -54,7 +75,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      }),
+      })
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
@@ -74,7 +95,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      }),
+      })
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
@@ -96,7 +117,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      }),
+      })
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
@@ -118,7 +139,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      }),
+      })
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
