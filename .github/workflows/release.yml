@@ -20,6 +20,7 @@ jobs:
 
       - run: npm ci
       - run: npm test
+      - run: npm run build-lib
 
       - run: |
           npm version -w oasis --allow-same-version --no-git-tag-version ${{ github.event.release.tag_name }}
