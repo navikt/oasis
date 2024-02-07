@@ -1,4 +1,4 @@
-FROM node:20 AS builder
+FROM node:20@sha256:fd0115473b293460df5b217ea73ff216928f2b0bb7650c5e7aa56aae4c028426 AS builder
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN npm ci --prefer-offline --no-audit
 RUN npm run build-lib
 RUN npm run build
 
-FROM node:20-alpine AS runtime
+FROM node:20-alpine@sha256:2f46fd49c767554c089a5eb219115313b72748d8f62f5eccb58ef52bc36db4ad AS runtime
 
 WORKDIR /app
 
