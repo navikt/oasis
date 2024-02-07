@@ -3,12 +3,7 @@ const { generateKeyPair } = require("jose");
 /** @type {import("next").NextConfig} */
 const nextConfig = async () => ({
   experimental: {
-    instrumentationHook: true,
-  },
-  serverRuntimeConfig: {
-    ...(process.env.GENERATE_DEV_JWK == "enabled" && {
-      key: await generateKeyPair("RS256"),
-    }),
+    instrumentationHook: process.env.NODE_ENV === "development",
   },
   reactStrictMode: true,
   output: "standalone",

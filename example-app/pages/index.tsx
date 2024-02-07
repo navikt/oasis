@@ -1,10 +1,12 @@
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { token } from "../test-provider";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const testToken = await token("213");
+  const testToken =
+    process.env.NODE_ENV === "development"
+      ? await (await require("../test-provider")).token("213")
+      : "wat";
 
   return {
     props: { testToken },
