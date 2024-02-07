@@ -13,7 +13,6 @@ const maxCacheCapacity = Math.floor(maxCacheSize / averageJwtSize);
 
 function getCache() {
   if (cache == undefined) {
-    console.log(`Initializing cache with capacity: ${maxCacheCapacity}`);
     cache = new SieveCache(maxCacheCapacity);
   }
   return cache;
