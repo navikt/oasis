@@ -71,6 +71,6 @@
   },
   "homepage": "https://github.com/navikt/oasis#readme",
   "engines": {
-    "node": ">=20"
+    "node": ">=18"
   }
 }
