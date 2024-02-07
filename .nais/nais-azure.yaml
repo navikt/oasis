@@ -28,9 +28,6 @@ spec:
       memory: 64Mi
   ingresses:
     - https://oasis-azure.intern.dev.nav.no
-  env:
-    - name: PROVIDER
-      value: azure
   azure:
     application:
       enabled: true

@@ -3,18 +3,19 @@ import { getSession } from "@navikt/oasis";
 
 export default async function authenticatedHandler(
   req: NextApiRequest,
-  res: NextApiResponse<string>,
+  res: NextApiResponse<string>
 ) {
   const session = await getSession(req);
 
   if (!session) return res.status(401);
 
   let obo = "";
-  if (process.env.PROVIDER == "idporten") {
+
+  if (process.env.IDPORTEN_ISSUER) {
     obo = await session.apiToken("dev-gcp:oasis-maintainers:oasis-idporten");
-  } else if (process.env.PROVIDER == "azure") {
+  } else if (process.env.AZURE_OPENID_CONFIG_ISSUER) {
     obo = await session.apiToken(
-      "api://dev-gcp.oasis-maintainers.oasis-azure/.default",
+      "api://dev-gcp.oasis-maintainers.oasis-azure/.default"
     );
   }
 
