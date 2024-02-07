@@ -1,3 +1,4 @@
 *.md
-.env.*
+**/.env
+**/.env.*
 .git

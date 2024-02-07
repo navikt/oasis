@@ -2,8 +2,8 @@ name: Deploy test-app
 
 on:
   push:
-    branches-ignore:
-      - 'dependabot/**'
+    branches:
+      - "main"
 
 jobs:
   test:
@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: npm
 
       - run: npm install --no-save --no-audit --prefer-offline --ignore-scripts
@@ -29,7 +29,7 @@ jobs:
       - uses: nais/docker-build-push@v0
         id: docker-build-push
         with:
-          team: teamdagpenger
+          team: oasis-maintainers
           tag: ${{ github.sha }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
@@ -39,14 +39,15 @@ jobs:
 
   deploy-azure:
     name: Deploy with Azure AD
-    needs: [ test, build ]
-    if: github.ref == 'refs/heads/main'
+    needs: [test, build]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais-azure.yaml
           PRINT_PAYLOAD: true
@@ -54,14 +55,15 @@ jobs:
 
   deploy-idporten:
     name: Deploy with IDporten
-    needs: [ test, build ]
-    if: github.ref == 'refs/heads/main'
+    needs: [test, build]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais-idporten.yaml
           PRINT_PAYLOAD: true

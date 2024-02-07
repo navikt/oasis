@@ -1,10 +1,10 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: dp-auth-azure
-  namespace: teamdagpenger
+  name: oasis-azure
+  namespace: oasis-maintainers
   labels:
-    team: teamdagpenger
+    team: oasis-maintainers
 spec:
   image: {{image}}
   port: 3000
@@ -27,10 +27,7 @@ spec:
       cpu: 10m
       memory: 64Mi
   ingresses:
-    - https://dp-auth-azure.intern.dev.nav.no
-  env:
-    - name: PROVIDER
-      value: azure
+    - https://oasis-azure.intern.dev.nav.no
   azure:
     application:
       enabled: true
@@ -41,4 +38,4 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: dp-auth-azure
+        - application: oasis-azure

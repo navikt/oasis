@@ -1,8 +1,9 @@
-name: Test Dependabot PRs
+name: Test PRs
 
 on:
-  push:
-    branches:
+  pull_request:
+    types: [opened, reopened]
+    branches-ignore:
       - "dependabot/**"
 
 jobs:
