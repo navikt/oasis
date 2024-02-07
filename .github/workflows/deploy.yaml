@@ -9,8 +9,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # ratchet:actions/checkout@v4
+      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # ratchet:actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
@@ -25,8 +25,8 @@ jobs:
       contents: "read"
       id-token: "write"
     steps:
-      - uses: actions/checkout@v4
-      - uses: nais/docker-build-push@v0
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # ratchet:actions/checkout@v4
+      - uses: nais/docker-build-push@vo # ratchet:exclude
         id: docker-build-push
         with:
           team: oasis-maintainers
@@ -45,8 +45,8 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: nais/deploy/actions/deploy@v2
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # ratchet:actions/checkout@v4
+      - uses: nais/deploy/actions/deploy@v2 # ratchet:exclude
         env:
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais-azure.yaml
@@ -61,8 +61,8 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: nais/deploy/actions/deploy@v2
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # ratchet:actions/checkout@v4
+      - uses: nais/deploy/actions/deploy@v2 # ratchet:exclude
         env:
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais-idporten.yaml
