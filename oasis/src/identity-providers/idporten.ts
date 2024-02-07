@@ -1,7 +1,7 @@
+import { JWTVerifyResult, errors, jwtVerify } from "jose";
 import { SupportedRequestType, Token } from "../index";
-import { getTokenFromHeader } from "../utils/getTokenFromHeader";
-import { errors, jwtVerify, JWTVerifyResult } from "jose";
 import { cachedRemoteJWKSet } from "../utils/cachedRemoteJWKSet";
+import { getTokenFromHeader } from "../utils/getTokenFromHeader";
 
 const idportenJWKSet = () =>
   cachedRemoteJWKSet(process.env.IDPORTEN_JWKS_URI as string);
@@ -17,7 +17,7 @@ async function verify(token: string): Promise<JWTVerifyResult> {
     throw new errors.JWTClaimValidationFailed(
       `unexpected "client_id" claim value`,
       "client_id",
-      "check_failed",
+      "check_failed"
     );
   }
   const acr = process.env.IDPORTEN_REQUIRED_ACR
@@ -28,14 +28,14 @@ async function verify(token: string): Promise<JWTVerifyResult> {
     throw new errors.JWTClaimValidationFailed(
       `unexpected "acr" claim value, expected "${acr}", recieved"${result.payload["acr"]}"`,
       "acr",
-      "check_failed",
+      "check_failed"
     );
   }
   return result;
 }
 
 export default async function idporten(
-  req: SupportedRequestType,
+  req: SupportedRequestType
 ): Promise<Token | null> {
   const token = getTokenFromHeader(req.headers);
   if (!token) return null;

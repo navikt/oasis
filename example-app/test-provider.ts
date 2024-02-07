@@ -1,60 +1,24 @@
-import {
-  exportJWK,
-  generateKeyPair,
-  GenerateKeyPairResult,
-  SignJWT,
-} from "jose";
-import { JWK } from "jose/dist/types/types";
-import getConfig from "next/config";
+import { SignJWT, exportJWK, importJWK } from "jose";
 
-const alg = "RS256";
+const privateKey = () => importJWK(JSON.parse(process.env.PRIVATE_KEY!));
+export const jwk = async () =>
+  exportJWK(await importJWK(JSON.parse(process.env.PUBLIC_KEY!)));
+export const jwkPrivate = async () => exportJWK(await privateKey());
 
-export type tokenOptions = {
-  expirationTime?: string | number;
-  issuer?: string;
-};
-
-export async function token(
+export const token = async (
   pid: string,
-  options?: tokenOptions,
-): Promise<string> {
-  const { issuer, expirationTime } = {
-    expirationTime: "2h",
-    issuer: "urn:example:issuer",
-    ...options,
-  };
-  const { privateKey } = await cachedKeyPair;
-  const payload = {
+  options: {
+    issuer?: string;
+    expirationTime?: string;
+  } = {}
+) =>
+  new SignJWT({
     pid,
-    acr: "Level4",
     client_id: process.env.IDPORTEN_CLIENT_ID,
-  };
-  return new SignJWT(payload)
-    .setSubject(Math.random().toString(36).slice(2, 7))
-    .setProtectedHeader({ alg })
+  })
+    .setSubject(Math.random().toString())
+    .setProtectedHeader({ alg: "RS256" })
     .setIssuedAt()
-    .setIssuer(<string>issuer)
-    .setExpirationTime(<string | number>expirationTime)
-    .sign(privateKey);
-}
-
-export async function jwk(): Promise<JWK> {
-  const { publicKey } = await cachedKeyPair;
-  return exportJWK(publicKey);
-}
-
-export async function jwkPrivate(): Promise<JWK> {
-  const { privateKey } = await cachedKeyPair;
-  return exportJWK(privateKey);
-}
-
-let cachedKeyPair: Promise<GenerateKeyPairResult>;
-
-if (process.env.GENERATE_DEV_JWK == "enabled") {
-  const { serverRuntimeConfig } = getConfig();
-  cachedKeyPair = serverRuntimeConfig.key;
-} else {
-  cachedKeyPair = generateKeyPair(alg);
-}
-
-export default cachedKeyPair;
+    .setIssuer(options.issuer ?? "urn:example:issuer")
+    .setExpirationTime(options.expirationTime ?? "2h")
+    .sign(await privateKey());
