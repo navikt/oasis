@@ -9,20 +9,8 @@ const idportenJWKSet = () =>
 async function verify(token: string): Promise<JWTVerifyResult> {
   const result = await jwtVerify(token, idportenJWKSet(), {
     issuer: process.env.IDPORTEN_ISSUER,
+    audience: process.env.IDPORTEN_AUDIENCE,
   });
-
-  console.log(result.payload.aud);
-
-  if (
-    !("aud" in result.payload) ||
-    result.payload["aud"] != process.env.IDPORTEN_AUDIENCE
-  ) {
-    throw new errors.JWTClaimValidationFailed(
-      `unexpected "aud" claim value`,
-      "aud",
-      "check_failed"
-    );
-  }
 
   const acr = process.env.IDPORTEN_REQUIRED_ACR
     ? [process.env.IDPORTEN_REQUIRED_ACR]

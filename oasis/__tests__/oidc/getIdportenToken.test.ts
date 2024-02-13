@@ -33,6 +33,19 @@ describe("getIdportenToken", () => {
     expect(payload.iss).toBe(process.env.IDPORTEN_ISSUER);
   });
 
+  it("verification handles array audience", async () => {
+    const jwt = await token("123123123", {
+      audience: ["idporten_audience", "https://nav.no"],
+    });
+    const actual = await idporten(
+      createRequest({ headers: { authorization: `Bearer ${jwt}` } })
+    );
+    expect(actual).not.toBeNull();
+    const payload = decodeJwt(actual!);
+    expect(payload.pid).toBe("123123123");
+    expect(payload.iss).toBe(process.env.IDPORTEN_ISSUER);
+  });
+
   it("fails verification when issuer is not IDPORTEN_ISSUER", async () => {
     const jwt = await token("123123123", { issuer: "the issuer" });
     const verify = async () =>
