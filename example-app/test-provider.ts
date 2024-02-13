@@ -14,8 +14,8 @@ export const token = async (
 ) =>
   new SignJWT({
     pid,
-    client_id: process.env.IDPORTEN_CLIENT_ID,
   })
+    .setAudience(process.env.IDPORTEN_AUDIENCE!)
     .setSubject(Math.random().toString())
     .setProtectedHeader({ alg: "RS256" })
     .setIssuedAt()

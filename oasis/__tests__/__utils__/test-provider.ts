@@ -18,15 +18,16 @@ export const token = async (
   options: {
     issuer?: string;
     expirationTime?: string;
+    audience?: string;
   } = {}
 ) =>
   new SignJWT({
     pid,
-    client_id: process.env.IDPORTEN_CLIENT_ID,
   })
     .setSubject(Math.random().toString())
     .setProtectedHeader({ alg })
     .setIssuedAt()
+    .setAudience(options.audience ?? "idporten_audience")
     .setIssuer(options.issuer ?? "urn:example:issuer")
     .setExpirationTime(options.expirationTime ?? "2h")
     .sign(await privateKey());
