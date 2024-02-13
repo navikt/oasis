@@ -18,7 +18,7 @@ export const token = async (
   options: {
     issuer?: string;
     expirationTime?: string;
-    audience?: string;
+    audience?: string | string[];
   } = {}
 ) =>
   new SignJWT({
