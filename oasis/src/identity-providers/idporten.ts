@@ -11,6 +11,17 @@ async function verify(token: string): Promise<JWTVerifyResult> {
     issuer: process.env.IDPORTEN_ISSUER,
   });
 
+  if (
+    !("aud" in result.payload) ||
+    result.payload["aud"] != process.env.IDPORTEN_AUDIENCE
+  ) {
+    throw new errors.JWTClaimValidationFailed(
+      `unexpected "aud" claim value`,
+      "aud",
+      "check_failed"
+    );
+  }
+
   const acr = process.env.IDPORTEN_REQUIRED_ACR
     ? [process.env.IDPORTEN_REQUIRED_ACR]
     : ["Level4", "idporten-loa-high"];

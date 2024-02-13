@@ -41,4 +41,13 @@ describe("getIdportenToken", () => {
       );
     expect(verify).rejects.toThrow(errors.JWTClaimValidationFailed);
   });
+
+  it("fails verification when aud is not IDPORTEN_AUDIENCE", async () => {
+    const jwt = await token("123123123", { audience: "the audience" });
+    const verify = async () =>
+      await idporten(
+        createRequest({ headers: { authorization: `Bearer ${jwt}` } })
+      );
+    expect(verify).rejects.toThrow(errors.JWTClaimValidationFailed);
+  });
 });

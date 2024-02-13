@@ -18,6 +18,7 @@ export const token = async (
   options: {
     issuer?: string;
     expirationTime?: string;
+    audience?: string;
   } = {}
 ) =>
   new SignJWT({
@@ -26,6 +27,7 @@ export const token = async (
     .setSubject(Math.random().toString())
     .setProtectedHeader({ alg })
     .setIssuedAt()
+    .setAudience(options.audience ?? "idporten_audience")
     .setIssuer(options.issuer ?? "urn:example:issuer")
     .setExpirationTime(options.expirationTime ?? "2h")
     .sign(await privateKey());
