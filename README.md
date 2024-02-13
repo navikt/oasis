@@ -27,13 +27,19 @@ npm install @navikt/oasis
 import { getSession } from "@navikt/oasis";
 
 const session = await getSession(req);
-const onBehalfOfToken = session.apiToken(audience);
+const onBehalfOfToken = await session.apiToken(audience);
 // call a service using this token
 ```
 
 ... hvor `req` er en `IncomingMessage | Request`, og audience er applikasjonen du skal kalle på formen `cluster:namespace:app`, feks `dev-gcp:mitteam:minapp`.
 
 For at dette skal virke må du ha konfigurert bruk av [AzureAd](https://doc.nais.io/security/auth/azure-ad/) eller [ID-porten](https://doc.nais.io/security/auth/idporten/) i nais-manifestet ditt.
+
+`getSession` validerer tokenet i requestens authorization-header.
+
+`session.apiToken` cacher tokens i minne, og samler metrikker med Prometheus.
+
+Om du ikke har noen spesielle behov er dette alt du trenger å gjøre for å validere og utveksle tokens i appen din.
 
 ## Tilpasninger man kan gjøre
 
