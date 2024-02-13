@@ -35,7 +35,7 @@ describe("getIdportenToken", () => {
 
   it("verification handles array audience", async () => {
     const jwt = await token("123123123", {
-      audience: ["idporten_audience", "https://nav.no"],
+      audience: [process.env.IDPORTEN_AUDIENCE!, "https://nav.no"],
     });
     const actual = await idporten(
       createRequest({ headers: { authorization: `Bearer ${jwt}` } })

@@ -27,7 +27,7 @@ export const token = async (
     .setSubject(Math.random().toString())
     .setProtectedHeader({ alg })
     .setIssuedAt()
-    .setAudience(options.audience ?? "idporten_audience")
+    .setAudience(options.audience ?? "app-id")
     .setIssuer(options.issuer ?? "urn:example:issuer")
     .setExpirationTime(options.expirationTime ?? "2h")
     .sign(await privateKey());
