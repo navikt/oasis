@@ -11,6 +11,8 @@ async function verify(token: string): Promise<JWTVerifyResult> {
     issuer: process.env.IDPORTEN_ISSUER,
   });
 
+  console.log(result.payload.aud);
+
   if (
     !("aud" in result.payload) ||
     result.payload["aud"] != process.env.IDPORTEN_AUDIENCE
