@@ -22,7 +22,6 @@ export const token = async (
 ) =>
   new SignJWT({
     pid,
-    client_id: process.env.IDPORTEN_CLIENT_ID,
   })
     .setSubject(Math.random().toString())
     .setProtectedHeader({ alg })

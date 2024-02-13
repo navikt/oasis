@@ -10,16 +10,7 @@ async function verify(token: string): Promise<JWTVerifyResult> {
   const result = await jwtVerify(token, idportenJWKSet(), {
     issuer: process.env.IDPORTEN_ISSUER,
   });
-  if (
-    !("client_id" in result.payload) ||
-    result.payload["client_id"] != process.env.IDPORTEN_CLIENT_ID
-  ) {
-    throw new errors.JWTClaimValidationFailed(
-      `unexpected "client_id" claim value`,
-      "client_id",
-      "check_failed"
-    );
-  }
+
   const acr = process.env.IDPORTEN_REQUIRED_ACR
     ? [process.env.IDPORTEN_REQUIRED_ACR]
     : ["Level4", "idporten-loa-high"];
