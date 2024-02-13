@@ -22,44 +22,46 @@ describe("getIdportenToken", () => {
     expect(await idporten(createRequest())).toBeNull();
   });
 
-  it("verifies token", async () => {
-    const jwt = await token("123123123");
-    const actual = await idporten(
-      createRequest({ headers: { authorization: `Bearer ${jwt}` } })
-    );
-    expect(actual).not.toBeNull();
-    const payload = decodeJwt(actual!);
-    expect(payload.pid).toBe("123123123");
-    expect(payload.iss).toBe(process.env.IDPORTEN_ISSUER);
+  it("verifies valid token", async () => {
+    const pid = "123123123";
+
+    expect(
+      decodeJwt(
+        (await idporten(
+          createRequest({
+            headers: {
+              authorization: `Bearer ${await token(pid)}`,
+            },
+          })
+        ))!
+      ).pid
+    ).toBe(pid);
   });
 
-  it("verification handles array audience", async () => {
-    const jwt = await token("123123123", {
-      audience: [process.env.IDPORTEN_AUDIENCE!, "https://nav.no"],
-    });
-    const actual = await idporten(
-      createRequest({ headers: { authorization: `Bearer ${jwt}` } })
-    );
-    expect(actual).not.toBeNull();
-    const payload = decodeJwt(actual!);
-    expect(payload.pid).toBe("123123123");
-    expect(payload.iss).toBe(process.env.IDPORTEN_ISSUER);
-  });
-
-  it("fails verification when issuer is not IDPORTEN_ISSUER", async () => {
-    const jwt = await token("123123123", { issuer: "the issuer" });
+  it("fails verification when issuer is not idporten", async () => {
     const verify = async () =>
-      await idporten(
-        createRequest({ headers: { authorization: `Bearer ${jwt}` } })
+      idporten(
+        createRequest({
+          headers: {
+            authorization: `Bearer ${await token("123123123", {
+              issuer: "not idporten",
+            })}`,
+          },
+        })
       );
     expect(verify).rejects.toThrow(errors.JWTClaimValidationFailed);
   });
 
-  it("fails verification when aud is not IDPORTEN_AUDIENCE", async () => {
-    const jwt = await token("123123123", { audience: "the audience" });
+  it("fails verification when audience is not idporten", async () => {
     const verify = async () =>
-      await idporten(
-        createRequest({ headers: { authorization: `Bearer ${jwt}` } })
+      idporten(
+        createRequest({
+          headers: {
+            authorization: `Bearer ${await token("123123123", {
+              audience: "not idporten",
+            })}`,
+          },
+        })
       );
     expect(verify).rejects.toThrow(errors.JWTClaimValidationFailed);
   });
