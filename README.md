@@ -37,7 +37,7 @@ For at dette skal virke må du ha konfigurert bruk av [AzureAd](https://doc.nais
 
 `getSession` validerer tokenet i requestens authorization-header.
 
-`session.apiToken` cacher tokens i minne, og samler metrikker med Prometheus.
+`session.apiToken` gjør token-utvikling mot TokenX (Idporten) eller Azure, cacher tokens i minne, og samler metrikker med [Prometheus](#prometheus).
 
 Om du ikke har noen spesielle behov er dette alt du trenger å gjøre for å validere og utveksle tokens i appen din.
 
@@ -108,3 +108,12 @@ export const getSession = makeSession({
 });
 
 ```
+
+## Prometheus
+
+Enten du bruker standardkonfigutasjon eller tar i bruk `withPrometheus` direkte er dette de metrikkene du får:
+
+- Ett `Histogram` for hvor mange sekunder hver token-utveksling tar (`"oasis_token_exchange_duration_seconds"`), med følgende buckets: `[0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10]`.
+- To `Counter`: en for antall utvekslinger som feiler (`"oasis_token_exchange_failures"`) og en for totalt antall utvekslinger (`"oasis_token_exchanges"`).
+
+Se eksempelappen for et eksempel på hvordan disse kan eksponeres med [config i nais.yaml](.nais/nais-idporten.yaml) og [endepunkt](example-app/pages/api/internal/metrics.ts).
