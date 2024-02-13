@@ -1,4 +1,4 @@
-import { JWTVerifyResult, errors, jwtVerify } from "jose";
+import { JWTVerifyResult, jwtVerify } from "jose";
 import { SupportedRequestType, Token } from "../index";
 import { cachedRemoteJWKSet } from "../utils/cachedRemoteJWKSet";
 import { getTokenFromHeader } from "../utils/getTokenFromHeader";
