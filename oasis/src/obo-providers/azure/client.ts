@@ -38,6 +38,6 @@ export function getClient(): Client {
       client_secret,
       token_endpoint_auth_method: "client_secret_basic",
     },
-    { keys: [jwk] }
+    { keys: [jwk] },
   );
 }

@@ -24,11 +24,11 @@ function cachedClient() {
 
 export default async function tokenX(
   token: string,
-  audience: string
+  audience: string,
 ): Promise<string | null> {
   return tokenExchange(
     cachedClient(),
     getGrantBody(token, audience),
-    getAdditionalClaims()
+    getAdditionalClaims(),
   );
 }

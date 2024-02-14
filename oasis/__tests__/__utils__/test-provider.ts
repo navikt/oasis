@@ -19,7 +19,7 @@ export const token = async (
     issuer?: string;
     expirationTime?: string;
     audience?: string | string[];
-  } = {}
+  } = {},
 ) =>
   new SignJWT({
     pid,

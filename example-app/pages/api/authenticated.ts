@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function authenticatedHandler(
   req: NextApiRequest,
-  res: NextApiResponse<string>
+  res: NextApiResponse<string>,
 ) {
   const session = await getSession(req);
 

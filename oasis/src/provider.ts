@@ -14,12 +14,12 @@ import { withPrometheus } from "./obo-providers/withPrometheus";
 let session: GetSessionWithOboProvider;
 
 export const getSession: (
-  req: SupportedRequestType
+  req: SupportedRequestType,
 ) => Promise<SessionWithOboProvider> = (req) => {
   if (!session) {
     if (process.env.AZURE_OPENID_CONFIG_ISSUER && process.env.IDPORTEN_ISSUER) {
       throw new Error(
-        "Both AZURE_OPENID_CONFIG_ISSUER and IDPORTEN_ISSUER are present as env variables. If you need both, you have to configure token exchange manually."
+        "Both AZURE_OPENID_CONFIG_ISSUER and IDPORTEN_ISSUER are present as env variables. If you need both, you have to configure token exchange manually.",
       );
     } else if (process.env.IDPORTEN_ISSUER) {
       session = makeSession({
@@ -33,7 +33,7 @@ export const getSession: (
       });
     } else {
       throw new Error(
-        "None of AZURE_OPENID_CONFIG_ISSUER and IDPORTEN_ISSUER are present as env variables. You need to set one of them in your nais.yaml."
+        "None of AZURE_OPENID_CONFIG_ISSUER and IDPORTEN_ISSUER are present as env variables. You need to set one of them in your nais.yaml.",
       );
     }
   }

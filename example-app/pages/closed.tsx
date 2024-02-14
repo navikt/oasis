@@ -2,7 +2,7 @@ import { decodeJwt, getSession } from "@navikt/oasis";
 import { GetServerSideProps } from "next";
 
 export const getServerSideProps: GetServerSideProps<ClosedPageProps> = async (
-  context
+  context,
 ) => {
   const session = await getSession(context.req);
 

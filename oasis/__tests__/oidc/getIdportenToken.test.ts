@@ -10,8 +10,8 @@ describe("getIdportenToken", () => {
   beforeAll(() => {
     server = setupServer(
       http.get(process.env.IDPORTEN_JWKS_URI!, async () =>
-        HttpResponse.json({ keys: [await jwk()] })
-      )
+        HttpResponse.json({ keys: [await jwk()] }),
+      ),
     );
     server.listen();
   });
@@ -32,9 +32,9 @@ describe("getIdportenToken", () => {
             headers: {
               authorization: `Bearer ${await token(pid)}`,
             },
-          })
-        ))!
-      ).pid
+          }),
+        ))!,
+      ).pid,
     ).toBe(pid);
   });
 
@@ -47,7 +47,7 @@ describe("getIdportenToken", () => {
               issuer: "not idporten",
             })}`,
           },
-        })
+        }),
       );
     expect(verify).rejects.toThrow(errors.JWTClaimValidationFailed);
   });
@@ -61,7 +61,7 @@ describe("getIdportenToken", () => {
               audience: "not idporten",
             })}`,
           },
-        })
+        }),
       );
     expect(verify).rejects.toThrow(errors.JWTClaimValidationFailed);
   });
