@@ -1,6 +1,5 @@
+import { decodeJwt, getSession } from "@navikt/oasis";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { decodeJwt } from "@navikt/oasis";
-import { getSession } from "@navikt/oasis";
 
 export default async function authenticatedHandler(
   req: NextApiRequest,

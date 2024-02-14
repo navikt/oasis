@@ -15,7 +15,7 @@ describe("withPrometheus", () => {
 
     // Ensure that the exchange has been counted
     const tokenExchangesCounter = await getPrometheusMetric(
-      "oasis_token_exchanges"
+      "oasis_token_exchanges",
     );
     expect(tokenExchangesCounter!.value).toBe(1);
     expect(tokenExchangesCounter!.labels).toMatchObject({
@@ -28,12 +28,12 @@ describe("withPrometheus", () => {
         .get()
     ).values.find(
       (value: MetricValueWithName<string>) =>
-        value.metricName === "oasis_token_exchange_duration_seconds_count"
+        value.metricName === "oasis_token_exchange_duration_seconds_count",
     )?.value;
     expect(durationCout).toBe(1);
     // Ensure that no errors in the exchange has been counted
     const tokenExchangeFailures = await getPrometheusMetric(
-      "oasis_token_exchange_failures"
+      "oasis_token_exchange_failures",
     );
     expect(tokenExchangeFailures).toBeNull();
 
@@ -43,13 +43,13 @@ describe("withPrometheus", () => {
   });
 
   it("measures errors in token exchange", async () => {
-    const oboProvider: OboProvider = async (_, audience) => null;
+    const oboProvider: OboProvider = async () => null;
     const timedProvider = withPrometheus(oboProvider);
     const obo1 = await timedProvider("token1", "audience");
 
     // Ensure that the exchange has been counted
     const tokenExchangesCounter = await getPrometheusMetric(
-      "oasis_token_exchanges"
+      "oasis_token_exchanges",
     );
     expect(tokenExchangesCounter!.value).toBe(1);
     expect(tokenExchangesCounter!.labels).toMatchObject({
@@ -62,12 +62,12 @@ describe("withPrometheus", () => {
         .get()
     ).values.find(
       (value: MetricValueWithName<string>) =>
-        value.metricName === "oasis_token_exchange_duration_seconds_count"
+        value.metricName === "oasis_token_exchange_duration_seconds_count",
     )?.value;
     expect(durationCout).toBe(1);
     // Ensure that errors in the exchange has been counted
     const tokenExchangeFailures = await getPrometheusMetric(
-      "oasis_token_exchange_failures"
+      "oasis_token_exchange_failures",
     );
     expect(tokenExchangeFailures!.value).toBe(1);
     expect(tokenExchangeFailures!.labels).toMatchObject({
@@ -81,7 +81,7 @@ describe("withPrometheus", () => {
 });
 
 async function getPrometheusMetric(
-  name: string
+  name: string,
 ): Promise<MetricValue<string> | null> {
   const metric = await register.getSingleMetric(name)!.get();
 

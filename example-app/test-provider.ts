@@ -10,7 +10,7 @@ export const token = async (
   options: {
     issuer?: string;
     expirationTime?: string;
-  } = {}
+  } = {},
 ) =>
   new SignJWT({
     pid,

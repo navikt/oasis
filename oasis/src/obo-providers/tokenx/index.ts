@@ -1,6 +1,6 @@
-import { Client, errors, GrantBody } from "openid-client";
-import { getAdditionalClaims, getClient } from "./client";
+import { Client, GrantBody } from "openid-client";
 import { tokenExchange } from "../tokenExchange";
+import { getAdditionalClaims, getClient } from "./client";
 
 function getGrantBody(subject_token: string, audience: string): GrantBody {
   return {

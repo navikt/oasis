@@ -9,7 +9,7 @@ export function getTokenFromHeader(
   return bearer.split(" ")[1];
 }
 
-function getBearer(headers: IncomingHttpHeaders | Headers): String | null {
+function getBearer(headers: IncomingHttpHeaders | Headers): string | null {
   if ("authorization" in headers) {
     return headers.authorization || null;
   }

@@ -1,5 +1,5 @@
 import { JWK } from "jose";
-import _ from "lodash";
+import memoize from "lodash.memoize";
 import { Client, Issuer } from "openid-client";
 
 export interface ClientConfig {
@@ -10,7 +10,7 @@ export interface ClientConfig {
   jwk: JWK;
 }
 
-export const getClientConfig = _.memoize((): ClientConfig => {
+export const getClientConfig = memoize((): ClientConfig => {
   return {
     issuer: process.env.AZURE_OPENID_CONFIG_ISSUER as string,
     token_endpoint: process.env.AZURE_OPENID_CONFIG_TOKEN_ENDPOINT as string,

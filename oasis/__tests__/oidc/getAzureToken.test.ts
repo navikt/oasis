@@ -10,8 +10,8 @@ describe("getAzureToken", () => {
   beforeAll(() => {
     server = setupServer(
       http.get(process.env.AZURE_OPENID_CONFIG_JWKS_URI!, async () =>
-        HttpResponse.json({ keys: [await jwk()] })
-      )
+        HttpResponse.json({ keys: [await jwk()] }),
+      ),
     );
     server.listen();
   });
@@ -32,9 +32,9 @@ describe("getAzureToken", () => {
             headers: {
               authorization: `Bearer ${await token(pid)}`,
             },
-          })
-        ))!
-      ).pid
+          }),
+        ))!,
+      ).pid,
     ).toBe(pid);
   });
 
@@ -47,7 +47,7 @@ describe("getAzureToken", () => {
               issuer: "not azure",
             })}`,
           },
-        })
+        }),
       );
     expect(verify).rejects.toThrow(errors.JWTClaimValidationFailed);
   });
@@ -61,7 +61,7 @@ describe("getAzureToken", () => {
               audience: "not azure",
             })}`,
           },
-        })
+        }),
       );
     expect(verify).rejects.toThrow(errors.JWTClaimValidationFailed);
   });

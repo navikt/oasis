@@ -7,7 +7,8 @@
     "build-lib": "tsc --noEmit false",
     "type-check": "tsc --pretty --noEmit",
     "clean": "rm -rf ./dist",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint ."
   },
   "keywords": [],
   "optionalDependencies": {
@@ -25,6 +26,7 @@
     "@types/jest": "^29.5.11",
     "@types/lodash.memoize": "^4.1.9",
     "@types/node": "^20.11.17",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
     "dotenv": "^16.4.4",
     "jest": "^29.7.0",
     "msw": "^2.1.7",

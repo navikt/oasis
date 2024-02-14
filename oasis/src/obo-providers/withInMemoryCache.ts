@@ -23,7 +23,7 @@ const NO_CACHE_TTL = 0;
 function getSecondsToExpire(payload: JWTPayload) {
   return Math.max(
     payload.exp ? secondsUntil(payload.exp) : NO_CACHE_TTL,
-    NO_CACHE_TTL
+    NO_CACHE_TTL,
   );
 }
 
@@ -35,7 +35,7 @@ export interface CacheOptions {
 
 export function withInMemoryCache(
   oboProvider: OboProvider,
-  { minExpire, cacheHit, cacheMiss }: CacheOptions = {}
+  { minExpire, cacheHit, cacheMiss }: CacheOptions = {},
 ): OboProvider {
   const cache = getCache();
   const emitter = new EventEmitter();

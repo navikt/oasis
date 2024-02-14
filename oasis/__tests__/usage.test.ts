@@ -22,16 +22,16 @@ describe("getSession", () => {
   beforeAll(() => {
     server = setupServer(
       http.get(process.env.IDPORTEN_JWKS_URI!, async () =>
-        HttpResponse.json({ keys: [await jwk()] })
+        HttpResponse.json({ keys: [await jwk()] }),
       ),
       http.post(process.env.TOKEN_X_TOKEN_ENDPOINT!, async ({ request }) =>
         HttpResponse.json({
           access_token: await token(
             new URLSearchParams(await request.text()).get("subject_Token")!,
-            { issuer: "urn:tokenx:dings" }
+            { issuer: "urn:tokenx:dings" },
           ),
-        })
-      )
+        }),
+      ),
     );
     server.listen();
   });
@@ -55,12 +55,12 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      })
+      }),
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
     expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
-    // @ts-ignore
+    // @ts-expect-error expect no apiToken
     expect(session?.apiToken).toBeUndefined();
   });
 
@@ -75,7 +75,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      })
+      }),
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
@@ -95,7 +95,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      })
+      }),
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
@@ -117,7 +117,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      })
+      }),
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
@@ -139,7 +139,7 @@ describe("getSession", () => {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      })
+      }),
     );
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
