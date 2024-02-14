@@ -61,8 +61,8 @@ describe("withInMemoryCache", () => {
     const oboProvider: OboProvider = async (_, audience) =>
       await token(audience);
     const cachedProvider = withInMemoryCache(oboProvider, {
-      cacheHit: (token, audience) => hits++,
-      cacheMiss: (token, audience) => misses++,
+      cacheHit: () => hits++,
+      cacheMiss: () => misses++,
     });
     const cachedToken = mockToken();
     await cachedProvider(cachedToken, "audience");

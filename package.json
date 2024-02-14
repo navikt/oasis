@@ -12,7 +12,7 @@
     "test": "npm run test --ws",
     "dev": "npm run dev -w example-app",
     "build": "npm run build -w example-app",
-    "lint": "npm run lint -w example-app",
+    "lint": "npm run lint --ws",
     "prepack": "npm run build-lib",
     "type-check": "npm run type-check -w oasis",
     "prepare": "husky",

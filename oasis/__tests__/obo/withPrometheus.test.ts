@@ -43,7 +43,7 @@ describe("withPrometheus", () => {
   });
 
   it("measures errors in token exchange", async () => {
-    const oboProvider: OboProvider = async (_, audience) => null;
+    const oboProvider: OboProvider = async () => null;
     const timedProvider = withPrometheus(oboProvider);
     const obo1 = await timedProvider("token1", "audience");
 

@@ -60,7 +60,7 @@ describe("getSession", () => {
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
     expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
-    // @ts-ignore
+    // @ts-expect-error expect no apiToken
     expect(session?.apiToken).toBeUndefined();
   });
 
