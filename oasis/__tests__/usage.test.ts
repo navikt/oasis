@@ -149,4 +149,34 @@ describe("getSession", () => {
     const payload = decodeJwt(oboToken);
     expect(payload.iss).toContain(`urn:tokenx:dings`);
   });
+
+  it("can be initalized with a custom identity provider that infers type", async () => {
+    type RequestContext = {
+      foo: string;
+    };
+
+    const getDataLoaderSession = makeSession({
+      identityProvider: (context: RequestContext) => idporten(context.foo),
+      oboProvider: withInMemoryCache(withMetrics(tokenX)),
+    });
+
+    // This should also infer types correctly
+    makeSession<RequestContext>({
+      identityProvider: (context) => idporten(context.foo),
+      oboProvider: withInMemoryCache(withMetrics(tokenX)),
+    });
+
+    const jwt = await token("123");
+    const session = await getDataLoaderSession({
+      foo: jwt,
+    });
+
+    expect(session).not.toBeNull();
+    expect(session?.token).toBe(jwt);
+    expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
+
+    const oboToken = await session?.apiToken("fo");
+    const payload = decodeJwt(oboToken);
+    expect(payload.iss).toContain(`urn:tokenx:dings`);
+  });
 });

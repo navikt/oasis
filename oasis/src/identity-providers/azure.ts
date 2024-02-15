@@ -13,10 +13,20 @@ async function verify(token: string): Promise<JWTVerifyResult> {
   });
 }
 
+export default async function azure(token: string): Promise<Token | null>;
+
 export default async function azure(
   req: SupportedRequestType,
+): Promise<Token | null>;
+
+export default async function azure(
+  reqOrToken: SupportedRequestType | string,
 ): Promise<Token | null> {
-  const token = getTokenFromHeader(req.headers);
+  const token =
+    typeof reqOrToken === "string"
+      ? reqOrToken
+      : getTokenFromHeader(reqOrToken.headers);
+
   if (!token) return null;
   await verify(token);
   return token;
