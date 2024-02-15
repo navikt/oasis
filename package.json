@@ -28,5 +28,15 @@
     "*.{md,html,css,json,graphql,graphqls}": "prettier --write",
     "*.{ts,tsx}": "eslint --fix --max-warnings=0"
   },
-  "prettier": {}
+  "prettier": {
+    "overrides": [
+      {
+        "files": "*.yaml",
+        "options": {
+          "semi": true,
+          "bracketSpacing": false
+        }
+      }
+    ]
+  }
 }
