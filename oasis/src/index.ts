@@ -8,10 +8,7 @@ export type IdentityProvider = (
   req: SupportedRequestType,
 ) => Promise<string | null>;
 
-export type OboProvider = (
-  token: string,
-  audience: string,
-) => Promise<string | null>;
+export type OboProvider = (token: string, audience: string) => Promise<string>;
 
 interface SessionBase {
   token: string;
@@ -19,7 +16,7 @@ interface SessionBase {
 }
 
 interface SessionWithOboProvider extends SessionBase {
-  apiToken: (audience: string) => Promise<string | null>;
+  apiToken: (audience: string) => Promise<string>;
 }
 
 type GetSession = (req: SupportedRequestType) => Promise<SessionBase | null>;

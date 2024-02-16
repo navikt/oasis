@@ -70,17 +70,17 @@ describe("getSession", () => {
       oboProvider: tokenX,
     });
     const jwt = await token("123");
-    const session = await getSession(
+    const session = (await getSession(
       createRequest({
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
       }),
-    );
+    ))!;
     expect(session).not.toBeNull();
-    expect(session?.token).toBe(jwt);
-    expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
-    const oboToken = decodeJwt((await session?.apiToken("fo"))!);
+    expect(session.token).toBe(jwt);
+    expect(session.expiresIn).toBeGreaterThanOrEqual(600);
+    const oboToken = decodeJwt(await session.apiToken("fo"));
     expect(oboToken.iss).toBe(`urn:tokenx:dings`);
   });
 
@@ -90,19 +90,19 @@ describe("getSession", () => {
       oboProvider: withInMemoryCache(tokenX),
     });
     const jwt = await token("123");
-    const session = await getSession(
+    const session = (await getSession(
       createRequest({
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
       }),
-    );
+    ))!;
     expect(session).not.toBeNull();
-    expect(session?.token).toBe(jwt);
-    expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
+    expect(session.token).toBe(jwt);
+    expect(session.expiresIn).toBeGreaterThanOrEqual(600);
 
-    const oboToken = await session?.apiToken("fo");
-    const payload = decodeJwt(oboToken!);
+    const oboToken = await session.apiToken("fo");
+    const payload = decodeJwt(oboToken);
     expect(payload.iss).toContain(`urn:tokenx:dings`);
   });
 
@@ -112,19 +112,18 @@ describe("getSession", () => {
       oboProvider: withMetrics(withInMemoryCache(tokenX)),
     });
     const jwt = await token("123");
-    const session = await getSession(
+    const session = (await getSession(
       createRequest({
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
       }),
-    );
+    ))!;
     expect(session).not.toBeNull();
-    expect(session?.token).toBe(jwt);
-    expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
+    expect(session.token).toBe(jwt);
+    expect(session.expiresIn).toBeGreaterThanOrEqual(600);
 
-    const oboToken = await session?.apiToken("fo");
-    const payload = decodeJwt(oboToken!);
+    const payload = decodeJwt(await session.apiToken("fo"));
     expect(payload.iss).toContain(`urn:tokenx:dings`);
   });
 
@@ -134,19 +133,18 @@ describe("getSession", () => {
       oboProvider: withInMemoryCache(withMetrics(tokenX)),
     });
     const jwt = await token("123");
-    const session = await getSession(
+    const session = (await getSession(
       createRequest({
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
       }),
-    );
+    ))!;
     expect(session).not.toBeNull();
-    expect(session?.token).toBe(jwt);
-    expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
+    expect(session.token).toBe(jwt);
+    expect(session.expiresIn).toBeGreaterThanOrEqual(600);
 
-    const oboToken = await session?.apiToken("fo");
-    const payload = decodeJwt(oboToken!);
+    const payload = decodeJwt(await session.apiToken("fo"));
     expect(payload.iss).toContain(`urn:tokenx:dings`);
   });
 });

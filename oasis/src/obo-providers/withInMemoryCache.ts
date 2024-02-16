@@ -53,7 +53,6 @@ export function withInMemoryCache(
     emitter.emit("cache-miss", token, audience);
 
     const oboToken = await oboProvider(token, audience);
-    if (!oboToken) return null;
 
     const payload = decodeJwt(oboToken);
     const ttl = getSecondsToExpire(payload);
