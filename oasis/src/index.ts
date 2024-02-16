@@ -4,10 +4,10 @@ import { secondsUntil } from "./utils/secondsUntil";
 
 export type SupportedRequestType = IncomingMessage | Request;
 
-export type Token = string;
 export type IdentityProvider = (
   req: SupportedRequestType,
-) => Promise<Token | null>;
+) => Promise<string | null>;
+
 export type OboProvider = (
   token: string,
   audience: string,
@@ -18,41 +18,32 @@ interface SessionBase {
   expiresIn: number;
 }
 
-export interface SessionWithOboProvider extends SessionBase {
-  apiToken: (audience: string) => Promise<string>;
+interface SessionWithOboProvider extends SessionBase {
+  apiToken: (audience: string) => Promise<string | null>;
 }
 
-export type Session = SessionBase | SessionWithOboProvider | null;
+type GetSession = (req: SupportedRequestType) => Promise<SessionBase | null>;
 
-export type GetSession = (req: SupportedRequestType) => Promise<Session>;
-
-export type GetSessionWithoutOboProvider = (
-  req: SupportedRequestType,
-) => Promise<SessionBase>;
 export type GetSessionWithOboProvider = (
   req: SupportedRequestType,
-) => Promise<SessionWithOboProvider>;
+) => Promise<SessionWithOboProvider | null>;
 
-export interface MakeSessionWithoutOboProvider {
+export function makeSession(options: {
   identityProvider: IdentityProvider;
-}
+}): GetSession;
 
-export interface MakeSessionWithOboProvider
-  extends MakeSessionWithoutOboProvider {
-  oboProvider?: OboProvider;
-}
+export function makeSession(options: {
+  identityProvider: IdentityProvider;
+  oboProvider: OboProvider;
+}): GetSessionWithOboProvider;
 
-export function makeSession(
-  options: MakeSessionWithoutOboProvider,
-): GetSessionWithoutOboProvider;
-
-export function makeSession(
-  options: MakeSessionWithOboProvider,
-): GetSessionWithOboProvider;
 export function makeSession({
   identityProvider,
   oboProvider,
-}: MakeSessionWithOboProvider): GetSession {
+}: {
+  identityProvider: IdentityProvider;
+  oboProvider?: OboProvider;
+}): GetSession {
   return async (req) => {
     const token = await identityProvider(req);
     if (!token) return null;
@@ -66,7 +57,7 @@ export function makeSession({
     if (oboProvider) {
       return {
         ...session,
-        apiToken: (audience) => oboProvider(token, audience),
+        apiToken: (audience: string) => oboProvider(token, audience),
       };
     }
     return session;

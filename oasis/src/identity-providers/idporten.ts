@@ -1,5 +1,5 @@
 import { JWTVerifyResult, jwtVerify } from "jose";
-import { SupportedRequestType, Token } from "../index";
+import { IdentityProvider } from "../index";
 import { cachedRemoteJWKSet } from "../utils/cachedRemoteJWKSet";
 import { getTokenFromHeader } from "../utils/getTokenFromHeader";
 
@@ -13,11 +13,11 @@ async function verify(token: string): Promise<JWTVerifyResult> {
   });
 }
 
-export default async function idporten(
-  req: SupportedRequestType,
-): Promise<Token | null> {
+const idporten: IdentityProvider = async (req) => {
   const token = getTokenFromHeader(req.headers);
   if (!token) return null;
   await verify(token);
   return token;
-}
+};
+
+export default idporten;

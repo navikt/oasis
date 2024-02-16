@@ -1,6 +1,7 @@
 import { Client, GrantBody, GrantExtras } from "openid-client";
 import { getClient, getClientConfig } from "./client";
 import { tokenExchange } from "../tokenExchange";
+import { OboProvider } from "../..";
 
 function getGrantBody(subject_token: string, audience: string): GrantBody {
   return {
@@ -31,13 +32,11 @@ function cachedClient() {
   return _cached;
 }
 
-export default async function azureOBO(
-  token: string,
-  audience: string,
-): Promise<string | null> {
-  return tokenExchange(
+const azureOBO: OboProvider = async (token, audience) =>
+  tokenExchange(
     cachedClient(),
     getGrantBody(token, audience),
     getAdditionalClaims(),
   );
-}
+
+export default azureOBO;

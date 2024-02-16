@@ -1,11 +1,6 @@
 import azure from "./identity-providers/azure";
 import idporten from "./identity-providers/idporten";
-import {
-  GetSessionWithOboProvider,
-  SessionWithOboProvider,
-  SupportedRequestType,
-  makeSession,
-} from "./index";
+import { GetSessionWithOboProvider, makeSession } from "./index";
 import { withInMemoryCache } from "./obo-providers";
 import azureOBO from "./obo-providers/azure";
 import tokenX from "./obo-providers/tokenx";
@@ -13,9 +8,7 @@ import { withPrometheus } from "./obo-providers/withPrometheus";
 
 let session: GetSessionWithOboProvider;
 
-export const getSession: (
-  req: SupportedRequestType,
-) => Promise<SessionWithOboProvider> = (req) => {
+export const getSession: GetSessionWithOboProvider = (req) => {
   if (!session) {
     if (process.env.AZURE_OPENID_CONFIG_ISSUER && process.env.IDPORTEN_ISSUER) {
       throw new Error(
