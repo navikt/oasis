@@ -57,8 +57,8 @@ export function makeSession({
     if (oboProvider) {
       return {
         ...session,
-        apiToken: (audience: string) => oboProvider(token, audience),
-      };
+        apiToken: (audience) => oboProvider(token, audience),
+      } satisfies SessionWithOboProvider;
     }
     return session;
   };

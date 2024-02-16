@@ -80,7 +80,7 @@ describe("getSession", () => {
     expect(session).not.toBeNull();
     expect(session?.token).toBe(jwt);
     expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
-    const oboToken = decodeJwt(await session?.apiToken("fo"));
+    const oboToken = decodeJwt((await session?.apiToken("fo"))!);
     expect(oboToken.iss).toBe(`urn:tokenx:dings`);
   });
 
@@ -102,7 +102,7 @@ describe("getSession", () => {
     expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
 
     const oboToken = await session?.apiToken("fo");
-    const payload = decodeJwt(oboToken);
+    const payload = decodeJwt(oboToken!);
     expect(payload.iss).toContain(`urn:tokenx:dings`);
   });
 
@@ -124,7 +124,7 @@ describe("getSession", () => {
     expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
 
     const oboToken = await session?.apiToken("fo");
-    const payload = decodeJwt(oboToken);
+    const payload = decodeJwt(oboToken!);
     expect(payload.iss).toContain(`urn:tokenx:dings`);
   });
 
@@ -146,7 +146,7 @@ describe("getSession", () => {
     expect(session?.expiresIn).toBeGreaterThanOrEqual(600);
 
     const oboToken = await session?.apiToken("fo");
-    const payload = decodeJwt(oboToken);
+    const payload = decodeJwt(oboToken!);
     expect(payload.iss).toContain(`urn:tokenx:dings`);
   });
 });
