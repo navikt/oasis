@@ -31,11 +31,11 @@ export type Session = SessionBase | SessionWithOboProvider | null;
 export type GetSession<Arg> = (reqOrArg: Arg) => Promise<Session>;
 
 export type GetSessionWithoutOboProvider = (
-  req: SupportedRequestType,
+  req: SupportedRequestType | string,
 ) => Promise<SessionBase>;
 
 export type GetSessionWithOboProvider = (
-  req: SupportedRequestType,
+  req: SupportedRequestType | string,
 ) => Promise<SessionWithOboProvider>;
 
 export type GetCustomSessionWithoutOboProvider<Arg> = (

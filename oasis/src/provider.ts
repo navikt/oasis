@@ -14,7 +14,7 @@ import { withPrometheus } from "./obo-providers/withPrometheus";
 let session: GetSessionWithOboProvider;
 
 export const getSession: (
-  req: SupportedRequestType,
+  req: SupportedRequestType | string,
 ) => Promise<SessionWithOboProvider> = (req) => {
   if (!session) {
     if (process.env.AZURE_OPENID_CONFIG_ISSUER && process.env.IDPORTEN_ISSUER) {
