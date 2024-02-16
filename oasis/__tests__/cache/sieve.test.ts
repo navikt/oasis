@@ -10,10 +10,10 @@ describe("SieveCache", () => {
     });
 
     it("should throw an error if capacity is less than or equal to 0", () => {
-      expect(() => new SieveCache(0)).toThrowError(
+      expect(() => new SieveCache(0)).toThrow(
         "Capacity must be greater than 0",
       );
-      expect(() => new SieveCache(-1)).toThrowError(
+      expect(() => new SieveCache(-1)).toThrow(
         "Capacity must be greater than 0",
       );
     });
@@ -65,8 +65,8 @@ describe("SieveCache", () => {
 
     it("should handle setting a key with a falsy value", () => {
       const cache = new SieveCache(2);
-      cache.set("key", 0);
-      expect(cache.get("key")).toBe(0);
+      cache.set("key", "");
+      expect(cache.get("key")).toBe("");
     });
 
     it("should handle setting an empty string as a key", () => {

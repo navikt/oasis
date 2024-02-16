@@ -45,7 +45,7 @@ export function withInMemoryCache(
   return async (token, audience) => {
     const { signature } = splitJwt(token);
     const key = `${signature}-${audience}`;
-    const cachedToken = cache.get<string>(key);
+    const cachedToken = cache.get(key);
     if (cachedToken) {
       emitter.emit("cache-hit", token, audience);
       return cachedToken;
