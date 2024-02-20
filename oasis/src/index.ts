@@ -1,4 +1,4 @@
-export type Result<T = {}> = ({ ok: true } & T) | { ok: false; error: Error };
+export type Result<T> = ({ ok: true } & T) | { ok: false; error: Error };
 
 export const Result = {
   Error: <T>(error: Error | string): Result<T> => ({
@@ -11,5 +11,5 @@ export const Result = {
   }),
 };
 
-export { validateToken } from "./validate";
 export { requestOboToken } from "./obo";
+export { validateToken } from "./validate";
