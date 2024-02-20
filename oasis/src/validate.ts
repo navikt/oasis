@@ -26,7 +26,7 @@ const validateJwt = async ({
         algorithms: ["RS256"],
       },
     );
-    return Result.Ok({});
+    return Result.Ok(undefined);
   } catch (e) {
     return Result.Error(e as Error);
   }

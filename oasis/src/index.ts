@@ -1,4 +1,6 @@
-export type Result<T> = ({ ok: true } & T) | { ok: false; error: Error };
+export type Result<T = undefined> =
+  | ({ ok: true } & T)
+  | { ok: false; error: Error };
 
 export const Result = {
   Error: <T>(error: Error | string): Result<T> => ({
