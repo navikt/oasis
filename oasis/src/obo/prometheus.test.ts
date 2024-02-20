@@ -1,7 +1,8 @@
-import { OboProvider } from "../../src";
-import { token } from "../__utils__/test-provider";
-import { withPrometheus } from "../../src/obo-providers/withPrometheus";
+import { token } from "../test-provider";
+import { withPrometheus } from "./prometheus";
 import { MetricValue, MetricValueWithName, register } from "prom-client";
+import { OboProvider } from ".";
+import { Result } from "..";
 
 describe("withPrometheus", () => {
   afterEach(() => {
@@ -9,7 +10,7 @@ describe("withPrometheus", () => {
   });
   it("measures time spent getting token", async () => {
     const oboProvider: OboProvider = async (_, audience) =>
-      await token(audience);
+      Promise.resolve(Result.Ok({ token: await token({ audience }) }));
     const timedProvider = withPrometheus(oboProvider);
     const obo1 = await timedProvider("token1", "audience");
 
@@ -22,7 +23,7 @@ describe("withPrometheus", () => {
       provider: "oboProvider",
     });
     // Ensure that the exchange has been timed
-    const durationCout = (
+    const durationCount = (
       await register
         .getSingleMetric("oasis_token_exchange_duration_seconds")!
         .get()
@@ -30,7 +31,7 @@ describe("withPrometheus", () => {
       (value: MetricValueWithName<string>) =>
         value.metricName === "oasis_token_exchange_duration_seconds_count",
     )?.value;
-    expect(durationCout).toBe(1);
+    expect(durationCount).toBe(1);
     // Ensure that no errors in the exchange has been counted
     const tokenExchangeFailures = await getPrometheusMetric(
       "oasis_token_exchange_failures",
@@ -43,7 +44,8 @@ describe("withPrometheus", () => {
   });
 
   it("measures errors in token exchange", async () => {
-    const oboProvider: OboProvider = async () => null;
+    const oboProvider: OboProvider = async () =>
+      Promise.resolve(Result.Error(""));
     const timedProvider = withPrometheus(oboProvider);
     const obo1 = await timedProvider("token1", "audience");
 
@@ -56,7 +58,7 @@ describe("withPrometheus", () => {
       provider: "oboProvider",
     });
     // Ensure that the exchange has been timed
-    const durationCout = (
+    const durationCount = (
       await register
         .getSingleMetric("oasis_token_exchange_duration_seconds")!
         .get()
@@ -64,7 +66,7 @@ describe("withPrometheus", () => {
       (value: MetricValueWithName<string>) =>
         value.metricName === "oasis_token_exchange_duration_seconds_count",
     )?.value;
-    expect(durationCout).toBe(1);
+    expect(durationCount).toBe(1);
     // Ensure that errors in the exchange has been counted
     const tokenExchangeFailures = await getPrometheusMetric(
       "oasis_token_exchange_failures",
@@ -75,8 +77,7 @@ describe("withPrometheus", () => {
     });
 
     // Expect no token
-    expect(obo1).toBeNull();
-    expect(obo1).not.toBe("token1");
+    expect(obo1.ok).toBe(false);
   });
 });
 

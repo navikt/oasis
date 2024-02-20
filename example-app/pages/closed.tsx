@@ -1,23 +1,36 @@
-import { decodeJwt, getSession } from "@navikt/oasis";
+import { validateToken } from "@navikt/oasis";
+import { decodeJwt } from "jose";
 import { GetServerSideProps } from "next";
 
-export const getServerSideProps: GetServerSideProps<ClosedPageProps> = async (
-  context,
-) => {
-  const session = await getSession(context.req);
+export const getServerSideProps: GetServerSideProps<ClosedPageProps> = async ({
+  req,
+}) => {
+  if (req.headers.authorization) {
+    const token = req.headers.authorization!.replace("Bearer ", "");
 
-  if (!session)
+    const result = await validateToken(token);
+
+    if (result.ok) {
+      const payload = decodeJwt(token);
+      return {
+        props: { sub: payload.sub as string },
+      };
+    } else {
+      return {
+        redirect: {
+          destination: "/oauth2/login",
+          permanent: false,
+        },
+      };
+    }
+  } else {
     return {
       redirect: {
         destination: "/oauth2/login",
         permanent: false,
       },
     };
-
-  const payload = decodeJwt(session.token);
-  return {
-    props: { sub: payload.sub as string },
-  };
+  }
 };
 
 interface ClosedPageProps {

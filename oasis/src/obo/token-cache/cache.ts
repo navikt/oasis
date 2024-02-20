@@ -1,12 +1,12 @@
-class Node<T> {
+class Node {
   key: string;
-  value: any;
+  value: string;
   visited: boolean;
-  prev: Node<any> | null;
-  next: Node<any> | null;
+  prev: Node | null;
+  next: Node | null;
   expirationTime: number;
 
-  constructor(key: string, value: T, expirationTime: number) {
+  constructor(key: string, value: string, expirationTime: number) {
     this.key = key;
     this.value = value;
     this.visited = false;
@@ -24,10 +24,10 @@ class Node<T> {
 // https://cachemon.github.io/SIEVE-website/blog/2023/12/17/sieve-is-simpler-than-lru/
 class SieveCache {
   capacity: number;
-  private cache: Map<string, Node<any>>;
-  private head: Node<any> | null;
-  private tail: Node<any> | null;
-  private hand: Node<any> | null;
+  private cache: Map<string, Node>;
+  private head: Node | null;
+  private tail: Node | null;
+  private hand: Node | null;
   size: number;
 
   constructor(capacity: number) {
@@ -40,7 +40,7 @@ class SieveCache {
     this.size = 0;
   }
 
-  private addToHead(node: Node<any>) {
+  private addToHead(node: Node) {
     node.next = this.head;
     node.prev = null;
     if (this.head) {
@@ -52,7 +52,7 @@ class SieveCache {
     }
   }
 
-  private removeNode(node: Node<any>) {
+  private removeNode(node: Node) {
     if (node.prev) {
       node.prev.next = node.next;
     } else {
@@ -72,7 +72,7 @@ class SieveCache {
     this.deleteNode(nodeToEvict);
   }
 
-  private findNodeToEvict(): Node<any> | null {
+  private findNodeToEvict(): Node | null {
     let node = this.hand || this.tail;
     while (node && node.visited) {
       node.visited = false;
@@ -81,13 +81,13 @@ class SieveCache {
     return node;
   }
 
-  private deleteNode(node: Node<any>) {
+  private deleteNode(node: Node) {
     this.cache.delete(node.key);
     this.removeNode(node);
     this.size -= 1;
   }
 
-  get<T>(key: string): T | undefined {
+  get(key: string): string | undefined {
     const node = this.cache.get(key);
     if (node) {
       if (node.hasExpired()) {
@@ -96,10 +96,10 @@ class SieveCache {
       }
       node.visited = true;
     }
-    return node?.value as T;
+    return node?.value;
   }
 
-  set<T>(key: string, value: T, ttl: number = 0) {
+  set(key: string, value: string, ttl: number = 0) {
     if (this.size === this.capacity) {
       // Cache Full
       this.evict(); // Eviction

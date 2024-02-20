@@ -1,4 +1,5 @@
 import { Counter, Histogram } from "prom-client";
+import { OboProvider } from ".";
 
 export class AuthMetrics {
   public tokenExchangeDurationHistogram = new Histogram({
@@ -27,4 +28,25 @@ type AuthMetricsGlobal = typeof global & {
 (global as AuthMetricsGlobal)[authMetricsSymbol] =
   (global as AuthMetricsGlobal)[authMetricsSymbol] || new AuthMetrics();
 
-export default (global as AuthMetricsGlobal)[authMetricsSymbol];
+const prometheus = (global as AuthMetricsGlobal)[authMetricsSymbol];
+
+export function withPrometheus(oboProvider: OboProvider): OboProvider {
+  const provider = oboProvider.name;
+
+  return async (token, audience) => {
+    const measureTokenExchange = prometheus.tokenExchangeDurationHistogram
+      .labels({ provider })
+      .startTimer();
+
+    const oboToken = await oboProvider(token, audience);
+
+    measureTokenExchange();
+
+    if (!oboToken.ok) {
+      prometheus.tokenExchangeFailures.labels({ provider }).inc();
+    }
+
+    prometheus.tokenExchanges.labels({ provider }).inc();
+    return oboToken;
+  };
+}
