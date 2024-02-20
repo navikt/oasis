@@ -1,32 +1,22 @@
 {
   "name": "oasis",
-  "private": true,
-  "version": "0.0.1",
-  "description": "Javascriptbibliotek for håntering av tokens fra Wonderwall",
-  "workspaces": [
-    "example-app",
-    "oasis"
-  ],
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "build-lib": "npm run build-lib -w oasis",
-    "test": "npm run test --ws",
-    "dev": "npm run dev -w example-app",
+    "test": "npm run -w oasis test",
     "build": "npm run build -w example-app",
-    "lint": "npm run lint --ws",
-    "prepack": "npm run build-lib",
-    "type-check": "npm run type-check -w oasis",
-    "prepare": "husky",
-    "clean": "npm run clean -w oasis"
+    "build-lib": "npm run build -w oasis"
   },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "workspaces": [
+    "oasis",
+    "example-app"
+  ],
   "devDependencies": {
-    "eslint": "^8.56.0",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.2",
     "prettier": "^3.2.5"
-  },
-  "lint-staged": {
-    "*.{md,html,css,json,graphql,graphqls}": "prettier --write",
-    "*.{ts,tsx}": "eslint --fix --max-warnings=0"
   },
   "prettier": {
     "overrides": [

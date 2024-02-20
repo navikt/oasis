@@ -1,23 +1,30 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@navikt/oasis";
+import { requestOboToken, validateToken } from "@navikt/oasis";
 
 export default async function authenticatedHandler(
   req: NextApiRequest,
   res: NextApiResponse<string>,
 ) {
-  const session = await getSession(req);
+  const token = req.headers.authorization!.replace("Bearer ", "");
 
-  if (!session) return res.status(401);
+  const validationResult = await validateToken(token);
 
-  let obo = "";
+  if (validationResult.ok) {
+    const oboRes = process.env.IDPORTEN_ISSUER
+      ? await requestOboToken(token, "dev-gcp:oasis-maintainers:oasis-idporten")
+      : await requestOboToken(
+          token,
+          "api://dev-gcp.oasis-maintainers.oasis-azure/.default",
+        );
 
-  if (process.env.IDPORTEN_ISSUER) {
-    obo = await session.apiToken("dev-gcp:oasis-maintainers:oasis-idporten");
-  } else if (process.env.AZURE_OPENID_CONFIG_ISSUER) {
-    obo = await session.apiToken(
-      "api://dev-gcp.oasis-maintainers.oasis-azure/.default",
-    );
+    if (oboRes.ok) {
+      res
+        .status(200)
+        .send(`Made obo-token request: got ${oboRes.token.length}`);
+    } else {
+      res.status(401);
+    }
+  } else {
+    return res.status(401);
   }
-
-  res.status(200).send(`Made obo-token request: got ${obo.length}`);
 }

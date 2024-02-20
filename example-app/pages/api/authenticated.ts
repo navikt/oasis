@@ -1,15 +1,17 @@
-import { decodeJwt, getSession } from "@navikt/oasis";
+import { validateToken } from "@navikt/oasis";
+import { decodeJwt } from "jose";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function authenticatedHandler(
   req: NextApiRequest,
   res: NextApiResponse<string>,
 ) {
-  const session = await getSession(req);
+  const token = req.headers.authorization!.replace("Bearer ", "");
 
-  if (!session) return res.status(401);
-
-  const { sub } = decodeJwt(session.token);
-
-  res.status(200).send(`Authenticated as ${sub}`);
+  const result = await validateToken(token);
+  if (result.ok) {
+    res.status(200).send(`Authenticated as ${decodeJwt(token).sub}`);
+  } else {
+    res.status(401);
+  }
 }
