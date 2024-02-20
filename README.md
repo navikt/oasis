@@ -1,5 +1,7 @@
 # @navikt/oasis
 
+![OBO](/img/obo.jpg)
+
 ```ts
 const token = req.headers.authorization.replace("Bearer ", "");
 
