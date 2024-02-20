@@ -26,5 +26,5 @@ if (validation.ok) {
 
 ### Spørsmål?
 
-Eller kommentarer? Lag en issue eller kontakt oss på [#oasis-maintainers(https://nav-it.slack.com/archives/C06GZFG0ELC) på Slack.
+Eller kommentarer? Lag en issue eller kontakt oss på [#oasis-maintainers](https://nav-it.slack.com/archives/C06GZFG0ELC) på Slack.
 
