@@ -2,6 +2,10 @@
 
 ![OBO](/img/obo.jpg)
 
+Bibliotek for å validere tokens fra Wonderwall og utføre On-Behalf-Of (OBO) Exchange mot både Azure og IDporten 
+
+### Bruk
+
 ```ts
 const token = req.headers.authorization.replace("Bearer ", "");
 
@@ -19,3 +23,8 @@ if (validation.ok) {
   // handle error
 }
 ```
+
+### Spørsmål?
+
+Eller kommentarer? Lag en issue eller kontakt oss på [#oasis-maintainers(https://nav-it.slack.com/archives/C06GZFG0ELC) på Slack.
+
