@@ -1,23 +1,19 @@
 # @navikt/oasis
 
 ```ts
-validateToken(token).then((validationResult) =>
-  validationResult.match({
-    Ok: () => {
-      requestOboToken(token, audience).then((oboResult) =>
-        oboResult.match({
-          Ok: (oboToken) => {
-            // make api call
-          },
-          Error: (error) => {
-            throw error;
-          },
-        }),
-      );
-    },
-    Error: (error) => {
-      throw error;
-    },
-  }),
-);
+const token = req.headers.authorization.replace("Bearer ", "");
+
+const validation = await validateToken(token);
+
+if (validation.ok) {
+  const obo = await requestOboToken(token, audience);
+
+  if (obo.ok) {
+    // make api request with obo.token
+  } else {
+    // handle error
+  }
+} else {
+  // handle error
+}
 ```
