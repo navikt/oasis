@@ -6,7 +6,9 @@
   "scripts": {
     "test": "npm run -w oasis test",
     "build": "npm run build -w example-app",
-    "build-lib": "npm run build -w oasis"
+    "build-lib": "npm run build -w oasis",
+    "type-check": "npm run type-check -w oasis",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +18,8 @@
     "example-app"
   ],
   "devDependencies": {
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "prettier": "^3.2.5"
   },
   "prettier": {
@@ -28,5 +32,9 @@
         }
       }
     ]
+  },
+  "lint-staged": {
+    "*.{md,html,css,json,graphql,graphqls}": "prettier --write",
+    "*.{ts,tsx}": "eslint --fix --max-warnings=0"
   }
 }

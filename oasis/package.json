@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "build": "tsc --noEmit false",
-    "test": "jest"
+    "test": "jest",
+    "type-check": "tsc --pretty --noEmit"
   },
   "keywords": [],
   "author": "",
