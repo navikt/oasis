@@ -17,6 +17,15 @@ export const Result = {
   }),
 };
 
-export { requestOboToken } from "./obo";
-export { validateToken } from "./validate";
+export {
+  requestOboToken,
+  requestAzureOboToken,
+  requestTokenxOboToken,
+} from "./obo";
+export {
+  validateToken,
+  validateAzureToken,
+  validateIdportenToken,
+  validateTokenxToken,
+} from "./validate";
 export { getToken } from "./get-token";
