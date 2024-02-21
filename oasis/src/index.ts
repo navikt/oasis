@@ -15,3 +15,4 @@ export const Result = {
 
 export { requestOboToken } from "./obo";
 export { validateToken } from "./validate";
+export { getToken } from "./get-token";
