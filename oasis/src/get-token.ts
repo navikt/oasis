@@ -7,12 +7,12 @@ export const getToken = (
     return val.startsWith("Bearer ") ? val.replace("Bearer ", "") : val;
   } else {
     const { headers } = val;
-    let authHeader
+    let authHeader;
     if ("authorization" in headers) {
-      authHeader= headers.authorization
+      authHeader = headers.authorization;
     } else if (headers instanceof Headers) {
       authHeader = headers.get("authorization");
     }
-      return authHeader ? getToken(authHeader) : undefined;
+    return authHeader ? getToken(authHeader) : undefined;
   }
 };
