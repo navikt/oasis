@@ -10,9 +10,19 @@ describe("getToken", () => {
     expect(getToken("Bearer token")).toBe("token");
   });
 
-  it("extracts auth header", () => {
+  it("extracts auth header from IncomingMessage", () => {
     expect(
       getToken(createRequest({ headers: { authorization: "Bearer token" } })),
+    ).toBe("token");
+  });
+
+  it("extracts auth header from Request", () => {
+    expect(
+      getToken(
+        new Request("localhost:3000", {
+          headers: { authorization: "Bearer token" },
+        }),
+      ),
     ).toBe("token");
   });
 
