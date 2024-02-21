@@ -119,6 +119,18 @@ describe("validate idporten token", () => {
     );
     expect(result.ok).toBe(false);
   });
+
+  it("fails verification when token is expired", async () => {
+    const result = await validateIdportenToken(
+      await token({
+        audience: "idporten_audience",
+        issuer: "idporten_issuer",
+        exp: "5 minutes ago",
+      }),
+    );
+    expect(result.ok).toBe(false);
+    expect(result.errorType).toBe("token expired");
+  });
 });
 
 describe("validate azure token", () => {

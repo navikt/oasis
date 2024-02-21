@@ -1,4 +1,4 @@
-import { createRemoteJWKSet, jwtVerify } from "jose";
+import { createRemoteJWKSet, jwtVerify, errors } from "jose";
 import { Result } from ".";
 
 type ValidationResult = Result;
@@ -28,7 +28,10 @@ const validateJwt = async ({
     );
     return Result.Ok(undefined);
   } catch (e) {
-    return Result.Error(e as Error);
+    return Result.Error(
+      e as Error,
+      e instanceof errors.JWTExpired ? "token expired" : "unknown",
+    );
   }
 };
 
