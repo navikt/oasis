@@ -30,3 +30,11 @@ export const token = async ({
     .setIssuer(issuer)
     .setJti(`${Math.random()}`)
     .sign(await privateKey());
+
+export const tokenWithoutExp = async () =>
+  new SignJWT({
+    pid: "pid",
+  })
+    .setProtectedHeader({ alg })
+    .setJti(`${Math.random()}`)
+    .sign(await privateKey());
