@@ -15,4 +15,8 @@ describe("getToken", () => {
       getToken(createRequest({ headers: { authorization: "Bearer token" } })),
     ).toBe("token");
   });
+
+  it("empty auth header gives undefined", () => {
+    expect(getToken(createRequest())).toBe(undefined);
+  });
 });
