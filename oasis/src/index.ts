@@ -29,3 +29,4 @@ export {
   validateTokenxToken,
 } from "./validate";
 export { getToken } from "./get-token";
+export { expiresIn } from "./expires-in";
