@@ -2,22 +2,22 @@ import { IncomingMessage } from "http";
 
 export const getToken = (
   val: Request | IncomingMessage | Headers | string,
-): string | undefined => {
+): string | null => {
   if (typeof val === "string") {
     return val.startsWith("Bearer ") ? stripBearer(val) : val;
   } else if (val instanceof Headers) {
     return getTokenFromHeaders(val);
-  } else if (val.headers instanceof Headers) {
+  } else if (val instanceof Request) {
     return getTokenFromHeaders(val.headers);
   } else {
-    const authHeader = val.headers?.authorization;
-    return authHeader ? stripBearer(authHeader) : undefined
+    const authHeader = val.headers.authorization;
+    return authHeader ? stripBearer(authHeader) : null;
   }
 };
 
-function getTokenFromHeaders(headers: Headers): string | undefined {
+function getTokenFromHeaders(headers: Headers): string | null {
   const authHeader = headers.get("authorization");
-  return authHeader ? stripBearer(authHeader) : undefined;
+  return authHeader ? stripBearer(authHeader) : null;
 }
 
 function stripBearer(token: string): string {

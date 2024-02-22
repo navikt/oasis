@@ -27,12 +27,12 @@ describe("getToken", () => {
   });
 
   it("extracts auth header from Headers", () => {
-    const headers = new Headers({ authorization: "Bearer token" });
-
-    expect(getToken(headers)).toBe("token");
+    expect(getToken(new Headers({ authorization: "Bearer token" }))).toBe(
+      "token",
+    );
   });
 
-  it("empty auth header gives undefined", () => {
-    expect(getToken(createRequest())).toBe(undefined);
+  it("empty auth header gives null", () => {
+    expect(getToken(createRequest())).toBe(null);
   });
 });
