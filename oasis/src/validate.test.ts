@@ -129,7 +129,7 @@ describe("validate idporten token", () => {
       }),
     );
     expect(result.ok).toBe(false);
-    expect(result.errorType).toBe("token expired");
+    expect(!result.ok && result.errorType).toBe("token expired");
   });
 });
 

@@ -1,7 +1,26 @@
 import { createRemoteJWKSet, jwtVerify, errors } from "jose";
-import { Result } from ".";
 
-type ValidationResult = Result;
+type ErrorTypes = "token expired" | "unknown";
+
+export type ValidationResult =
+  | { ok: true }
+  | {
+      ok: false;
+      error: Error;
+      errorType: ErrorTypes;
+    };
+
+const ValidationResult = {
+  Error: (
+    error: Error | string,
+    errorType: ErrorTypes | undefined = "unknown",
+  ): ValidationResult => ({
+    ok: false,
+    error: typeof error === "string" ? Error(error) : error,
+    errorType,
+  }),
+  Ok: (): ValidationResult => ({ ok: true }),
+};
 
 const validateJwt = async ({
   token,
@@ -26,9 +45,9 @@ const validateJwt = async ({
         algorithms: ["RS256"],
       },
     );
-    return Result.Ok(undefined);
+    return ValidationResult.Ok();
   } catch (e) {
-    return Result.Error(
+    return ValidationResult.Error(
       e as Error,
       e instanceof errors.JWTExpired ? "token expired" : "unknown",
     );
@@ -63,19 +82,19 @@ export const validateToken = async (
   token: string,
 ): Promise<ValidationResult> => {
   if (!token) {
-    return Result.Error("empty token");
+    return ValidationResult.Error("empty token");
   }
 
   const idporten: boolean = !!process.env.IDPORTEN_ISSUER;
   const azure: boolean = !!process.env.AZURE_OPENID_CONFIG_ISSUER;
 
   if (idporten && azure) {
-    return Result.Error("multiple identity providers");
+    return ValidationResult.Error("multiple identity providers");
   } else if (idporten) {
     return validateIdportenToken(token);
   } else if (azure) {
     return validateAzureToken(token);
   } else {
-    return Result.Error("no identity provider");
+    return ValidationResult.Error("no identity provider");
   }
 };
