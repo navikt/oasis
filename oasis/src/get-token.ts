@@ -1,18 +1,25 @@
 import { IncomingMessage } from "http";
 
 export const getToken = (
-  val: Request | IncomingMessage | string,
+  val: Request | IncomingMessage | Headers | string,
 ): string | undefined => {
   if (typeof val === "string") {
-    return val.startsWith("Bearer ") ? val.replace("Bearer ", "") : val;
+    return val.startsWith("Bearer ") ? stripBearer(val) : val;
+  } else if (val instanceof Headers) {
+    return getTokenFromHeaders(val);
+  } else if (val.headers instanceof Headers) {
+    return getTokenFromHeaders(val.headers);
   } else {
-    const { headers } = val;
-    let authHeader;
-    if ("authorization" in headers) {
-      authHeader = headers.authorization;
-    } else if (headers instanceof Headers) {
-      authHeader = headers.get("authorization");
-    }
-    return authHeader ? getToken(authHeader) : undefined;
+    const authHeader = val.headers?.authorization;
+    return authHeader ? stripBearer(authHeader) : undefined
   }
 };
+
+function getTokenFromHeaders(headers: Headers): string | undefined {
+  const authHeader = headers.get("authorization");
+  return authHeader ? stripBearer(authHeader) : undefined;
+}
+
+function stripBearer(token: string): string {
+  return token.replace("Bearer ", "");
+}

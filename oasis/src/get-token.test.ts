@@ -26,6 +26,12 @@ describe("getToken", () => {
     ).toBe("token");
   });
 
+  it("extracts auth header from Headers", () => {
+    const headers = new Headers({ authorization: "Bearer token" });
+
+    expect(getToken(headers)).toBe("token");
+  });
+
   it("empty auth header gives undefined", () => {
     expect(getToken(createRequest())).toBe(undefined);
   });
