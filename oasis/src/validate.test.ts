@@ -76,19 +76,6 @@ describe("validate idporten token", () => {
 
   afterAll(() => server.close());
 
-  it("succeeds for valid token", async () => {
-    expect(
-      (
-        await validateIdportenToken(
-          await token({
-            audience: "idporten_audience",
-            issuer: "idporten_issuer",
-          }),
-        )
-      ).ok,
-    ).toBe(true);
-  });
-
   it("fails verification when issuer is not idporten", async () => {
     const result = await validateIdportenToken(
       await token({
@@ -97,6 +84,19 @@ describe("validate idporten token", () => {
       }),
     );
     expect(result.ok).toBe(false);
+  });
+
+  it("works with Bearer prefix", async () => {
+    expect(
+      (
+        await validateIdportenToken(
+          `Bearer ${await token({
+            audience: "idporten_audience",
+            issuer: "idporten_issuer",
+          })}`,
+        )
+      ).ok,
+    ).toBe(true);
   });
 
   it("fails verification when audience is not idporten", async () => {

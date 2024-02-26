@@ -35,7 +35,7 @@ const validateJwt = async ({
 }): Promise<ValidationResult> => {
   try {
     await jwtVerify(
-      token,
+      token.startsWith("Bearer ") ? token.replace("Bearer ", "") : token,
       createRemoteJWKSet(new URL(jwksUri), {
         cacheMaxAge: 60 * 60 * 1000 /* 1 hour */,
       }),
