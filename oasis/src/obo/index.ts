@@ -3,7 +3,7 @@ import { withCache } from "./token-cache";
 import { withPrometheus } from "./prometheus";
 
 export type OboResult =
-  | { ok: true; token: string }
+  | { ok: true; token: string; toString(): string }
   | { ok: false; error: Error };
 
 export const OboResult = {
@@ -14,6 +14,7 @@ export const OboResult = {
   Ok: (token: string): OboResult => ({
     ok: true,
     token,
+    toString: () => token,
   }),
 };
 

@@ -198,6 +198,22 @@ describe("request tokenX obo token", () => {
     }
   });
 
+  it("returns token with useful toString", async () => {
+    const result = await requestTokenxOboToken(
+      await token({
+        audience: "idporten_audience",
+        issuer: "idporten_issuer",
+      }),
+      "audience",
+    );
+
+    expect(result.ok).toBe(true);
+
+    if (result.ok) {
+      expect(`${result}`).toBe(result.token);
+    }
+  });
+
   it("returns error when exchange fails", async () => {
     const result = await requestTokenxOboToken(
       await token({
