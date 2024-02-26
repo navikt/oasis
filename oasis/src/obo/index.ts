@@ -4,7 +4,7 @@ import { withPrometheus } from "./prometheus";
 import { stripBearer } from "../strip-bearer";
 
 export type OboResult =
-  | { ok: true; token: string; toString(): string }
+  | { ok: true; token: string }
   | { ok: false; error: Error };
 
 export const OboResult = {
@@ -12,11 +12,16 @@ export const OboResult = {
     ok: false,
     error: typeof error === "string" ? Error(error) : error,
   }),
-  Ok: (token: string): OboResult => ({
-    ok: true,
-    token,
-    toString: () => token,
-  }),
+  Ok: (token: string): OboResult => {
+    const res = {
+      ok: true,
+      token,
+      toString: () => {
+        throw Error("wat");
+      },
+    } as const;
+    return res;
+  },
 };
 
 const grantOboToken: (opts: {
