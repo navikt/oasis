@@ -76,6 +76,19 @@ describe("validate idporten token", () => {
 
   afterAll(() => server.close());
 
+  it("works with Bearer prefix", async () => {
+    expect(
+      (
+        await validateIdportenToken(
+          await token({
+            audience: "idporten_audience",
+            issuer: "idporten_issuer",
+          }),
+        )
+      ).ok,
+    ).toBe(true);
+  });
+
   it("fails verification when issuer is not idporten", async () => {
     const result = await validateIdportenToken(
       await token({
