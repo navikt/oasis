@@ -54,7 +54,14 @@ const validateJwt = async ({
   }
 };
 
-export const validateIdportenToken = (token: string) =>
+/**
+ * Validates token issued by Idporten. Requires Idporten to be enabled in nais application manifest.
+ *
+ * @param {string} token Token issued by Idporten (JWT)
+ */
+export const validateIdportenToken = (
+  token: string,
+): Promise<ValidationResult> =>
   validateJwt({
     token,
     jwksUri: process.env.IDPORTEN_JWKS_URI!,
@@ -62,7 +69,12 @@ export const validateIdportenToken = (token: string) =>
     audience: process.env.IDPORTEN_AUDIENCE!,
   });
 
-export const validateAzureToken = (token: string) =>
+/**
+ * Validates token issued by Azure. Requires Azure to be enabled in nais application manifest.
+ *
+ * @param {string} token Token issued by Azure (JWT)
+ */
+export const validateAzureToken = (token: string): Promise<ValidationResult> =>
   validateJwt({
     token,
     jwksUri: process.env.AZURE_OPENID_CONFIG_JWKS_URI!,
@@ -70,7 +82,12 @@ export const validateAzureToken = (token: string) =>
     audience: process.env.AZURE_APP_CLIENT_ID!,
   });
 
-export const validateTokenxToken = (token: string) =>
+/**
+ * Validates token issued by Tokenx. Requires Tokenx to be enabled in nais application manifest.
+ *
+ * @param {string} token Token issued by Tokenx (JWT)
+ */
+export const validateTokenxToken = (token: string): Promise<ValidationResult> =>
   validateJwt({
     token,
     jwksUri: process.env.TOKEN_X_JWKS_URI!,
@@ -78,6 +95,12 @@ export const validateTokenxToken = (token: string) =>
     audience: process.env.TOKEN_X_CLIENT_ID!,
   });
 
+/**
+ * Validates token issued by Idporten or Azure. Requires either Idporten or
+ * Azure to be enabled in nais application manifest.
+ *
+ * @param {string} token Token issued by Idporten or Azure(JWT)
+ */
 export const validateToken = async (
   token: string,
 ): Promise<ValidationResult> => {
