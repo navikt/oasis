@@ -1,4 +1,5 @@
 import { createRemoteJWKSet, jwtVerify, errors } from "jose";
+import { stripBearer } from "./strip-bearer";
 
 type ErrorTypes = "token expired" | "unknown";
 
@@ -35,7 +36,7 @@ const validateJwt = async ({
 }): Promise<ValidationResult> => {
   try {
     await jwtVerify(
-      token.startsWith("Bearer ") ? token.replace("Bearer ", "") : token,
+      stripBearer(token),
       createRemoteJWKSet(new URL(jwksUri), {
         cacheMaxAge: 60 * 60 * 1000 /* 1 hour */,
       }),
