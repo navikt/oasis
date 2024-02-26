@@ -44,21 +44,11 @@ fetch("https://example.com/api", {
 
 #### Parametre
 
-`token: string`: Tokenet du får fra din konsument, også kjent som et _subject token_. Pass på at du stripper tokenet for "Bearer ", f.eks. ved a bruke [getToken].
+`token: string`: Tokenet du får fra din konsument.
 
 #### Returverdi
 
-En `Promise` som resolver til et `ValidationResult`-objekt:
-
-```ts
-export type ValidationResult =
-  | { ok: true }
-  | {
-      ok: false;
-      error: Error;
-      errorType: "token expired" | "unknown";
-    };
-```
+En `Promise` som resolver til et `ValidationResult`-objekt.
 
 #### Azure, Idporten og Tokenx
 
@@ -80,23 +70,18 @@ Obo-tokens caches i applikasjonens minne inntil det utløper.
 
 #### Parametre
 
-`token: string`: Tokenet du får fra din konsument, også kjent som et _subject token_. Pass på at du stripper tokenet for "Bearer ", f.eks. ved a bruke [getToken].
+`token: string`: Tokenet du får fra din konsument.
 
-`audience: string`: Client ID til APIet du skal kontakte. Har formatet `"cluster:namespace:app"`.
+`audience: string`: Client ID til APIet du skal kontakte på formatet `"cluster:namespace:app"`.
 
 #### Returverdi
 
-En `Promise` som resolver til et `OboResult`-objekt:
-
-```ts
-export type OboResult =
-  | { ok: true; token: string }
-  | { ok: false; error: Error };
-```
+En `Promise` som resolver til et `OboResult`-objekt.
 
 > [!WARNING]  
 > Pass på at du ikke bruker et `OboResult`-objekt direkte i f.eks. en tempalte string. Det er token-feltet som har selve tokenet.
-> FEIL:
+
+❌ FEIL:
 
 ```ts
 const obo = await requestOboToken(token, "an:example:audience");
@@ -105,7 +90,7 @@ if (obo.ok) {
 }
 ```
 
-RIKTIG:
+✅ RIKTIG:
 
 ```ts
 const obo = await requestOboToken(token, "an:example:audience");
