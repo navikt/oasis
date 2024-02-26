@@ -60,6 +60,8 @@ validateIdportenToken(token);
 validateTokenxToken(token);
 ```
 
+---
+
 ### requestOboToken
 
 `requestOboToken(token, audience)` gjør on-behalf-of-utveksling mot enten Azure eller Idporten, avhengig av verdien til noen miljøvariabler som settes av Nais (IDPORTEN_ISSUER og AZURE_OPENID_CONFIG_ISSUER). Før du utfører obo-utveksling må tokenet være validert.
@@ -108,6 +110,8 @@ requestAzureOboToken(token, audience);
 requestTokenxOboToken(token, audience);
 ```
 
+---
+
 ### getToken
 
 `getToken(val)` henter ut token fra en `Request`, `IncomingMessage`, `Headers` eller et Bearer-token.
@@ -119,6 +123,8 @@ requestTokenxOboToken(token, audience);
 #### Returverdi
 
 en `string` token eller `null` om argumentet ikke inneholder noe token.
+
+---
 
 ### expiresIn
 
@@ -133,6 +139,8 @@ en `string` token eller `null` om argumentet ikke inneholder noe token.
 Et `number` med antall sekunder til tokenet uløper.
 
 Funksjonen kaster feil om dekoding av tokenet feiler, eller om tokenet ikke har en `exp`-payload.
+
+---
 
 ### Spørsmål?
 
