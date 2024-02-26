@@ -172,6 +172,18 @@ describe("request tokenX obo token", () => {
     expect(result.ok && decodeJwt(result.token).nbf).toBe(undefined);
   });
 
+  it("accepts Bearer prefix", async () => {
+    const jwt = await token({
+      audience: "idporten_audience",
+      issuer: "idporten_issuer",
+    });
+    const result = await requestTokenxOboToken(`Bearer ${jwt}`, "audience");
+
+    expect(result.ok && decodeJwt(result.token).iss).toBe("urn:tokenx:dings");
+    expect(result.ok && decodeJwt(result.token).pid).toBe(jwt);
+    expect(result.ok && decodeJwt(result.token).nbf).toBe(undefined);
+  });
+
   it("returns valid token", async () => {
     const result = await requestTokenxOboToken(
       await token({

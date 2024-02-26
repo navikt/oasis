@@ -1,4 +1,5 @@
 import { IncomingMessage } from "http";
+import { stripBearer } from "./strip-bearer";
 
 export function getToken(val: string): string;
 export function getToken(
@@ -8,7 +9,7 @@ export function getToken(
   val: Request | IncomingMessage | Headers | string,
 ): string | null {
   if (typeof val === "string") {
-    return val.startsWith("Bearer ") ? stripBearer(val) : val;
+    return stripBearer(val);
   } else if (val instanceof Headers) {
     return getTokenFromHeaders(val);
   } else if (val instanceof Request) {
@@ -22,8 +23,4 @@ export function getToken(
 function getTokenFromHeaders(headers: Headers): string | null {
   const authHeader = headers.get("authorization");
   return authHeader ? stripBearer(authHeader) : null;
-}
-
-function stripBearer(token: string): string {
-  return token.replace("Bearer ", "");
 }
