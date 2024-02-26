@@ -1,6 +1,7 @@
 import { GrantBody, Issuer } from "openid-client";
 import { withCache } from "./token-cache";
 import { withPrometheus } from "./prometheus";
+import { stripBearer } from "../strip-bearer";
 
 export type OboResult =
   | { ok: true; token: string }
@@ -54,7 +55,7 @@ const grantOboToken: (opts: {
 };
 
 export const requestAzureOboToken: OboProvider = withCache(
-  withPrometheus(async (assertion, scope) =>
+  withPrometheus(async (token, scope) =>
     grantOboToken({
       issuer: process.env.AZURE_OPENID_CONFIG_ISSUER!,
       token_endpoint: process.env.AZURE_OPENID_CONFIG_TOKEN_ENDPOINT!,
@@ -63,7 +64,7 @@ export const requestAzureOboToken: OboProvider = withCache(
       grant_body: {
         grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
         requested_token_use: "on_behalf_of",
-        assertion,
+        assertion: stripBearer(token),
         scope,
       },
     }),
@@ -71,7 +72,7 @@ export const requestAzureOboToken: OboProvider = withCache(
 );
 
 export const requestTokenxOboToken: OboProvider = withCache(
-  withPrometheus(async (subject_token, audience) =>
+  withPrometheus(async (token, audience) =>
     grantOboToken({
       issuer: process.env.TOKEN_X_ISSUER!,
       token_endpoint: process.env.TOKEN_X_TOKEN_ENDPOINT!,
@@ -80,7 +81,7 @@ export const requestTokenxOboToken: OboProvider = withCache(
       grant_body: {
         grant_type: "urn:ietf:params:oauth:grant-type:token-exchange",
         subject_token_type: "urn:ietf:params:oauth:token-type:jwt",
-        subject_token,
+        subject_token: stripBearer(token),
         audience,
       },
     }),
