@@ -76,7 +76,7 @@ describe("validate idporten token", () => {
 
   afterAll(() => server.close());
 
-  it("works with Bearer prefix", async () => {
+  it("succeeds for valid token", async () => {
     expect(
       (
         await validateIdportenToken(
