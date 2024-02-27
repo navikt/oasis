@@ -3,6 +3,11 @@ import { withCache } from "./token-cache";
 import { withPrometheus } from "./prometheus";
 import { stripBearer } from "../strip-bearer";
 
+export type OboProvider = (
+  token: string,
+  audience: string,
+) => Promise<OboResult>;
+
 export type OboResult =
   | { ok: true; token: string }
   | { ok: false; error: Error };
@@ -54,6 +59,13 @@ const grantOboToken: (opts: {
   }
 };
 
+/**
+ * Requests on-behalf-of token from Azure. Requires Azure to be enabled in nais
+ * application manifest.
+ *
+ * @param token Token from your client (assertion).
+ * @param audience The target app you request a token for (scope).
+ */
 export const requestAzureOboToken: OboProvider = withCache(
   withPrometheus(async (token, scope) =>
     grantOboToken({
@@ -71,6 +83,13 @@ export const requestAzureOboToken: OboProvider = withCache(
   ),
 );
 
+/**
+ * Requests on-behalf-of token from Tokenx. Requires Tokenx to be enabled in
+ * nais application manifest.
+ *
+ * @param token Token from your client (subject token).
+ * @param audience The target app you request a token for.
+ */
 export const requestTokenxOboToken: OboProvider = withCache(
   withPrometheus(async (token, audience) =>
     grantOboToken({
@@ -88,11 +107,13 @@ export const requestTokenxOboToken: OboProvider = withCache(
   ),
 );
 
-export type OboProvider = (
-  token: string,
-  audience: string,
-) => Promise<OboResult>;
-
+/**
+ * Requests on-behalf-of token from Tokenx or Azure. Requires either Tokenx or
+ * Azure to be enabled in nais application manifest.
+ *
+ * @param token Token from your client (subject token).
+ * @param audience The target app you request a token for.
+ */
 export const requestOboToken: OboProvider = async (token, audience) => {
   if (!token) {
     return OboResult.Error("empty token");

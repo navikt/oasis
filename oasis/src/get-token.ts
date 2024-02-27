@@ -1,6 +1,11 @@
 import { IncomingMessage } from "http";
 import { stripBearer } from "./strip-bearer";
 
+/**
+ * Extracts token for your convenience.
+ *
+ * @param val Request, header or string containing token.
+ */
 export function getToken(val: string): string;
 export function getToken(
   val: Request | IncomingMessage | Headers,
