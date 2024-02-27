@@ -22,7 +22,9 @@ export const OboResult = {
       ok: true,
       token,
       toString: () => {
-        throw Error("wat");
+        throw Error(
+          "OboResult object can not be used as a string. If you tried to get the token, access the 'token' property.",
+        );
       },
     } as const;
     return res;
