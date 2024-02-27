@@ -11,7 +11,7 @@ npm install @navikt/oasis
 ```
 
 > [!NOTE]
-> @navikt-scopede pakker hentes fra GitHubs NPM-register, tilgang dit må [konfigureres](https://github.com/navikt/frontend#github-npm-registry).
+> @navikt-scopede pakker hentes fra GitHubs NPM-register Tilgang dit må [konfigureres](https://github.com/navikt/frontend#github-npm-registry).
 
 ## Quick start
 
@@ -38,9 +38,9 @@ fetch("https://example.com/api", {
 
 ## API
 
-### validateToken
+### validateToken(token)
 
-`validateToken(token)` utfører validering av et token mot enten Azure eller Idporten, avhengig av verdien til noen miljøvariabler som settes av Nais (IDPORTEN_ISSUER og AZURE_OPENID_CONFIG_ISSUER).
+Utfører validering av et token mot enten Azure eller Idporten, avhengig av verdien til noen miljøvariabler som settes av NAIS (IDPORTEN_ISSUER og AZURE_OPENID_CONFIG_ISSUER).
 
 #### Parametre
 
@@ -50,7 +50,7 @@ fetch("https://example.com/api", {
 
 En `Promise` som resolver til et `ValidationResult`-objekt.
 
-#### Azure, Idporten og Tokenx
+#### Azure, Idporten og TokenX
 
 Om du har både azure og idporten enabled, eller av andre grunner ønsker å eksplisitt validere mot en gitt tjeneste eksponeres disse funksjonene direkte:
 
@@ -62,13 +62,13 @@ validateTokenxToken(token);
 
 ---
 
-### requestOboToken
+### requestOboToken(token, audience)
 
-`requestOboToken(token, audience)` gjør on-behalf-of-utveksling mot enten Azure eller Idporten, avhengig av verdien til noen miljøvariabler som settes av Nais (IDPORTEN_ISSUER og AZURE_OPENID_CONFIG_ISSUER). Før du utfører obo-utveksling må tokenet være validert.
+Gjør on-behalf-of-utveksling mot enten Azure eller Idporten, avhengig av verdien til noen miljøvariabler som settes av NAIS (IDPORTEN_ISSUER og AZURE_OPENID_CONFIG_ISSUER). Før du utfører OBO-utveksling må tokenet være validert.
 
-Obo-tokens caches i applikasjonens minne inntil det utløper.
+OBO-tokens caches i applikasjonens minne inntil det utløper.
 
-//TODO: Prometheus
+Prometheus-metrikker for OBO-utveksling er tilgjengelig gjennom biblioteket `"prom-client"`. Eksempelappen viser hvordan disse kan eksponeres med [config i nais.yaml](.nais/nais-idporten.yaml) og [endepunkt](example-app/pages/api/internal/metrics.ts). [Vi har et dashboard i Grafana hvor du kan utforske dine Prometheus-data](https://grafana.nav.cloud.nais.io/d/A-QjTBGSz/dagpenger-auth-token-exchange).
 
 #### Parametre
 
@@ -101,7 +101,7 @@ if (obo.ok) {
 }
 ```
 
-#### Azure og Tokenx
+#### Azure og TokenX
 
 Om du har både azure og idporten enabled, eller av andre grunner ønsker å eksplisitt validere mot en gitt tjeneste eksponeres disse funksjonene direkte:
 
@@ -112,9 +112,7 @@ requestTokenxOboToken(token, audience);
 
 ---
 
-### getToken
-
-`getToken(val)` henter ut token fra en `Request`, `IncomingMessage`, `Headers` eller et Bearer-token.
+### getToken(val)
 
 #### Parametre
 
@@ -122,17 +120,15 @@ requestTokenxOboToken(token, audience);
 
 #### Returverdi
 
-en `string` token eller `null` om argumentet ikke inneholder noe token.
+En `string` token eller `null` om argumentet ikke inneholder noe token.
 
 ---
 
-### expiresIn
-
-`expiresIn(token)`
+### expiresIn(token)
 
 #### Parametre
 
-`token: string`: Tokenet du får fra din konsument, også kjent som et _subject token_. Pass på at du stripper tokenet for "Bearer ", f.eks. ved a bruke [getToken].
+`token: string`: Et token med exp-payload.
 
 #### Returverdi
 
