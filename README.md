@@ -11,7 +11,7 @@ npm install @navikt/oasis
 ```
 
 > [!NOTE]
-> @navikt-scopede pakker hentes fra GitHubs NPM-register, tilgang dit må [konfigureres](https://github.com/navikt/frontend#github-npm-registry).
+> @navikt-scopede pakker hentes fra GitHubs NPM-register Tilgang dit må [konfigureres](https://github.com/navikt/frontend#github-npm-registry).
 
 ## Quick start
 
@@ -38,29 +38,19 @@ fetch("https://example.com/api", {
 
 ## API
 
-### validateToken
+### validateToken(token)
 
-`validateToken(token)` utfører validering av et token mot enten Azure eller Idporten, avhengig av verdien til noen miljøvariabler som settes av Nais (IDPORTEN_ISSUER og AZURE_OPENID_CONFIG_ISSUER).
+Utfører validering av et token mot enten Azure eller Idporten, avhengig av verdien til noen miljøvariabler som settes av NAIS (IDPORTEN_ISSUER og AZURE_OPENID_CONFIG_ISSUER).
 
 #### Parametre
 
-`token: string`: Tokenet du får fra din konsument, også kjent som et _subject token_. Pass på at du stripper tokenet for "Bearer ", f.eks. ved a bruke [getToken].
+`token: string`: Tokenet du får fra din konsument.
 
 #### Returverdi
 
-En `Promise` som resolver til et `ValidationResult`-objekt:
+En `Promise` som resolver til et `ValidationResult`-objekt.
 
-```ts
-export type ValidationResult =
-  | { ok: true }
-  | {
-      ok: false;
-      error: Error;
-      errorType: "token expired" | "unknown";
-    };
-```
-
-#### Azure, Idporten og Tokenx
+#### Azure, Idporten og TokenX
 
 Om du har både azure og idporten enabled, eller av andre grunner ønsker å eksplisitt validere mot en gitt tjeneste eksponeres disse funksjonene direkte:
 
@@ -70,33 +60,30 @@ validateIdportenToken(token);
 validateTokenxToken(token);
 ```
 
-### requestOboToken
+---
 
-`requestOboToken(token, audience)` gjør on-behalf-of-utveksling mot enten Azure eller Idporten, avhengig av verdien til noen miljøvariabler som settes av Nais (IDPORTEN_ISSUER og AZURE_OPENID_CONFIG_ISSUER). Før du utfører obo-utveksling må tokenet være validert.
+### requestOboToken(token, audience)
 
-Obo-tokens caches i applikasjonens minne inntil det utløper.
+Gjør on-behalf-of-utveksling mot enten Azure eller Idporten, avhengig av verdien til noen miljøvariabler som settes av NAIS (IDPORTEN_ISSUER og AZURE_OPENID_CONFIG_ISSUER). Før du utfører OBO-utveksling må tokenet være validert.
 
-//TODO: Prometheus
+OBO-tokens caches i applikasjonens minne inntil det utløper.
+
+Prometheus-metrikker for OBO-utveksling er tilgjengelig gjennom biblioteket `"prom-client"`. Eksempelappen viser hvordan disse kan eksponeres med [config i nais.yaml](.nais/nais-idporten.yaml) og [endepunkt](example-app/pages/api/internal/metrics.ts). [Vi har et dashboard i Grafana hvor du kan utforske dine Prometheus-data](https://grafana.nav.cloud.nais.io/d/A-QjTBGSz/dagpenger-auth-token-exchange).
 
 #### Parametre
 
-`token: string`: Tokenet du får fra din konsument, også kjent som et _subject token_. Pass på at du stripper tokenet for "Bearer ", f.eks. ved a bruke [getToken].
+`token: string`: Tokenet du får fra din konsument.
 
-`audience: string`: Client ID til APIet du skal kontakte. Har formatet `"cluster:namespace:app"`.
+`audience: string`: Client ID til APIet du skal kontakte på formatet `"cluster:namespace:app"`.
 
 #### Returverdi
 
-En `Promise` som resolver til et `OboResult`-objekt:
-
-```ts
-export type OboResult =
-  | { ok: true; token: string }
-  | { ok: false; error: Error };
-```
+En `Promise` som resolver til et `OboResult`-objekt.
 
 > [!WARNING]  
 > Pass på at du ikke bruker et `OboResult`-objekt direkte i f.eks. en tempalte string. Det er token-feltet som har selve tokenet.
-> FEIL:
+
+❌ FEIL:
 
 ```ts
 const obo = await requestOboToken(token, "an:example:audience");
@@ -105,7 +92,7 @@ if (obo.ok) {
 }
 ```
 
-RIKTIG:
+✅ RIKTIG:
 
 ```ts
 const obo = await requestOboToken(token, "an:example:audience");
@@ -114,7 +101,7 @@ if (obo.ok) {
 }
 ```
 
-#### Azure og Tokenx
+#### Azure og TokenX
 
 Om du har både azure og idporten enabled, eller av andre grunner ønsker å eksplisitt validere mot en gitt tjeneste eksponeres disse funksjonene direkte:
 
@@ -123,9 +110,9 @@ requestAzureOboToken(token, audience);
 requestTokenxOboToken(token, audience);
 ```
 
-### getToken
+---
 
-`getToken(val)` henter ut token fra en `Request`, `IncomingMessage`, `Headers` eller et Bearer-token.
+### getToken(val)
 
 #### Parametre
 
@@ -133,21 +120,23 @@ requestTokenxOboToken(token, audience);
 
 #### Returverdi
 
-en `string` token eller `null` om argumentet ikke inneholder noe token.
+En `string` token eller `null` om argumentet ikke inneholder noe token.
 
-### expiresIn
+---
 
-`expiresIn(token)`
+### expiresIn(token)
 
 #### Parametre
 
-`token: string`: Tokenet du får fra din konsument, også kjent som et _subject token_. Pass på at du stripper tokenet for "Bearer ", f.eks. ved a bruke [getToken].
+`token: string`: Et token med exp-payload.
 
 #### Returverdi
 
 Et `number` med antall sekunder til tokenet uløper.
 
 Funksjonen kaster feil om dekoding av tokenet feiler, eller om tokenet ikke har en `exp`-payload.
+
+---
 
 ### Spørsmål?
 

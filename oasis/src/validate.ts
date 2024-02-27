@@ -56,9 +56,10 @@ const validateJwt = async ({
 };
 
 /**
- * Validates token issued by Idporten. Requires Idporten to be enabled in nais application manifest.
+ * Validates token issued by Idporten. Requires Idporten to be enabled in nais
+ * application manifest.
  *
- * @param {string} token Token issued by Idporten (JWT)
+ * @param token Token issued by Idporten.
  */
 export const validateIdportenToken = (
   token: string,
@@ -71,9 +72,10 @@ export const validateIdportenToken = (
   });
 
 /**
- * Validates token issued by Azure. Requires Azure to be enabled in nais application manifest.
+ * Validates token issued by Azure. Requires Azure to be enabled in nais
+ * application manifest.
  *
- * @param {string} token Token issued by Azure (JWT)
+ * @param token Token issued by Azure.
  */
 export const validateAzureToken = (token: string): Promise<ValidationResult> =>
   validateJwt({
@@ -84,9 +86,10 @@ export const validateAzureToken = (token: string): Promise<ValidationResult> =>
   });
 
 /**
- * Validates token issued by Tokenx. Requires Tokenx to be enabled in nais application manifest.
+ * Validates token issued by Tokenx. Requires Tokenx to be enabled in nais
+ * application manifest.
  *
- * @param {string} token Token issued by Tokenx (JWT)
+ * @param token Token issued by Tokenx.
  */
 export const validateTokenxToken = (token: string): Promise<ValidationResult> =>
   validateJwt({
@@ -100,7 +103,7 @@ export const validateTokenxToken = (token: string): Promise<ValidationResult> =>
  * Validates token issued by Idporten or Azure. Requires either Idporten or
  * Azure to be enabled in nais application manifest.
  *
- * @param {string} token Token issued by Idporten or Azure(JWT)
+ * @param token Token issued by Idporten or Azure.
  */
 export const validateToken = async (
   token: string,
