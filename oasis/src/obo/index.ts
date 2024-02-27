@@ -17,10 +17,18 @@ export const OboResult = {
     ok: false,
     error: typeof error === "string" ? Error(error) : error,
   }),
-  Ok: (token: string): OboResult => ({
-    ok: true,
-    token,
-  }),
+  Ok: (token: string): OboResult => {
+    const res = {
+      ok: true,
+      token,
+      toString: () => {
+        throw Error(
+          "OboResult object can not be used as a string. If you tried to get the token, access the 'token' property.",
+        );
+      },
+    } as const;
+    return res;
+  },
 };
 
 const grantOboToken: (opts: {

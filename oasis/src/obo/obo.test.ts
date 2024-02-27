@@ -210,6 +210,19 @@ describe("request tokenX obo token", () => {
     }
   });
 
+  it("toString throws", async () => {
+    expect(async () => {
+      const result = await requestTokenxOboToken(
+        await token({
+          audience: "idporten_audience",
+          issuer: "idporten_issuer",
+        }),
+        "audience",
+      );
+      console.log(`Bearer ${result}`);
+    }).rejects.toThrow();
+  });
+
   it("returns error when exchange fails", async () => {
     const result = await requestTokenxOboToken(
       await token({
