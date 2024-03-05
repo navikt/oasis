@@ -60,6 +60,7 @@ describe("validate token", () => {
 
 describe("validate idporten token", () => {
   let server: SetupServer;
+  let count = 0;
 
   beforeAll(() => {
     process.env.IDPORTEN_JWKS_URI = "http://idporten-provider.test/jwks";
@@ -67,9 +68,10 @@ describe("validate idporten token", () => {
     process.env.IDPORTEN_AUDIENCE = "idporten_audience";
 
     server = setupServer(
-      http.get(process.env.IDPORTEN_JWKS_URI, async () =>
-        HttpResponse.json({ keys: [await jwk()] }),
-      ),
+      http.get(process.env.IDPORTEN_JWKS_URI, async () => {
+        count += 1;
+        return HttpResponse.json({ keys: [await jwk()] });
+      }),
     );
     server.listen();
   });
@@ -87,6 +89,22 @@ describe("validate idporten token", () => {
         )
       ).ok,
     ).toBe(true);
+  });
+
+  it("only calls /jwks once", async () => {
+    await validateIdportenToken(
+      await token({
+        audience: "idporten_audience",
+        issuer: "idporten_issuer",
+      }),
+    );
+    await validateIdportenToken(
+      await token({
+        audience: "idporten_audience",
+        issuer: "idporten_issuer",
+      }),
+    );
+    expect(count).toBe(1);
   });
 
   it("fails verification when issuer is not idporten", async () => {
