@@ -1,4 +1,4 @@
-import { createRemoteJWKSet, jwtVerify, errors } from "jose";
+import { createRemoteJWKSet, errors, jwtVerify } from "jose";
 import { stripBearer } from "./strip-bearer";
 
 type ErrorTypes = "token expired" | "unknown";
@@ -23,6 +23,16 @@ const ValidationResult = {
   Ok: (): ValidationResult => ({ ok: true }),
 };
 
+let remoteJWKSet: ReturnType<typeof createRemoteJWKSet>;
+
+const getJwkSet = (jwksUri: string): ReturnType<typeof createRemoteJWKSet> => {
+  if (!remoteJWKSet) {
+    remoteJWKSet = createRemoteJWKSet(new URL(jwksUri));
+  }
+
+  return remoteJWKSet;
+};
+
 const validateJwt = async ({
   token,
   jwksUri,
@@ -35,17 +45,11 @@ const validateJwt = async ({
   audience: string;
 }): Promise<ValidationResult> => {
   try {
-    await jwtVerify(
-      stripBearer(token),
-      createRemoteJWKSet(new URL(jwksUri), {
-        cacheMaxAge: 60 * 60 * 1000 /* 1 hour */,
-      }),
-      {
-        issuer,
-        audience,
-        algorithms: ["RS256"],
-      },
-    );
+    await jwtVerify(stripBearer(token), getJwkSet(jwksUri), {
+      issuer,
+      audience,
+      algorithms: ["RS256"],
+    });
     return ValidationResult.Ok();
   } catch (e) {
     return ValidationResult.Error(
