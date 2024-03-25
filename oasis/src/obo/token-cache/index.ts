@@ -32,7 +32,8 @@ export const withCache = (oboProvider: OboProvider): OboProvider => {
     return oboProvider(token, audience).then((result) => {
       if (result.ok) {
         try {
-          const ttl = expiresIn(result.token);
+          const leeway = 5; // seconds
+          const ttl = expiresIn(result.token) - leeway;
           if (ttl > 0) {
             cache.set(key, result.token, ttl);
           }
