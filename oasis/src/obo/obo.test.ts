@@ -141,7 +141,7 @@ describe("request tokenX obo token", () => {
               pid: subject_token,
               issuer: "urn:tokenx:dings",
               audience,
-              exp: Math.round(Date.now() / 1000) - 10,
+              exp: Math.round(Date.now() / 1000) + 4, // tests leeway of 5 seconds
             }),
           });
         } else {

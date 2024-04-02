@@ -1,7 +1,7 @@
-import { JWTPayload, decodeJwt } from "jose";
 import { createHash } from "node:crypto";
-import SieveCache from "./cache";
 import { OboProvider, OboResult } from "..";
+import { expiresIn } from "../../expires-in";
+import SieveCache from "./cache";
 
 function sha256(content: string): string {
   return createHash("sha256").update(content).digest("hex");
@@ -20,14 +20,6 @@ function getCache() {
   return cache;
 }
 
-function getSecondsToExpire(payload: JWTPayload): number {
-  function secondsUntil(timestamp: number): number {
-    return Math.max(Math.round(timestamp - Math.round(Date.now() / 1000)), 0);
-  }
-
-  return payload.exp ? secondsUntil(payload.exp) : 0;
-}
-
 export const withCache = (oboProvider: OboProvider): OboProvider => {
   return async (token, audience) => {
     const cache = getCache();
@@ -39,9 +31,14 @@ export const withCache = (oboProvider: OboProvider): OboProvider => {
 
     return oboProvider(token, audience).then((result) => {
       if (result.ok) {
-        const ttl = getSecondsToExpire(decodeJwt(result.token));
-        if (ttl > 0) {
-          cache.set(key, result.token, ttl);
+        try {
+          const leeway = 5; // seconds
+          const ttl = expiresIn(result.token) - leeway;
+          if (ttl > 0) {
+            cache.set(key, result.token, ttl);
+          }
+        } catch (e) {
+          console.warn(e);
         }
       }
 
