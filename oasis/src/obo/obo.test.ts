@@ -135,13 +135,13 @@ describe("request tokenX obo token", () => {
           return HttpResponse.json({});
         } else if (audience === "error-audience") {
           return HttpResponse.json({});
-        } else if (audience === "timed-out") {
+        } else if (audience === "short-expiration") {
           return HttpResponse.json({
             access_token: await token({
               pid: subject_token,
               issuer: "urn:tokenx:dings",
               audience,
-              exp: Math.round(Date.now() / 1000) + 4, // tests leeway of 5 seconds
+              exp: Math.round(Date.now() / 1000) + 7,
             }),
           });
         } else {
@@ -257,17 +257,33 @@ describe("request tokenX obo token", () => {
       audience: "idporten_audience",
       issuer: "idporten_issuer",
     });
-    const result = await requestTokenxOboToken(clientToken, "timed-out");
-    const result2 = await requestTokenxOboToken(clientToken, "timed-out");
+    const result = await requestTokenxOboToken(clientToken, "short-expiration");
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    const result2 = await requestTokenxOboToken(
+      clientToken,
+      "short-expiration",
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    const result3 = await requestTokenxOboToken(
+      clientToken,
+      "short-expiration",
+    );
 
     expect(result.ok).toBe(true);
     expect(result2.ok).toBe(true);
+    expect(result3.ok).toBe(true);
 
-    if (result.ok && result2.ok) {
+    if (result.ok && result2.ok && result3.ok) {
       const token1 = decodeJwt(result.token);
       const token2 = decodeJwt(result2.token);
+      const token3 = decodeJwt(result3.token);
 
-      expect(token1.jti).not.toBe(token2.jti);
+      expect(token1.jti).toBe(token2.jti);
+      expect(token1.jti).not.toBe(token3.jti);
     }
   });
 });
