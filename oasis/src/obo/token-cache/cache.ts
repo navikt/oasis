@@ -12,11 +12,11 @@ class Node {
     this.visited = false;
     this.prev = null;
     this.next = null;
-    this.expirationTime = expirationTime; // TTL in milliseconds
+    this.expirationTime = expirationTime; // TTL in seconds
   }
 
   hasExpired(): boolean {
-    return Date.now() > this.expirationTime;
+    return Date.now() / 1000 > this.expirationTime;
   }
 }
 
@@ -105,7 +105,7 @@ class SieveCache {
       this.evict(); // Eviction
     }
 
-    const expirationTime = ttl > 0 ? Date.now() + ttl : Infinity;
+    const expirationTime = ttl > 0 ? Date.now() / 1000 + ttl : Infinity;
     const node = new Node(key, value, expirationTime);
     this.addToHead(node);
     this.cache.set(key, node);
