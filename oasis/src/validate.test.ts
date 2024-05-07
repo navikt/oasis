@@ -162,6 +162,22 @@ describe("validate idporten token", () => {
     expect(result.ok).toBe(false);
     expect(!result.ok && result.errorType).toBe("token expired");
   });
+
+  it("Returns valid payload for a token", async () => {
+    const res = await validateToken<{ pid: string }>(
+      await token({
+        pid: "someid",
+        audience: "idporten_audience",
+        issuer: "idporten_issuer",
+      }),
+    );
+
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.payload.pid).toBe("someid");
+      expect(res.payload.aud).toContain("idporten_audience");
+    } else fail();
+  });
 });
 
 describe("validate azure token", () => {
@@ -194,6 +210,22 @@ describe("validate azure token", () => {
         )
       ).ok,
     ).toBe(true);
+  });
+
+  it("Returns a payload with custom claim", async () => {
+    const res = await validateAzureToken<{ pid: string }>(
+      await token({
+        pid: "someid",
+        audience: "azure_audience",
+        issuer: "azure_issuer",
+      }),
+    );
+
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.payload.pid).toBe("someid");
+      expect(res.payload.aud).toContain("azure_audience");
+    } else fail();
   });
 });
 

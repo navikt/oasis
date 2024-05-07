@@ -1,10 +1,10 @@
-import { createRemoteJWKSet, errors, jwtVerify } from "jose";
+import { JWTVerifyResult, createRemoteJWKSet, errors, jwtVerify } from "jose";
 import { stripBearer } from "./strip-bearer";
 
 type ErrorTypes = "token expired" | "unknown";
 
-export type ValidationResult =
-  | { ok: true }
+export type ValidationResult<Payload = unknown> =
+  | { ok: true; payload: JWTVerifyResult<Partial<Payload>>["payload"] }
   | {
       ok: false;
       error: Error;
@@ -12,15 +12,18 @@ export type ValidationResult =
     };
 
 const ValidationResult = {
-  Error: (
+  Error: <T>(
     error: Error | string,
     errorType: ErrorTypes | undefined = "unknown",
-  ): ValidationResult => ({
+  ): ValidationResult<T> => ({
     ok: false,
     error: typeof error === "string" ? Error(error) : error,
     errorType,
   }),
-  Ok: (): ValidationResult => ({ ok: true }),
+  Ok: <T>(payload: JWTVerifyResult<T>["payload"]): ValidationResult<T> => ({
+    ok: true,
+    payload,
+  }),
 };
 
 let remoteJWKSet: ReturnType<typeof createRemoteJWKSet>;
@@ -33,7 +36,7 @@ const getJwkSet = (jwksUri: string): ReturnType<typeof createRemoteJWKSet> => {
   return remoteJWKSet;
 };
 
-const validateJwt = async ({
+const validateJwt = async <Payload>({
   token,
   jwksUri,
   issuer,
@@ -43,14 +46,18 @@ const validateJwt = async ({
   jwksUri: string;
   issuer: string;
   audience: string;
-}): Promise<ValidationResult> => {
+}): Promise<ValidationResult<Payload>> => {
   try {
-    await jwtVerify(stripBearer(token), getJwkSet(jwksUri), {
-      issuer,
-      audience,
-      algorithms: ["RS256"],
-    });
-    return ValidationResult.Ok();
+    const { payload } = await jwtVerify<Payload>(
+      stripBearer(token),
+      getJwkSet(jwksUri),
+      {
+        issuer,
+        audience,
+        algorithms: ["RS256"],
+      },
+    );
+    return ValidationResult.Ok(payload);
   } catch (e) {
     return ValidationResult.Error(
       e as Error,
@@ -65,9 +72,9 @@ const validateJwt = async ({
  *
  * @param token Token issued by Idporten.
  */
-export const validateIdportenToken = (
+export const validateIdportenToken = <Payload>(
   token: string,
-): Promise<ValidationResult> =>
+): Promise<ValidationResult<Payload>> =>
   validateJwt({
     token,
     jwksUri: process.env.IDPORTEN_JWKS_URI!,
@@ -81,7 +88,9 @@ export const validateIdportenToken = (
  *
  * @param token Token issued by Azure.
  */
-export const validateAzureToken = (token: string): Promise<ValidationResult> =>
+export const validateAzureToken = <Payload>(
+  token: string,
+): Promise<ValidationResult<Payload>> =>
   validateJwt({
     token,
     jwksUri: process.env.AZURE_OPENID_CONFIG_JWKS_URI!,
@@ -109,9 +118,9 @@ export const validateTokenxToken = (token: string): Promise<ValidationResult> =>
  *
  * @param token Token issued by Idporten or Azure.
  */
-export const validateToken = async (
+export const validateToken = async <Payload>(
   token: string,
-): Promise<ValidationResult> => {
+): Promise<ValidationResult<Payload>> => {
   if (!token) {
     return ValidationResult.Error("empty token");
   }
