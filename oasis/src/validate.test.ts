@@ -7,6 +7,7 @@ import {
   validateTokenxToken,
 } from "./validate";
 import { jwk, token } from "./test-provider";
+import { expectNotOK } from "./test-expect";
 
 describe("validate token", () => {
   afterEach(() => {
@@ -79,16 +80,14 @@ describe("validate idporten token", () => {
   afterAll(() => server.close());
 
   it("succeeds for valid token", async () => {
-    expect(
-      (
-        await validateIdportenToken(
-          await token({
-            audience: "idporten_audience",
-            issuer: "idporten_issuer",
-          }),
-        )
-      ).ok,
-    ).toBe(true);
+    const result = await validateIdportenToken(
+      await token({
+        audience: "idporten_audience",
+        issuer: "idporten_issuer",
+      }),
+    );
+
+    expect(result.ok).toBe(true);
   });
 
   it("only calls /jwks once", async () => {
@@ -114,20 +113,20 @@ describe("validate idporten token", () => {
         issuer: "not idporten",
       }),
     );
-    expect(result.ok).toBe(false);
+
+    expectNotOK(result);
+    expect(result.error).not.toBeNull();
   });
 
   it("works with Bearer prefix", async () => {
-    expect(
-      (
-        await validateIdportenToken(
-          `Bearer ${await token({
-            audience: "idporten_audience",
-            issuer: "idporten_issuer",
-          })}`,
-        )
-      ).ok,
-    ).toBe(true);
+    const result = await validateIdportenToken(
+      `Bearer ${await token({
+        audience: "idporten_audience",
+        issuer: "idporten_issuer",
+      })}`,
+    );
+
+    expect(result.ok).toBe(true);
   });
 
   it("fails verification when audience is not idporten", async () => {
@@ -137,7 +136,9 @@ describe("validate idporten token", () => {
         issuer: "idporten_issuer",
       }),
     );
-    expect(result.ok).toBe(false);
+
+    expectNotOK(result);
+    expect(result.error).not.toBeNull();
   });
 
   it("fails verification when alg is not RS256", async () => {
@@ -159,8 +160,9 @@ describe("validate idporten token", () => {
         exp: "5 minutes ago",
       }),
     );
-    expect(result.ok).toBe(false);
-    expect(!result.ok && result.errorType).toBe("token expired");
+
+    expectNotOK(result);
+    expect(result.errorType).toBe("token expired");
   });
 });
 
@@ -184,16 +186,13 @@ describe("validate azure token", () => {
   afterAll(() => server.close());
 
   it("succeeds for valid token", async () => {
-    expect(
-      (
-        await validateAzureToken(
-          await token({
-            audience: "azure_audience",
-            issuer: "azure_issuer",
-          }),
-        )
-      ).ok,
-    ).toBe(true);
+    const result = await validateAzureToken(
+      await token({
+        audience: "azure_audience",
+        issuer: "azure_issuer",
+      }),
+    );
+    expect(result.ok).toBe(true);
   });
 });
 
@@ -216,15 +215,12 @@ describe("validate tokenx token", () => {
   afterAll(() => server.close());
 
   it("succeeds for valid token", async () => {
-    expect(
-      (
-        await validateTokenxToken(
-          await token({
-            audience: "tokenx_audience",
-            issuer: "tokenx_issuer",
-          }),
-        )
-      ).ok,
-    ).toBe(true);
+    const result = await validateTokenxToken(
+      await token({
+        audience: "tokenx_audience",
+        issuer: "tokenx_issuer",
+      }),
+    );
+    expect(result.ok).toBe(true);
   });
 });
