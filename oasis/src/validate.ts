@@ -1,7 +1,17 @@
-import { JWTPayload, createRemoteJWKSet, errors, jwtVerify } from "jose";
+import { createRemoteJWKSet, errors, jwtVerify } from "jose";
 import { stripBearer } from "./strip-bearer";
 
 type ErrorTypes = "token expired" | "unknown";
+
+type JWTPayload = {
+  iss: string;
+  aud: string | string[];
+  jti: string;
+  nbf: number;
+  exp: number;
+  iat: number;
+  [propName: string]: unknown;
+};
 
 export type ValidationResult<Payload = unknown> =
   | { ok: true; payload: Payload & JWTPayload }
@@ -48,20 +58,15 @@ const validateJwt = async <Payload>({
   audience: string;
 }): Promise<ValidationResult<Payload>> => {
   try {
-    const { payload } = await jwtVerify<
-      Payload & {
-        iss: string;
-        aud: string | string[];
-        jti: string;
-        nbf: number;
-        exp: number;
-        iat: number;
-      }
-    >(stripBearer(token), getJwkSet(jwksUri), {
-      issuer,
-      audience,
-      algorithms: ["RS256"],
-    });
+    const { payload } = await jwtVerify<Payload & JWTPayload>(
+      stripBearer(token),
+      getJwkSet(jwksUri),
+      {
+        issuer,
+        audience,
+        algorithms: ["RS256"],
+      },
+    );
     return ValidationResult.Ok(payload);
   } catch (e) {
     return ValidationResult.Error(
