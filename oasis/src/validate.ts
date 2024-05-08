@@ -1,10 +1,10 @@
-import { createRemoteJWKSet, errors, jwtVerify } from "jose";
+import { JWTPayload, createRemoteJWKSet, errors, jwtVerify } from "jose";
 import { stripBearer } from "./strip-bearer";
 
 type ErrorTypes = "token expired" | "unknown";
 
-export type ValidationResult =
-  | { ok: true }
+export type ValidationResult<Payload = unknown> =
+  | { ok: true; payload: Payload & JWTPayload }
   | {
       ok: false;
       error: Error;
@@ -12,15 +12,18 @@ export type ValidationResult =
     };
 
 const ValidationResult = {
-  Error: (
+  Error: <Payload>(
     error: Error | string,
     errorType: ErrorTypes | undefined = "unknown",
-  ): ValidationResult => ({
+  ): ValidationResult<Payload> => ({
     ok: false,
     error: typeof error === "string" ? Error(error) : error,
     errorType,
   }),
-  Ok: (): ValidationResult => ({ ok: true }),
+  Ok: <Payload>(payload: Payload & JWTPayload): ValidationResult<Payload> => ({
+    ok: true,
+    payload,
+  }),
 };
 
 let remoteJWKSet: ReturnType<typeof createRemoteJWKSet>;
@@ -33,7 +36,7 @@ const getJwkSet = (jwksUri: string): ReturnType<typeof createRemoteJWKSet> => {
   return remoteJWKSet;
 };
 
-const validateJwt = async ({
+const validateJwt = async <Payload>({
   token,
   jwksUri,
   issuer,
@@ -43,20 +46,36 @@ const validateJwt = async ({
   jwksUri: string;
   issuer: string;
   audience: string;
-}): Promise<ValidationResult> => {
+}): Promise<ValidationResult<Payload>> => {
   try {
-    await jwtVerify(stripBearer(token), getJwkSet(jwksUri), {
+    const { payload } = await jwtVerify<
+      Payload & {
+        iss: string;
+        aud: string | string[];
+        jti: string;
+        nbf: number;
+        exp: number;
+        iat: number;
+      }
+    >(stripBearer(token), getJwkSet(jwksUri), {
       issuer,
       audience,
       algorithms: ["RS256"],
     });
-    return ValidationResult.Ok();
+    return ValidationResult.Ok(payload);
   } catch (e) {
     return ValidationResult.Error(
       e as Error,
       e instanceof errors.JWTExpired ? "token expired" : "unknown",
     );
   }
+};
+
+type IdportenPayload = {
+  pid?: string;
+  acr: "idporten-loa-substantial" | "idporten-loa-high";
+  idp?: string;
+  locale: "nb" | "nn" | "en" | "se";
 };
 
 /**
@@ -67,7 +86,7 @@ const validateJwt = async ({
  */
 export const validateIdportenToken = (
   token: string,
-): Promise<ValidationResult> =>
+): Promise<ValidationResult<IdportenPayload>> =>
   validateJwt({
     token,
     jwksUri: process.env.IDPORTEN_JWKS_URI!,
@@ -75,13 +94,25 @@ export const validateIdportenToken = (
     audience: process.env.IDPORTEN_AUDIENCE!,
   });
 
+type AzurePayload = {
+  azp?: string;
+  azp_name?: string;
+  groups?: string[];
+  idtyp?: string;
+  NAVident?: string;
+  roles?: string[];
+  scp?: string;
+};
+
 /**
  * Validates token issued by Azure. Requires Azure to be enabled in nais
  * application manifest.
  *
  * @param token Token issued by Azure.
  */
-export const validateAzureToken = (token: string): Promise<ValidationResult> =>
+export const validateAzureToken = (
+  token: string,
+): Promise<ValidationResult<AzurePayload>> =>
   validateJwt({
     token,
     jwksUri: process.env.AZURE_OPENID_CONFIG_JWKS_URI!,

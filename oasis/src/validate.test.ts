@@ -79,16 +79,15 @@ describe("validate idporten token", () => {
   afterAll(() => server.close());
 
   it("succeeds for valid token", async () => {
-    expect(
-      (
-        await validateIdportenToken(
-          await token({
-            audience: "idporten_audience",
-            issuer: "idporten_issuer",
-          }),
-        )
-      ).ok,
-    ).toBe(true);
+    const res = await validateIdportenToken(
+      await token({
+        audience: "idporten_audience",
+        issuer: "idporten_issuer",
+      }),
+    );
+    if (res.ok) {
+      expect(res.payload.aud).toContain("idporten_audience");
+    } else fail();
   });
 
   it("only calls /jwks once", async () => {
