@@ -11,5 +11,10 @@ export {
   validateTokenxToken,
   ValidationResult,
 } from "./validate";
+export {
+  parseAzureUserToken,
+  parseIdportenToken,
+  ParseResult,
+} from "./parse-token";
 export { getToken } from "./get-token";
 export { expiresIn } from "./expires-in";
