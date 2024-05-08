@@ -79,8 +79,6 @@ const validateJwt = async <Payload>({
 type IdportenPayload = {
   pid?: string;
   acr: "idporten-loa-substantial" | "idporten-loa-high";
-  idp?: string;
-  locale: "nb" | "nn" | "en" | "se";
 };
 
 /**
@@ -125,13 +123,20 @@ export const validateAzureToken = (
     audience: process.env.AZURE_APP_CLIENT_ID!,
   });
 
+type TokenxPayload = {
+  idp?: string;
+  acr: "Level3" | "Level4";
+};
+
 /**
  * Validates token issued by Tokenx. Requires Tokenx to be enabled in nais
  * application manifest.
  *
  * @param token Token issued by Tokenx.
  */
-export const validateTokenxToken = (token: string): Promise<ValidationResult> =>
+export const validateTokenxToken = (
+  token: string,
+): Promise<ValidationResult<TokenxPayload>> =>
   validateJwt({
     token,
     jwksUri: process.env.TOKEN_X_JWKS_URI!,
