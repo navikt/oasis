@@ -6,8 +6,8 @@ type ErrorTypes = "token expired" | "unknown";
 type JWTPayload = {
   iss: string;
   aud: string | string[];
-  jti: string;
-  nbf: number;
+  jti?: string;
+  nbf?: number;
   exp: number;
   iat: number;
   [propName: string]: unknown;
