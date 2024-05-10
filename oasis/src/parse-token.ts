@@ -1,6 +1,7 @@
 import { decodeJwt } from "jose";
 
 export type IdportenPayload = {
+  /* The users fødselsnummer */
   pid: string;
 };
 
@@ -21,7 +22,7 @@ export type ParseResult<Payload> =
  * Parses Idporten token, returning PID if present. This does not support parsing
  * tokenx tokens.
  *
- * @param token Validated (preferably) token issued by Idporten.
+ * @param token Validated token issued by Idporten.
  */
 export function parseIdportenToken(
   token: string,
@@ -29,15 +30,14 @@ export function parseIdportenToken(
   try {
     const payload = decodeJwt(token);
 
-    if (payload.pid) {
-      if (typeof payload.pid !== "string") {
-        return { ok: false, error: new Error("PID is not a string") };
-      }
-
+    if (typeof payload.pid === "string") {
       return { ok: true, pid: payload.pid };
     }
 
-    return { ok: false, error: new Error("Missing PID") };
+    return {
+      ok: false,
+      error: new Error("Invalid or missing values in token"),
+    };
   } catch (error) {
     if (error instanceof Error) {
       return { ok: false, error };
@@ -52,7 +52,7 @@ export function parseIdportenToken(
  * as extra claims in nais configuration). This does not support parsing Azure
  * machine tokens.
  *
- * @param token Validated (preferably) token issued by Azure.
+ * @param token Validated token issued by Azure.
  */
 export function parseAzureUserToken(token: string): ParseResult<AzurePayload> {
   try {

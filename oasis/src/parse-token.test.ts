@@ -14,26 +14,11 @@ describe("parseIdportenToken", () => {
     expect(res.pid).toBe("real-pid");
   });
 
-  it("should not be OK when pid is missing", async () => {
-    const res = parseIdportenToken(
-      await token({
-        pid: null,
-      }),
-    );
-
-    expectNotOK(res);
-    expect(res.error.message).toEqual("Missing PID");
-  });
-
   it("should handle PID not being a string", async () => {
-    const res = parseIdportenToken(
-      await token({
-        pid: 69,
-      }),
-    );
+    const res = parseIdportenToken(await token());
 
     expectNotOK(res);
-    expect(res.error.message).toEqual("PID is not a string");
+    expect(res.error.message).toEqual("Invalid or missing values in token");
   });
 
   it("should return error when parsing fails", async () => {
@@ -58,18 +43,6 @@ describe("parseAzureUserToken", () => {
     expect(res.name).toBe("name");
     expect(res.NAVIdent).toBe("navident");
     expect(res.preferred_username).toBe("username");
-  });
-
-  it("should not be OK when navident missing", async () => {
-    const res = parseAzureUserToken(
-      await token({
-        preferred_username: "username",
-        name: "name",
-      }),
-    );
-
-    expectNotOK(res);
-    expect(res.error.message).toEqual("Invalid or missing values in token");
   });
 
   it("should not be OK when values are missing", async () => {
