@@ -6,7 +6,7 @@ type ErrorTypes = "token expired" | "unknown";
 export type ValidationResult<Payload = unknown> =
   | {
       ok: true;
-      payload: Partial<Payload> & JWTPayload;
+      payload: Payload & JWTPayload;
     }
   | {
       ok: false;
@@ -15,17 +15,15 @@ export type ValidationResult<Payload = unknown> =
     };
 
 const ValidationResult = {
-  Error: <Payload>(
+  Error: (
     error: Error | string,
     errorType: ErrorTypes | undefined = "unknown",
-  ): ValidationResult<Payload> => ({
+  ): ValidationResult => ({
     ok: false,
     error: typeof error === "string" ? Error(error) : error,
     errorType,
   }),
-  Ok: <Payload>(
-    payload: Partial<Payload> & JWTPayload,
-  ): ValidationResult<Payload> => ({
+  Ok: (payload: JWTPayload): ValidationResult => ({
     ok: true,
     payload,
   }),
@@ -41,7 +39,7 @@ const getJwkSet = (jwksUri: string): ReturnType<typeof createRemoteJWKSet> => {
   return remoteJWKSet;
 };
 
-const validateJwt = async <Payload>({
+const validateJwt = async ({
   token,
   jwksUri,
   issuer,
@@ -51,9 +49,9 @@ const validateJwt = async <Payload>({
   jwksUri: string;
   issuer: string;
   audience: string;
-}): Promise<ValidationResult<Payload>> => {
+}): Promise<ValidationResult> => {
   try {
-    const { payload } = await jwtVerify<Partial<Payload>>(
+    const { payload } = await jwtVerify(
       stripBearer(token),
       getJwkSet(jwksUri),
       {
@@ -83,8 +81,8 @@ type IdportenPayload = {
  */
 export const validateIdportenToken = (
   token: string,
-): Promise<ValidationResult<IdportenPayload>> =>
-  validateJwt<IdportenPayload>({
+): Promise<ValidationResult<Partial<IdportenPayload>>> =>
+  validateJwt({
     token,
     jwksUri: process.env.IDPORTEN_JWKS_URI!,
     issuer: process.env.IDPORTEN_ISSUER!,
@@ -105,8 +103,8 @@ type AzurePayload = {
  */
 export const validateAzureToken = (
   token: string,
-): Promise<ValidationResult<AzurePayload>> =>
-  validateJwt<AzurePayload>({
+): Promise<ValidationResult<Partial<AzurePayload>>> =>
+  validateJwt({
     token,
     jwksUri: process.env.AZURE_OPENID_CONFIG_JWKS_URI!,
     issuer: process.env.AZURE_OPENID_CONFIG_ISSUER!,
