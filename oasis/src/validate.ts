@@ -1,10 +1,13 @@
-import { createRemoteJWKSet, errors, jwtVerify } from "jose";
+import { JWTPayload, createRemoteJWKSet, errors, jwtVerify } from "jose";
 import { stripBearer } from "./strip-bearer";
 
 type ErrorTypes = "token expired" | "unknown";
 
-export type ValidationResult =
-  | { ok: true }
+export type ValidationResult<Payload = unknown> =
+  | {
+      ok: true;
+      payload: Payload & JWTPayload;
+    }
   | {
       ok: false;
       error: Error;
@@ -20,7 +23,10 @@ const ValidationResult = {
     error: typeof error === "string" ? Error(error) : error,
     errorType,
   }),
-  Ok: (): ValidationResult => ({ ok: true }),
+  Ok: (payload: JWTPayload): ValidationResult => ({
+    ok: true,
+    payload,
+  }),
 };
 
 let remoteJWKSet: ReturnType<typeof createRemoteJWKSet>;
@@ -45,18 +51,26 @@ const validateJwt = async ({
   audience: string;
 }): Promise<ValidationResult> => {
   try {
-    await jwtVerify(stripBearer(token), getJwkSet(jwksUri), {
-      issuer,
-      audience,
-      algorithms: ["RS256"],
-    });
-    return ValidationResult.Ok();
+    const { payload } = await jwtVerify(
+      stripBearer(token),
+      getJwkSet(jwksUri),
+      {
+        issuer,
+        audience,
+        algorithms: ["RS256"],
+      },
+    );
+    return ValidationResult.Ok(payload);
   } catch (e) {
     return ValidationResult.Error(
       e as Error,
       e instanceof errors.JWTExpired ? "token expired" : "unknown",
     );
   }
+};
+
+type IdportenPayload = {
+  pid: string;
 };
 
 /**
@@ -67,7 +81,7 @@ const validateJwt = async ({
  */
 export const validateIdportenToken = (
   token: string,
-): Promise<ValidationResult> =>
+): Promise<ValidationResult<Partial<IdportenPayload>>> =>
   validateJwt({
     token,
     jwksUri: process.env.IDPORTEN_JWKS_URI!,
@@ -75,13 +89,21 @@ export const validateIdportenToken = (
     audience: process.env.IDPORTEN_AUDIENCE!,
   });
 
+type AzurePayload = {
+  NAVident: string;
+  name: string;
+  preferred_username: string;
+};
+
 /**
  * Validates token issued by Azure. Requires Azure to be enabled in nais
  * application manifest.
  *
  * @param token Token issued by Azure.
  */
-export const validateAzureToken = (token: string): Promise<ValidationResult> =>
+export const validateAzureToken = (
+  token: string,
+): Promise<ValidationResult<Partial<AzurePayload>>> =>
   validateJwt({
     token,
     jwksUri: process.env.AZURE_OPENID_CONFIG_JWKS_URI!,
