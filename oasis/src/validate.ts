@@ -69,7 +69,7 @@ const validateJwt = async ({
   }
 };
 
-type IdportenPayload = {
+export type IdportenPayload = {
   pid: string;
 };
 
@@ -89,7 +89,7 @@ export const validateIdportenToken = (
     audience: process.env.IDPORTEN_AUDIENCE!,
   });
 
-type AzurePayload = {
+export type AzurePayload = {
   NAVident: string;
   name: string;
   preferred_username: string;
