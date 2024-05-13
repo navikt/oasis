@@ -1,18 +1,5 @@
 import { decodeJwt } from "jose";
-
-export type IdportenPayload = {
-  /* The users fødselsnummer */
-  pid: string;
-};
-
-export type AzurePayload = {
-  /* Internal NAV ID, typically on the format O123456 */
-  NAVIdent: string;
-  /* The users email address */
-  preferred_username: string;
-  /* The users full name, varying formatting */
-  name: string;
-};
+import { AzurePayload, IdportenPayload } from "./validate";
 
 export type ParseResult<Payload> =
   | { ok: false; error: Error }
@@ -61,11 +48,11 @@ export function parseAzureUserToken(token: string): ParseResult<AzurePayload> {
     if (
       typeof payload.preferred_username === "string" &&
       typeof payload.name === "string" &&
-      typeof payload.NAVIdent === "string"
+      typeof payload.NAVident === "string"
     ) {
       return {
         ok: true,
-        NAVIdent: payload.NAVIdent,
+        NAVident: payload.NAVident,
         preferred_username: payload.preferred_username,
         name: payload.name,
       };
