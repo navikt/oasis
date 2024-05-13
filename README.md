@@ -28,12 +28,17 @@ if (!validation.ok) {
 
 const obo = await requestOboToken(token, "an:example:audience");
 if (!obo.ok) {
-  /* håndter obofeil */
+  /* håndter obo-feil */
 }
 
 fetch("https://example.com/api", {
   headers: { Authorization: `Bearer ${obo.token}` },
 });
+
+const parse = parseAzureUserToken(token);
+if (parse.ok) {
+  console.log(`Bruker: ${parse.preferred_username} (${parse.NAVident})`);
+}
 ```
 
 ## API
@@ -48,7 +53,7 @@ Utfører validering av et token mot enten Azure eller Idporten, avhengig av verd
 
 #### Returverdi
 
-En `Promise` som resolver til et `ValidationResult`-objekt.
+En `Promise` som resolver til et `ValidationResult`-objekt med `JWTPayload`.
 
 #### Azure, Idporten og TokenX
 
@@ -78,7 +83,7 @@ Prometheus-metrikker for OBO-utveksling er tilgjengelig gjennom biblioteket `"pr
 
 #### Returverdi
 
-En `Promise` som resolver til et `OboResult`-objekt.
+En `Promise` som resolver til et `OboResult`-objekt med OBO-token.
 
 > [!WARNING]  
 > Pass på at du ikke bruker et `OboResult`-objekt direkte i f.eks. en tempalte string. Det er token-feltet som har selve tokenet.
@@ -135,6 +140,38 @@ En `string` token eller `null` om argumentet ikke inneholder noe token.
 Et `number` med antall sekunder til tokenet uløper.
 
 Funksjonen kaster feil om dekoding av tokenet feiler, eller om tokenet ikke har en `exp`-payload.
+
+--
+
+### parseIdportenToken(token)
+
+#### Parametre
+
+`token: string`: Et validert idportentoken.
+
+#### Returverdi
+
+Et `ParseResult` med `IdportenPayload`-verdier eller ok=false.
+
+### parseAzureUserToken(token)
+
+#### Parametre
+
+`token: string`: Et validert idportentoken.
+
+#### Returverdi
+
+Et `ParseResult` med `AzurePayload`-verdier.
+
+### parseIdportenToken(token)
+
+#### Parametre
+
+`token: string`: Et validert idportentoken.
+
+#### Returverdi
+
+Et `ParseResult` med `IdportenPayload`-verdier.
 
 ---
 
