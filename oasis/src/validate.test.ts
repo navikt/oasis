@@ -7,7 +7,7 @@ import {
   validateTokenxToken,
 } from "./validate";
 import { jwk, token } from "./test-provider";
-import { expectNotOK } from "./test-expect";
+import { expectNotOK, expectOK } from "./test-expect";
 
 describe("validate token", () => {
   afterEach(() => {
@@ -82,12 +82,14 @@ describe("validate idporten token", () => {
   it("succeeds for valid token", async () => {
     const result = await validateIdportenToken(
       await token({
+        pid: "12345678901",
         audience: "idporten_audience",
         issuer: "idporten_issuer",
       }),
     );
 
-    expect(result.ok).toBe(true);
+    expectOK(result);
+    expect(result.payload.pid).toBe("12345678901");
   });
 
   it("only calls /jwks once", async () => {
