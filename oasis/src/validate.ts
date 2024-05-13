@@ -6,7 +6,7 @@ type ErrorTypes = "token expired" | "unknown";
 export type ValidationResult<Payload = unknown> =
   | {
       ok: true;
-      payload: Payload & JWTPayload;
+      payload: Partial<Payload> & JWTPayload;
     }
   | {
       ok: false;
@@ -23,7 +23,9 @@ const ValidationResult = {
     error: typeof error === "string" ? Error(error) : error,
     errorType,
   }),
-  Ok: <Payload>(payload: Payload & JWTPayload): ValidationResult<Payload> => ({
+  Ok: <Payload>(
+    payload: Partial<Payload> & JWTPayload,
+  ): ValidationResult<Payload> => ({
     ok: true,
     payload,
   }),
@@ -51,7 +53,7 @@ const validateJwt = async <Payload>({
   audience: string;
 }): Promise<ValidationResult<Payload>> => {
   try {
-    const { payload } = await jwtVerify<Payload>(
+    const { payload } = await jwtVerify<Partial<Payload>>(
       stripBearer(token),
       getJwkSet(jwksUri),
       {
@@ -70,7 +72,7 @@ const validateJwt = async <Payload>({
 };
 
 type IdportenPayload = {
-  pid?: string;
+  pid: string;
 };
 
 /**
@@ -90,9 +92,9 @@ export const validateIdportenToken = (
   });
 
 type AzurePayload = {
-  NAVident?: string;
-  name?: string;
-  preferred_username?: string;
+  NAVident: string;
+  name: string;
+  preferred_username: string;
 };
 
 /**
