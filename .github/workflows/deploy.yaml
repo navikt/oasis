@@ -12,7 +12,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # ratchet:actions/checkout@v4
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # ratchet:actions/checkout@v4
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # ratchet:actions/setup-node@v4
         with:
           node-version: 20
@@ -28,7 +28,7 @@ jobs:
       contents: "read"
       id-token: "write"
     steps:
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # ratchet:actions/checkout@v4
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # ratchet:actions/checkout@v4
       - uses: nais/docker-build-push@v0 # ratchet:exclude
         id: docker-build-push
         with:
@@ -48,7 +48,7 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # ratchet:actions/checkout@v4
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # ratchet:actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2 # ratchet:exclude
         env:
           CLUSTER: dev-gcp
@@ -64,7 +64,7 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # ratchet:actions/checkout@v4
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # ratchet:actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2 # ratchet:exclude
         env:
           CLUSTER: dev-gcp
