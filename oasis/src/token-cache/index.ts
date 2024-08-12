@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
-import { OboProvider, OboResult } from "..";
-import { expiresIn } from "../../expires-in";
+import { OboProvider } from "../obo";
+import { ClientCredientialsProvider } from "../client-credentials";
+import { expiresIn } from "../expires-in";
 import SieveCache from "./cache";
+import { TokenResult } from "../token-result";
 
 function sha256(content: string): string {
   return createHash("sha256").update(content).digest("hex");
@@ -20,13 +22,19 @@ function getCache() {
   return cache;
 }
 
-export const withCache = (oboProvider: OboProvider): OboProvider => {
+export function withCache(
+  clientCredentialsProvider: ClientCredientialsProvider,
+): ClientCredientialsProvider;
+export function withCache(clientCredentialsProvider: OboProvider): OboProvider;
+export function withCache(
+  oboProvider: ClientCredientialsProvider | OboProvider,
+): ClientCredientialsProvider | OboProvider {
   return async (token, audience) => {
     const cache = getCache();
     const key = sha256(token + audience);
     const cachedToken = cache.get(key);
     if (cachedToken) {
-      return Promise.resolve(OboResult.Ok(cachedToken));
+      return Promise.resolve(TokenResult.Ok(cachedToken));
     }
 
     return oboProvider(token, audience).then((result) => {
@@ -45,4 +53,4 @@ export const withCache = (oboProvider: OboProvider): OboProvider => {
       return result;
     });
   };
-};
+}

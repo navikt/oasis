@@ -1,7 +1,8 @@
 import { token } from "../test-provider";
 import { withPrometheus } from "./prometheus";
 import { MetricValue, MetricValueWithName, register } from "prom-client";
-import { OboProvider, OboResult } from ".";
+import { OboProvider } from ".";
+import { TokenResult } from "../token-result";
 
 describe("withPrometheus", () => {
   afterEach(() => {
@@ -9,7 +10,7 @@ describe("withPrometheus", () => {
   });
   it("measures time spent getting token", async () => {
     const oboProvider: OboProvider = async (_, audience) =>
-      Promise.resolve(OboResult.Ok(await token({ audience })));
+      Promise.resolve(TokenResult.Ok(await token({ audience })));
     const timedProvider = withPrometheus(oboProvider);
     const obo1 = await timedProvider("token1", "audience");
 
@@ -44,7 +45,7 @@ describe("withPrometheus", () => {
 
   it("measures errors in token exchange", async () => {
     const oboProvider: OboProvider = async () =>
-      Promise.resolve(OboResult.Error(""));
+      Promise.resolve(TokenResult.Error(""));
     const timedProvider = withPrometheus(oboProvider);
     const obo1 = await timedProvider("token1", "audience");
 
