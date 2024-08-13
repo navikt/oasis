@@ -83,10 +83,10 @@ Prometheus-metrikker for OBO-utveksling er tilgjengelig gjennom biblioteket `"pr
 
 #### Returverdi
 
-En `Promise` som resolver til et `OboResult`-objekt med OBO-token.
+En `Promise` som resolver til et `TokenResult`-objekt med OBO-token.
 
 > [!WARNING]  
-> Pass på at du ikke bruker et `OboResult`-objekt direkte i f.eks. en tempalte string. Det er token-feltet som har selve tokenet.
+> Pass på at du ikke bruker et `TokenResult`-objekt direkte i f.eks. en tempalte string. Det er token-feltet som har selve tokenet.
 
 ❌ FEIL:
 
@@ -113,6 +113,21 @@ Om du har både azure og idporten enabled, eller av andre grunner ønsker å eks
 ```ts
 requestAzureOboToken(token, audience);
 requestTokenxOboToken(token, audience);
+```
+
+### requestAzureClientCredentialsToken(scope)
+
+Oasis kan også brukes til å bytte tokens utenom en bruker-kontekst. Dette er et såkalt ["maskin til maskin"-token-bytte](https://docs.nais.io/auth/entra-id/how-to/consume-m2m/)
+som bruker `client_credentials`-flyt.
+
+```ts
+const clientCredentials = await requestAzureClientCredentialsToken(
+  "api://<cluster>.<namespace>.<other-api-app-name>/.default",
+);
+
+if (clientCredentials.ok) {
+  const headers = { Authorization: `Bearer ${clientCredentials.token}` };
+}
 ```
 
 ---

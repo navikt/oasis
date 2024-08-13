@@ -1,35 +1,13 @@
 import { GrantBody, Issuer } from "openid-client";
-import { withCache } from "./token-cache";
+import { withCache } from "../token-cache";
 import { withPrometheus } from "./prometheus";
 import { stripBearer } from "../strip-bearer";
+import { TokenResult } from "../token-result";
 
 export type OboProvider = (
   token: string,
   audience: string,
-) => Promise<OboResult>;
-
-export type OboResult =
-  | { ok: true; token: string }
-  | { ok: false; error: Error };
-
-export const OboResult = {
-  Error: (error: Error | string): OboResult => ({
-    ok: false,
-    error: typeof error === "string" ? Error(error) : error,
-  }),
-  Ok: (token: string): OboResult => {
-    const res = {
-      ok: true,
-      token,
-      toString: () => {
-        throw Error(
-          "OboResult object can not be used as a string. If you tried to get the token, access the 'token' property.",
-        );
-      },
-    } as const;
-    return res;
-  },
-};
+) => Promise<TokenResult>;
 
 const grantOboToken: (opts: {
   issuer: string;
@@ -37,7 +15,7 @@ const grantOboToken: (opts: {
   client_id: string;
   jwk: string;
   grant_body: GrantBody;
-}) => Promise<OboResult> = async ({
+}) => Promise<TokenResult> = async ({
   issuer,
   token_endpoint,
   client_id,
@@ -60,10 +38,10 @@ const grantOboToken: (opts: {
     });
 
     return access_token
-      ? OboResult.Ok(access_token)
-      : OboResult.Error(Error("TokenSet does not contain an access_token"));
+      ? TokenResult.Ok(access_token)
+      : TokenResult.Error(Error("TokenSet does not contain an access_token"));
   } catch (e) {
-    return OboResult.Error(e as Error);
+    return TokenResult.Error(e as Error);
   }
 };
 
@@ -124,22 +102,22 @@ export const requestTokenxOboToken: OboProvider = withCache(
  */
 export const requestOboToken: OboProvider = async (token, audience) => {
   if (!token) {
-    return OboResult.Error("empty token");
+    return TokenResult.Error("empty token");
   }
   if (!audience) {
-    return OboResult.Error("empty audience");
+    return TokenResult.Error("empty audience");
   }
 
   const tokenx: boolean = !!process.env.TOKEN_X_ISSUER;
   const azure: boolean = !!process.env.AZURE_OPENID_CONFIG_ISSUER;
 
   if (tokenx && azure) {
-    return OboResult.Error("multiple identity providers");
+    return TokenResult.Error("multiple identity providers");
   } else if (tokenx) {
     return requestTokenxOboToken(token, audience);
   } else if (azure) {
     return requestAzureOboToken(token, audience);
   } else {
-    return OboResult.Error("no identity provider");
+    return TokenResult.Error("no identity provider");
   }
 };
