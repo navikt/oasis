@@ -7,6 +7,7 @@ import {
   requestOboToken,
 } from ".";
 import { jwk, jwkPrivate, token } from "../test-provider";
+import { expectNotOK, expectOK } from "../test-expect";
 
 describe("request obo token", () => {
   afterEach(() => {
@@ -16,17 +17,17 @@ describe("request obo token", () => {
 
   it("fails for empty token", async () => {
     const result = await requestOboToken("", "");
-    expect(result.ok).toBe(false);
+    expectNotOK(result);
   });
 
   it("fails for empty audience", async () => {
     const result = await requestOboToken(await token(), "");
-    expect(result.ok).toBe(false);
+    expectNotOK(result);
   });
 
   it("fails with no identity provider", async () => {
     const result = await requestOboToken(await token(), "audience");
-    expect(result.ok).toBe(false);
+    expectNotOK(result);
   });
 
   it("fails with multiple identity providers", async () => {
@@ -34,7 +35,7 @@ describe("request obo token", () => {
     process.env.AZURE_OPENID_CONFIG_ISSUER = "azure_issuer";
 
     const result = await requestOboToken(await token(), "audience");
-    expect(result.ok).toBe(false);
+    expectNotOK(result);
   });
 
   it("selects tokenx", async () => {
@@ -44,7 +45,7 @@ describe("request obo token", () => {
     process.env.TOKEN_X_CLIENT_ID = "token_x_client_id";
 
     const result = await requestOboToken(await token(), "audience");
-    expect(result.ok).toBe(false);
+    expectNotOK(result);
   });
 
   it("selects azure", async () => {
@@ -54,7 +55,7 @@ describe("request obo token", () => {
     process.env.AZURE_APP_JWK = JSON.stringify(await jwkPrivate());
 
     const result = await requestOboToken(await token(), "audience");
-    expect(result.ok).toBe(false);
+    expectNotOK(result);
   });
 });
 
@@ -167,9 +168,10 @@ describe("request tokenX obo token", () => {
     });
     const result = await requestTokenxOboToken(jwt, "audience");
 
-    expect(result.ok && decodeJwt(result.token).iss).toBe("urn:tokenx:dings");
-    expect(result.ok && decodeJwt(result.token).pid).toBe(jwt);
-    expect(result.ok && decodeJwt(result.token).nbf).toBe(undefined);
+    expectOK(result);
+    expect(decodeJwt(result.token).iss).toBe("urn:tokenx:dings");
+    expect(decodeJwt(result.token).pid).toBe(jwt);
+    expect(decodeJwt(result.token).nbf).toBe(undefined);
   });
 
   it("accepts Bearer prefix", async () => {
@@ -179,9 +181,10 @@ describe("request tokenX obo token", () => {
     });
     const result = await requestTokenxOboToken(`Bearer ${jwt}`, "audience");
 
-    expect(result.ok && decodeJwt(result.token).iss).toBe("urn:tokenx:dings");
-    expect(result.ok && decodeJwt(result.token).pid).toBe(jwt);
-    expect(result.ok && decodeJwt(result.token).nbf).toBe(undefined);
+    expectOK(result);
+    expect(decodeJwt(result.token).iss).toBe("urn:tokenx:dings");
+    expect(decodeJwt(result.token).pid).toBe(jwt);
+    expect(decodeJwt(result.token).nbf).toBe(undefined);
   });
 
   it("returns valid token", async () => {
@@ -193,21 +196,19 @@ describe("request tokenX obo token", () => {
       "audience",
     );
 
-    expect(result.ok).toBe(true);
+    expectOK(result);
 
-    if (result.ok) {
-      expect(
-        (() =>
-          jwtVerify(
-            result.token,
-            createRemoteJWKSet(new URL(process.env.TOKEN_X_JWKS_URI!)),
-            {
-              issuer: "urn:tokenx:dings",
-              audience: "audience",
-            },
-          ))(),
-      ).resolves.not.toThrow();
-    }
+    expect(
+      (() =>
+        jwtVerify(
+          result.token,
+          createRemoteJWKSet(new URL(process.env.TOKEN_X_JWKS_URI!)),
+          {
+            issuer: "urn:tokenx:dings",
+            audience: "audience",
+          },
+        ))(),
+    ).resolves.not.toThrow();
   });
 
   it("toString throws", async () => {
@@ -231,7 +232,7 @@ describe("request tokenX obo token", () => {
       }),
       "error-audience",
     );
-    expect(result.ok).toBe(false);
+    expectNotOK(result);
   });
 
   it("returns cached token", async () => {
@@ -242,14 +243,13 @@ describe("request tokenX obo token", () => {
     const result = await requestTokenxOboToken(clientToken, "audience");
     const result2 = await requestTokenxOboToken(clientToken, "audience");
 
-    expect(result.ok).toBe(true);
+    expectOK(result);
+    expectOK(result2);
 
-    if (result.ok && result2.ok) {
-      const token1 = decodeJwt(result.token);
-      const token2 = decodeJwt(result2.token);
+    const token1 = decodeJwt(result.token);
+    const token2 = decodeJwt(result2.token);
 
-      expect(token1.jti).toBe(token2.jti);
-    }
+    expect(token1.jti).toBe(token2.jti);
   });
 
   it("cache times out", async () => {
@@ -273,18 +273,16 @@ describe("request tokenX obo token", () => {
       "short-expiration",
     );
 
-    expect(result.ok).toBe(true);
-    expect(result2.ok).toBe(true);
-    expect(result3.ok).toBe(true);
+    expectOK(result);
+    expectOK(result2);
+    expectOK(result3);
 
-    if (result.ok && result2.ok && result3.ok) {
-      const token1 = decodeJwt(result.token);
-      const token2 = decodeJwt(result2.token);
-      const token3 = decodeJwt(result3.token);
+    const token1 = decodeJwt(result.token);
+    const token2 = decodeJwt(result2.token);
+    const token3 = decodeJwt(result3.token);
 
-      expect(token1.jti).toBe(token2.jti);
-      expect(token1.jti).not.toBe(token3.jti);
-    }
+    expect(token1.jti).toBe(token2.jti);
+    expect(token1.jti).not.toBe(token3.jti);
   });
 });
 
@@ -393,9 +391,10 @@ describe("request azure obo token", () => {
     });
     const result = await requestAzureOboToken(jwt, "audience");
 
-    expect(result.ok && decodeJwt(result.token).iss).toBe("urn:azure:dings");
-    expect(result.ok && decodeJwt(result.token).pid).toBe(jwt);
-    expect(result.ok && decodeJwt(result.token).nbf).toBe(undefined);
+    expectOK(result);
+    expect(decodeJwt(result.token).iss).toBe("urn:azure:dings");
+    expect(decodeJwt(result.token).pid).toBe(jwt);
+    expect(decodeJwt(result.token).nbf).toBe(undefined);
   });
 
   it("returns valid token", async () => {
@@ -407,23 +406,21 @@ describe("request azure obo token", () => {
       "audience",
     );
 
-    expect(result.ok).toBe(true);
+    expectOK(result);
 
-    if (result.ok) {
-      expect(
-        (() =>
-          jwtVerify(
-            result.token,
-            createRemoteJWKSet(
-              new URL(process.env.AZURE_OPENID_CONFIG_JWKS_URI!),
-            ),
-            {
-              issuer: "urn:azure:dings",
-              audience: "audience",
-            },
-          ))(),
-      ).resolves.not.toThrow();
-    }
+    expect(
+      (() =>
+        jwtVerify(
+          result.token,
+          createRemoteJWKSet(
+            new URL(process.env.AZURE_OPENID_CONFIG_JWKS_URI!),
+          ),
+          {
+            issuer: "urn:azure:dings",
+            audience: "audience",
+          },
+        ))(),
+    ).resolves.not.toThrow();
   });
 
   it("returns error when exchange fails", async () => {
@@ -434,6 +431,6 @@ describe("request azure obo token", () => {
       }),
       "error-audience",
     );
-    expect(result.ok).toBe(false);
+    expectNotOK(result);
   });
 });

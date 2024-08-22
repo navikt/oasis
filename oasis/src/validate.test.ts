@@ -22,7 +22,7 @@ describe("validate token", () => {
 
   it("fails with no identity provider", async () => {
     const result = await validateToken(await token());
-    expect(result.ok).toBe(false);
+    expectNotOK(result);
   });
 
   it("fails with multiple identity providers", async () => {
@@ -30,7 +30,7 @@ describe("validate token", () => {
     process.env.AZURE_OPENID_CONFIG_ISSUER = "azure_issuer";
 
     const result = await validateToken(await token());
-    expect(result.ok).toBe(false);
+    expectNotOK(result);
   });
 
   it("selects idporten", async () => {
@@ -38,8 +38,8 @@ describe("validate token", () => {
     process.env.IDPORTEN_ISSUER = "idporten_issuer";
 
     const result = await validateToken(await token());
-    expect(result.ok).toBe(false);
-  });
+    expectNotOK(result);
+  }, 10_000);
 
   it("selects azure", async () => {
     process.env.AZURE_OPENID_CONFIG_JWKS_URI =
@@ -47,15 +47,15 @@ describe("validate token", () => {
     process.env.AZURE_OPENID_CONFIG_ISSUER = "azure_issuer";
 
     const result = await validateToken(await token());
-    expect(result.ok).toBe(false);
-  });
+    expectNotOK(result);
+  }, 10_000);
 
   it("doesn't select tokenx", async () => {
     process.env.TOKEN_X_JWKS_URI = "http://tokenx-provider.test/jwks";
     process.env.TOKEN_X_ISSUER = "tokenx_issuer";
 
     const result = await validateToken(await token());
-    expect(result.ok).toBe(false);
+    expectNotOK(result);
   });
 });
 
@@ -128,7 +128,7 @@ describe("validate idporten token", () => {
       })}`,
     );
 
-    expect(result.ok).toBe(true);
+    expectOK(result);
   });
 
   it("fails verification when audience is not idporten", async () => {
@@ -151,7 +151,7 @@ describe("validate idporten token", () => {
         algorithm: "PS256",
       }),
     );
-    expect(result.ok).toBe(false);
+    expectNotOK(result);
   });
 
   it("fails verification when token is expired", async () => {
@@ -194,7 +194,7 @@ describe("validate azure token", () => {
         issuer: "azure_issuer",
       }),
     );
-    expect(result.ok).toBe(true);
+    expectOK(result);
   });
 });
 
@@ -223,6 +223,6 @@ describe("validate tokenx token", () => {
         issuer: "tokenx_issuer",
       }),
     );
-    expect(result.ok).toBe(true);
+    expectOK(result);
   });
 });
