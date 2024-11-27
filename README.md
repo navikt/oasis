@@ -79,7 +79,7 @@ Prometheus-metrikker for OBO-utveksling er tilgjengelig gjennom biblioteket `"pr
 
 `token: string`: Tokenet du får fra din konsument.
 
-`audience: string`: Client ID til APIet du skal kontakte på formatet `"cluster:namespace:app"`.
+`audience: string`: Client ID til APIet du skal kontakte på formatet `"cluster:namespace:app"` for TokenX eller `"api://cluster.namespace.app/.default" for Azure` (gitt at man skal ha default permissions).
 
 #### Returverdi
 
