@@ -93,6 +93,10 @@ export type AzurePayload = {
   NAVident: string;
   name: string;
   preferred_username: string;
+  /**
+   * Property `groups` is only available for tokens with a user context.
+   */
+  groups?: string[];
 };
 
 /**
