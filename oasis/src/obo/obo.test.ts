@@ -8,6 +8,7 @@ import {
 } from ".";
 import { jwk, jwkPrivate, token } from "../test-provider";
 import { expectNotOK, expectOK } from "../test-expect";
+import { register } from "prom-client";
 
 describe("request obo token", () => {
   afterEach(() => {
@@ -172,6 +173,22 @@ describe("request tokenX obo token", () => {
     expect(decodeJwt(result.token).iss).toBe("urn:tokenx:dings");
     expect(decodeJwt(result.token).pid).toBe(jwt);
     expect(decodeJwt(result.token).nbf).toBe(undefined);
+  });
+
+  it("has a prometheus named tokenx", async () => {
+    const jwt = await token({
+      audience: "idporten_audience",
+      issuer: "idporten_issuer",
+    });
+    await requestTokenxOboToken(`Bearer ${jwt}`, "audience");
+
+    const metric = await register
+      .getSingleMetric("oasis_token_exchanges")!
+      .get();
+
+    expect(metric.values[0].labels).toMatchObject({
+      provider: "tokenx",
+    });
   });
 
   it("accepts Bearer prefix", async () => {

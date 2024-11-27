@@ -53,8 +53,8 @@ const grantOboToken: (opts: {
  * @param audience The target app you request a token for (scope).
  */
 export const requestAzureOboToken: OboProvider = withCache(
-  withPrometheus(async (token, scope) =>
-    grantOboToken({
+  withPrometheus(async function azure(token, scope) {
+    return grantOboToken({
       issuer: process.env.AZURE_OPENID_CONFIG_ISSUER!,
       token_endpoint: process.env.AZURE_OPENID_CONFIG_TOKEN_ENDPOINT!,
       client_id: process.env.AZURE_APP_CLIENT_ID!,
@@ -65,8 +65,8 @@ export const requestAzureOboToken: OboProvider = withCache(
         assertion: stripBearer(token),
         scope,
       },
-    }),
-  ),
+    });
+  }),
 );
 
 /**
@@ -77,8 +77,8 @@ export const requestAzureOboToken: OboProvider = withCache(
  * @param audience The target app you request a token for.
  */
 export const requestTokenxOboToken: OboProvider = withCache(
-  withPrometheus(async (token, audience) =>
-    grantOboToken({
+  withPrometheus(async function tokenx(token, audience) {
+    return grantOboToken({
       issuer: process.env.TOKEN_X_ISSUER!,
       token_endpoint: process.env.TOKEN_X_TOKEN_ENDPOINT!,
       client_id: process.env.TOKEN_X_CLIENT_ID!,
@@ -89,8 +89,8 @@ export const requestTokenxOboToken: OboProvider = withCache(
         subject_token: stripBearer(token),
         audience,
       },
-    }),
-  ),
+    });
+  }),
 );
 
 /**
