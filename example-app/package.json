@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19",
+    "@types/react-dom": "^19.0.3",
     "eslint-config-next": "^15.0.3",
     "jose": "^5.2.3",
     "msw": "^2.1.7",
