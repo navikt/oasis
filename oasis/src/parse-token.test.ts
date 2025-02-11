@@ -3,18 +3,20 @@ import { token } from "./test-provider";
 import { expectNotOK, expectOK } from "./test-expect";
 
 describe("parseIdportenToken", () => {
-  it("should return pid", async () => {
+  it("should return pid and acr", async () => {
     const res = parseIdportenToken(
       await token({
         pid: "real-pid",
+        acr: "acr",
       }),
     );
 
     expectOK(res);
     expect(res.pid).toBe("real-pid");
+    expect(res.acr).toBe("acr");
   });
 
-  it("should handle PID not being a string", async () => {
+  it("should not be ok when payload is invalid", async () => {
     const res = parseIdportenToken(await token());
 
     expectNotOK(res);

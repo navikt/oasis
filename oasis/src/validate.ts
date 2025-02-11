@@ -71,6 +71,7 @@ const validateJwt = async ({
 
 export type IdportenPayload = {
   pid: string;
+  acr: string;
 };
 
 /**
