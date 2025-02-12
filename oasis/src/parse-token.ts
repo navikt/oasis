@@ -17,8 +17,8 @@ export function parseIdportenToken(
   try {
     const payload = decodeJwt(token);
 
-    if (typeof payload.pid === "string" && typeof payload.acr === "string") {
-      return { ok: true, pid: payload.pid, acr: payload.acr };
+    if (typeof payload.pid === "string") {
+      return { ok: true, pid: payload.pid };
     }
 
     return {
