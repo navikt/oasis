@@ -36,6 +36,7 @@ describe("parseAzureUserToken", () => {
         NAVident: "navident",
         preferred_username: "username",
         name: "name",
+        groups: ["group1", "group2"],
       }),
     );
 
@@ -43,6 +44,7 @@ describe("parseAzureUserToken", () => {
     expect(res.name).toBe("name");
     expect(res.NAVident).toBe("navident");
     expect(res.preferred_username).toBe("username");
+    expect(res.groups).toEqual(["group1", "group2"]);
   });
 
   it("should not be OK when values are missing", async () => {
