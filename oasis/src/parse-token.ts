@@ -48,13 +48,16 @@ export function parseAzureUserToken(token: string): ParseResult<AzurePayload> {
     if (
       typeof payload.preferred_username === "string" &&
       typeof payload.name === "string" &&
-      typeof payload.NAVident === "string"
+      typeof payload.NAVident === "string" &&
+      Array.isArray(payload.groups) &&
+      payload.groups.every((group) => typeof group === "string")
     ) {
       return {
         ok: true,
         NAVident: payload.NAVident,
         preferred_username: payload.preferred_username,
         name: payload.name,
+        groups: payload.groups,
       };
     }
 
