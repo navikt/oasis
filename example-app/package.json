@@ -15,10 +15,10 @@
   "dependencies": {
     "@navikt/oasis": "*",
     "next": "^15.0.3",
-    "react": "^18.2.0"
+    "react": "^19.1.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.55",
+    "@types/react": "^19.1.7",
     "@types/react-dom": "^19.1.6",
     "eslint-config-next": "^15.0.3",
     "jose": "^5.2.3",
