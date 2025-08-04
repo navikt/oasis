@@ -21,7 +21,7 @@
     "@types/react": "^19.1.7",
     "@types/react-dom": "^19.1.6",
     "eslint-config-next": "^15.0.3",
-    "jose": "^5.2.3",
+    "jose": "^6.0.12",
     "msw": "^2.1.7",
     "typescript": "^5.3.3"
   }
