@@ -1,4 +1,4 @@
-FROM node:23@sha256:ee8a0bc5bbaece0c538c76e7c20fde6d4db319bbd5d4e423940999f16da89aa1 AS builder
+FROM node:24@sha256:222f704ce7f499c7bd7d101c993b980d86393e87bb54d416bcfcfe8e62aa9f64 AS builder
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN npm ci --prefer-offline --no-audit
 RUN npm run build-lib
 RUN npm run build
 
-FROM node:23-alpine@sha256:86703151a18fcd06258e013073508c4afea8e19cd7ed451554221dd00aea83fc AS runtime
+FROM node:24-alpine@sha256:37712740dc486f179b9540be1c6703cef3f805ea932573a007db748b71189afe AS runtime
 
 WORKDIR /app
 
