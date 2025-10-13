@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { expiresIn } from "./expires-in";
 import { token, tokenWithoutExp } from "./test-provider";
 
