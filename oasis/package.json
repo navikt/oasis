@@ -24,8 +24,8 @@
     "@typescript-eslint/parser": "^8.16.0",
     "eslint": "^9.28.0",
     "jose": "^5.9.6",
-    "msw": "^2.2.1",
-    "node-mocks-http": "^1.14.1",
+    "msw": "^2.11.5",
+    "node-mocks-http": "^1.17.2",
     "tsup": "^8.5.0",
     "typescript": "^5.7.2",
     "vitest": "^3.2.4"

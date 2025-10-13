@@ -1,5 +1,4 @@
 import { describe, afterEach, beforeAll, afterAll, it, expect } from "vitest";
-import { createRemoteJWKSet, decodeJwt, jwtVerify } from "jose";
 import { HttpResponse, http } from "msw";
 import { type SetupServer, setupServer } from "msw/node";
 import {
@@ -9,6 +8,12 @@ import {
 } from ".";
 import { jwk, jwkPrivate, token } from "../test-provider";
 import { expectNotOK, expectOK } from "../test-expect";
+import type {
+  ErrorResponse,
+  TokenExchangeRequest,
+  TokenExchangeResponse,
+} from "../texas/types.gen";
+import { decodeJwt } from "../token/utils";
 
 describe("request obo token", () => {
   afterEach(() => {
@@ -64,95 +69,43 @@ describe("request tokenX obo token", () => {
   let server: SetupServer;
 
   beforeAll(async () => {
-    process.env.TOKEN_X_CLIENT_ID = "token_x_client_id";
-    process.env.TOKEN_X_PRIVATE_JWK = JSON.stringify(await jwkPrivate());
-    process.env.TOKEN_X_WELL_KNOWN_URL = "http://tokenx-provider.test/jwks";
-    process.env.TOKEN_X_ISSUER = "tokenx_issuer";
-    process.env.TOKEN_X_TOKEN_ENDPOINT = "http://tokenx.test/token";
-    process.env.TOKEN_X_JWKS_URI = "http://tokenx-provider.test/token";
-
-    const token_endpoint = "http://tokenx.test/token";
+    process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT =
+      "http://texas/api/v1/token/exchange";
 
     server = setupServer(
-      http.get(process.env.TOKEN_X_JWKS_URI, async () =>
-        HttpResponse.json({ keys: [await jwk()] }),
-      ),
-      http.post(token_endpoint, async ({ request }) => {
-        const {
-          audience,
-          subject_token,
-          grant_type,
-          client_assertion_type,
-          subject_token_type,
-          client_assertion,
-        } = Object.fromEntries(new URLSearchParams(await request.text()));
+      http.post<
+        never,
+        TokenExchangeRequest,
+        TokenExchangeResponse | ErrorResponse
+      >(process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT, async ({ request }) => {
+        const body = await request.json();
 
-        const client_assert_token = await jwtVerify(
-          client_assertion,
-          createRemoteJWKSet(new URL(process.env.TOKEN_X_JWKS_URI!)),
-          {
-            subject: "token_x_client_id",
-            issuer: "token_x_client_id",
-            algorithms: ["RS256"],
-          },
-        );
-
-        if (client_assert_token.payload.aud !== "http://tokenx.test/token") {
-          console.error(
-            "wrong client_assert.aud",
-            client_assert_token.payload.aud,
+        if (body.target === "error-audience") {
+          return HttpResponse.json(
+            {
+              error: "invalid_scope",
+              error_description: "Invalid or missing scope",
+            },
+            { status: 400 },
           );
-          return HttpResponse.json({});
-        } else if (
-          grant_type !== "urn:ietf:params:oauth:grant-type:token-exchange"
-        ) {
-          console.error("wrong grant_type");
-          return HttpResponse.json({});
-        } else if (
-          client_assertion_type !==
-          "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
-        ) {
-          console.error("wrong client_assertion_type");
-          return HttpResponse.json({});
-        } else if (
-          subject_token_type !== "urn:ietf:params:oauth:token-type:jwt"
-        ) {
-          console.error("wrong subject_token_type");
-          return HttpResponse.json({});
-        } else if (
-          Math.abs(
-            client_assert_token.payload.nbf! - Math.floor(Date.now() / 1000),
-          ) > 10
-        ) {
-          console.error("wrong client_assert_token.payload.nbf");
-          return HttpResponse.json({});
-        } else if (!client_assert_token.payload.jti) {
-          console.error("missing client_assert_token.payload.jti");
-          return HttpResponse.json({});
-        } else if (
-          client_assert_token.payload.exp! - Math.floor(Date.now() / 1000) >
-          120
-        ) {
-          console.error("client_assert_token.payload.exp too large");
-          return HttpResponse.json({});
-        } else if (audience === "error-audience") {
-          return HttpResponse.json({});
-        } else if (audience === "short-expiration") {
+        } else if (body.target === "short-expiration") {
           return HttpResponse.json({
             access_token: await token({
-              pid: subject_token,
               issuer: "urn:tokenx:dings",
-              audience,
+              audience: body.target,
               exp: Math.round(Date.now() / 1000) + 7,
             }),
+            expires_in: Math.round(Date.now() / 1000) + 7,
+            token_type: "Bearer",
           });
         } else {
           return HttpResponse.json({
             access_token: await token({
-              pid: subject_token,
               issuer: "urn:tokenx:dings",
-              audience,
+              audience: body.target,
             }),
+            expires_in: 3600,
+            token_type: "Bearer",
           });
         }
       }),
@@ -171,7 +124,6 @@ describe("request tokenX obo token", () => {
 
     expectOK(result);
     expect(decodeJwt(result.token).iss).toBe("urn:tokenx:dings");
-    expect(decodeJwt(result.token).pid).toBe(jwt);
     expect(decodeJwt(result.token).nbf).toBe(undefined);
   });
 
@@ -184,36 +136,11 @@ describe("request tokenX obo token", () => {
 
     expectOK(result);
     expect(decodeJwt(result.token).iss).toBe("urn:tokenx:dings");
-    expect(decodeJwt(result.token).pid).toBe(jwt);
     expect(decodeJwt(result.token).nbf).toBe(undefined);
   });
 
-  it("returns valid token", async () => {
-    const result = await requestTokenxOboToken(
-      await token({
-        audience: "idporten_audience",
-        issuer: "idporten_issuer",
-      }),
-      "audience",
-    );
-
-    expectOK(result);
-
-    expect(
-      (() =>
-        jwtVerify(
-          result.token,
-          createRemoteJWKSet(new URL(process.env.TOKEN_X_JWKS_URI!)),
-          {
-            issuer: "urn:tokenx:dings",
-            audience: "audience",
-          },
-        ))(),
-    ).resolves.not.toThrow();
-  });
-
   it("toString throws", async () => {
-    expect(async () => {
+    await expect(async () => {
       const result = await requestTokenxOboToken(
         await token({
           audience: "idporten_audience",
@@ -291,44 +218,18 @@ describe("request azure obo token", () => {
   let server: SetupServer;
 
   beforeAll(async () => {
-    process.env.AZURE_APP_CLIENT_ID = "azure_client_id";
-    process.env.AZURE_APP_CLIENT_SECRET = "azure_client_secret";
-    process.env.AZURE_APP_JWK = JSON.stringify(await jwkPrivate());
-    process.env.AZURE_OPENID_CONFIG_ISSUER = "azure_issuer";
-    process.env.AZURE_OPENID_CONFIG_TOKEN_ENDPOINT = "http://azure.test/token";
-    process.env.AZURE_OPENID_CONFIG_JWKS_URI =
-      "http://tokenx-provider.test/jwks";
-
-    const token_endpoint = "http://azure.test/token";
+    process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT =
+      "http://texas/api/v1/token/exchange";
 
     server = setupServer(
-      http.get(process.env.AZURE_OPENID_CONFIG_JWKS_URI, async () =>
-        HttpResponse.json({ keys: [await jwk()] }),
-      ),
-      http.post(token_endpoint, async ({ request }) => {
-        const {
-          scope,
-          assertion,
-          client_assertion,
-          requested_token_use,
-          grant_type,
-          client_assertion_type,
-          client_id,
-        } = Object.fromEntries(new URLSearchParams(await request.text()));
+      http.post<
+        never,
+        TokenExchangeRequest,
+        TokenExchangeResponse | ErrorResponse
+      >(process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT, async ({ request }) => {
+        const body = await request.json();
 
-        const client_assert_token = await jwtVerify(
-          client_assertion,
-          createRemoteJWKSet(
-            new URL(process.env.AZURE_OPENID_CONFIG_JWKS_URI!),
-          ),
-          {
-            subject: "azure_client_id",
-            issuer: "azure_client_id",
-            algorithms: ["RS256"],
-          },
-        );
-
-        if (client_assert_token.payload.aud !== "http://azure.test/token") {
+        /*if (client_assert_token.payload.aud !== "http://azure.test/token") {
           console.error(
             "wrong client_assert.aud",
             client_assert_token.payload.aud,
@@ -367,15 +268,23 @@ describe("request azure obo token", () => {
         ) {
           console.error("client_assert_token.payload.exp too large");
           return HttpResponse.json({});
-        } else if (scope === "error-audience") {
-          return HttpResponse.json({});
+        } else*/
+        if (body.target === "error-audience") {
+          return HttpResponse.json(
+            {
+              error: "invalid_scope",
+              error_description: "Invalid or missing scope",
+            },
+            { status: 400 },
+          );
         } else {
           return HttpResponse.json({
             access_token: await token({
-              pid: assertion,
               issuer: "urn:azure:dings",
-              audience: scope,
+              audience: body.target,
             }),
+            expires_in: 3600,
+            token_type: "Bearer",
           });
         }
       }),
@@ -394,34 +303,7 @@ describe("request azure obo token", () => {
 
     expectOK(result);
     expect(decodeJwt(result.token).iss).toBe("urn:azure:dings");
-    expect(decodeJwt(result.token).pid).toBe(jwt);
     expect(decodeJwt(result.token).nbf).toBe(undefined);
-  });
-
-  it("returns valid token", async () => {
-    const result = await requestAzureOboToken(
-      await token({
-        audience: "azure_audience",
-        issuer: "azure_issuer",
-      }),
-      "audience",
-    );
-
-    expectOK(result);
-
-    expect(
-      (() =>
-        jwtVerify(
-          result.token,
-          createRemoteJWKSet(
-            new URL(process.env.AZURE_OPENID_CONFIG_JWKS_URI!),
-          ),
-          {
-            issuer: "urn:azure:dings",
-            audience: "audience",
-          },
-        ))(),
-    ).resolves.not.toThrow();
   });
 
   it("returns error when exchange fails", async () => {

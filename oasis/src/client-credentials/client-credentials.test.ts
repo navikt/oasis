@@ -7,49 +7,44 @@ import { token } from "../test-provider";
 
 import { requestAzureClientCredentialsToken } from "./";
 import { expectNotOK, expectOK } from "../test-expect";
+import type {
+  ErrorResponse,
+  TokenRequest,
+  TokenResponse,
+} from "../texas/types.gen";
 
 describe("request azure client-credentials token", () => {
   let server: SetupServer;
 
   beforeAll(async () => {
-    process.env.AZURE_OPENID_CONFIG_ISSUER = "azure_issuer";
-    process.env.AZURE_OPENID_CONFIG_TOKEN_ENDPOINT = "http://azure.test/token";
-    process.env.AZURE_APP_CLIENT_ID = "azure_client_id";
-    process.env.AZURE_APP_CLIENT_SECRET = "azure_client_secret";
-
-    const token_endpoint = "http://azure.test/token";
+    process.env.NAIS_TOKEN_ENDPOINT = "http://texas/api/v1/token";
 
     server = setupServer(
-      http.post(token_endpoint, async ({ request }) => {
-        const { scope, assertion, grant_type, client_id, client_secret } =
-          Object.fromEntries(new URLSearchParams(await request.text()));
+      http.post<never, TokenRequest, TokenResponse | ErrorResponse>(
+        process.env.NAIS_TOKEN_ENDPOINT,
+        async ({ request }) => {
+          const body = await request.json();
 
-        if (grant_type !== "client_credentials") {
-          console.error("wrong grant_type");
-          return HttpResponse.json({});
-        }
+          if (body.target === "error-audience") {
+            return HttpResponse.json(
+              {
+                error: "invalid_scope",
+                error_description: "Invalid or missing scope",
+              },
+              { status: 400 },
+            );
+          }
 
-        if (client_secret !== "azure_client_secret") {
-          console.error("wrong azure_client_secret");
-        }
-
-        if (client_id !== "azure_client_id") {
-          console.error("wrong client_id");
-          return HttpResponse.json({});
-        }
-
-        if (scope === "error-audience") {
-          return HttpResponse.json({});
-        }
-
-        return HttpResponse.json({
-          access_token: await token({
-            pid: assertion,
-            issuer: "urn:azure:dings",
-            audience: scope,
-          }),
-        });
-      }),
+          return HttpResponse.json({
+            access_token: await token({
+              issuer: "urn:azure:dings",
+              audience: body.target,
+            }),
+            expires_in: 3600,
+            token_type: "Bearer",
+          });
+        },
+      ),
     );
     server.listen();
   });
@@ -70,8 +65,6 @@ describe("request azure client-credentials token", () => {
     const result = await requestAzureClientCredentialsToken("error-audience");
 
     expectNotOK(result);
-    expect(result.error.message).toEqual(
-      "TokenSet does not contain an access_token",
-    );
+    expect(result.error.message).toEqual("Invalid or missing scope");
   });
 });
