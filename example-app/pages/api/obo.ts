@@ -23,9 +23,9 @@ export default async function authenticatedHandler(
         .status(200)
         .send(`Made obo-token request: got ${oboRes.token.length}`);
     } else {
-      res.status(401);
+      res.status(401).send("Failed to get obo-token");
     }
   } else {
-    return res.status(401);
+    return res.status(401).send("Invalid token");
   }
 }

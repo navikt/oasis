@@ -1,6 +1,9 @@
-import { jwk, token } from "@/test-provider";
+/** biome-ignore-all lint/style/noNonNullAssertion: Mock server, is fine */
+
 import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
+
+import { jwk, token } from "@/mocks/test-provider";
 
 export const server = setupServer(
   http.get(process.env.IDPORTEN_JWKS_URI!, async () =>
