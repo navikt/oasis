@@ -9,7 +9,8 @@
     "moduleResolution": "Node",
     "incremental": true,
     "resolveJsonModule": true,
-    "declaration": true
+    "declaration": true,
+    "allowImportingTsExtensions": true
   },
   "include": ["./src"]
 }
