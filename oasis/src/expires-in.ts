@@ -1,4 +1,4 @@
-import { decodeJwt } from "jose";
+import { decodeJwt } from "./token/utils";
 
 /**
  * Returns seconds until token expires.
@@ -7,7 +7,7 @@ import { decodeJwt } from "jose";
  */
 export const expiresIn = (token: string): number => {
   const { exp } = decodeJwt(token);
-  if (exp === undefined) {
+  if (exp === undefined || typeof exp !== "number") {
     throw Error("missing exp payload");
   } else {
     return Math.floor(exp - Date.now() / 1000);

@@ -1,41 +1,21 @@
-import { GrantBody, Issuer } from "openid-client";
 import { withCache } from "../token-cache";
-import { withPrometheus } from "./prometheus";
-import { stripBearer } from "../strip-bearer";
 import { TokenResult } from "../token-result";
+import { texas } from "../texas/texas";
+import type { IdentityProvider } from "../texas/types.gen";
+import { stripBearer } from "../token/utils";
 
 export type OboProvider = (
   token: string,
   audience: string,
 ) => Promise<TokenResult>;
 
-const grantOboToken: (opts: {
-  issuer: string;
-  token_endpoint: string;
-  client_id: string;
-  jwk: string;
-  grant_body: GrantBody;
-}) => Promise<TokenResult> = async ({
-  issuer,
-  token_endpoint,
-  client_id,
-  jwk,
-  grant_body,
-}) => {
+const grantOboToken: (
+  token: string,
+  target: string,
+  provider: IdentityProvider,
+) => Promise<TokenResult> = async (token, target, provider) => {
   try {
-    const { access_token } = await new new Issuer({
-      issuer,
-      token_endpoint,
-      token_endpoint_auth_signing_alg_values_supported: ["RS256"],
-    }).Client(
-      { client_id, token_endpoint_auth_method: "private_key_jwt" },
-      { keys: [JSON.parse(jwk)] },
-    ).grant(grant_body, {
-      clientAssertionPayload: {
-        nbf: Math.floor(Date.now() / 1000),
-        aud: token_endpoint,
-      },
-    });
+    const { access_token } = await texas.exchange(token, target, provider);
 
     return access_token
       ? TokenResult.Ok(access_token)
@@ -53,20 +33,8 @@ const grantOboToken: (opts: {
  * @param audience The target app you request a token for (scope).
  */
 export const requestAzureOboToken: OboProvider = withCache(
-  withPrometheus(async function azure(token, scope) {
-    return grantOboToken({
-      issuer: process.env.AZURE_OPENID_CONFIG_ISSUER!,
-      token_endpoint: process.env.AZURE_OPENID_CONFIG_TOKEN_ENDPOINT!,
-      client_id: process.env.AZURE_APP_CLIENT_ID!,
-      jwk: process.env.AZURE_APP_JWK!,
-      grant_body: {
-        grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-        requested_token_use: "on_behalf_of",
-        assertion: stripBearer(token),
-        scope,
-      },
-    });
-  }),
+  (token: string, scope: string): Promise<TokenResult> =>
+    grantOboToken(token, scope, "azuread"),
 );
 
 /**
@@ -77,20 +45,8 @@ export const requestAzureOboToken: OboProvider = withCache(
  * @param audience The target app you request a token for.
  */
 export const requestTokenxOboToken: OboProvider = withCache(
-  withPrometheus(async function tokenx(token, audience) {
-    return grantOboToken({
-      issuer: process.env.TOKEN_X_ISSUER!,
-      token_endpoint: process.env.TOKEN_X_TOKEN_ENDPOINT!,
-      client_id: process.env.TOKEN_X_CLIENT_ID!,
-      jwk: process.env.TOKEN_X_PRIVATE_JWK!,
-      grant_body: {
-        grant_type: "urn:ietf:params:oauth:grant-type:token-exchange",
-        subject_token_type: "urn:ietf:params:oauth:token-type:jwt",
-        subject_token: stripBearer(token),
-        audience,
-      },
-    });
-  }),
+  (token: string, audience: string): Promise<TokenResult> =>
+    grantOboToken(token, audience, "tokenx"),
 );
 
 /**
@@ -101,23 +57,23 @@ export const requestTokenxOboToken: OboProvider = withCache(
  * @param audience The target app you request a token for.
  */
 export const requestOboToken: OboProvider = async (token, audience) => {
-  if (!token) {
-    return TokenResult.Error("empty token");
-  }
-  if (!audience) {
-    return TokenResult.Error("empty audience");
-  }
+  if (!token) return TokenResult.Error("empty token");
+  if (!audience) return TokenResult.Error("empty audience");
 
   const tokenx: boolean = !!process.env.TOKEN_X_ISSUER;
   const azure: boolean = !!process.env.AZURE_OPENID_CONFIG_ISSUER;
 
   if (tokenx && azure) {
-    return TokenResult.Error("multiple identity providers");
+    return TokenResult.Error(
+      "Multiple identity providers, use requestTokenxOboToken or requestAzureOboToken directly!",
+    );
   } else if (tokenx) {
-    return requestTokenxOboToken(token, audience);
+    return requestTokenxOboToken(stripBearer(token), audience);
   } else if (azure) {
-    return requestAzureOboToken(token, audience);
+    return requestAzureOboToken(stripBearer(token), audience);
   } else {
-    return TokenResult.Error("no identity provider");
+    return TokenResult.Error(
+      "No identity provider configured in your nais.yaml",
+    );
   }
 };

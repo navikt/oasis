@@ -1,7 +1,7 @@
-import { Issuer } from "openid-client";
-
 import { withCache } from "../token-cache";
 import { TokenResult } from "../token-result";
+import { texas } from "../texas/texas";
+import type { IdentityProvider } from "../texas/types.gen";
 
 export type ClientCredientialsProvider = (
   scope: string,
@@ -14,42 +14,17 @@ export type ClientCredientialsProvider = (
  * @param audience The target app you request a token for.
  */
 export const requestAzureClientCredentialsToken: ClientCredientialsProvider =
-  withCache(async (scope) =>
-    grantClientCredentialsToken({
-      issuer: process.env.AZURE_OPENID_CONFIG_ISSUER!,
-      token_endpoint: process.env.AZURE_OPENID_CONFIG_TOKEN_ENDPOINT!,
-      client_id: process.env.AZURE_APP_CLIENT_ID!,
-      client_secret: process.env.AZURE_APP_CLIENT_SECRET!,
-      scope: scope,
-    }),
-  );
+  withCache(async (scope) => grantClientCredentialsToken("azuread", scope));
 
-const grantClientCredentialsToken: (opts: {
-  issuer: string;
-  token_endpoint: string;
-  client_id: string;
-  client_secret: string;
-  scope: string;
-}) => Promise<TokenResult> = async ({
-  issuer,
-  token_endpoint,
-  client_id,
-  client_secret,
-  scope,
-}) => {
+const grantClientCredentialsToken: (
+  provider: IdentityProvider,
+  target: string,
+) => Promise<TokenResult> = async (provider, target) => {
   try {
-    const { access_token } = await new new Issuer({
-      issuer,
-      token_endpoint,
-      token_endpoint_auth_signing_alg_values_supported: ["RS256"],
-    }).Client({
-      client_id,
-      client_secret,
-      token_endpoint_auth_method: "client_secret_post",
-    }).grant({
-      grant_type: "client_credentials",
-      scope,
-    });
+    const { access_token } = await texas.token(
+      provider,
+      target as `api://${string}.${string}.${string}/.default`,
+    );
 
     return access_token
       ? TokenResult.Ok(access_token)

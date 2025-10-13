@@ -1,5 +1,6 @@
 import { IncomingMessage } from "http";
-import { stripBearer } from "./strip-bearer";
+
+import { stripBearer } from "./token/utils";
 
 /**
  * Extracts token for your convenience.
