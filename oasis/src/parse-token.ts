@@ -1,4 +1,4 @@
-import { AzurePayload, IdportenPayload } from "./validate";
+import type { AzurePayload, IdportenPayload } from "./validate";
 import { decodeJwt } from "./token/utils";
 
 export type ParseResult<Payload> =

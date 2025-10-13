@@ -1,7 +1,7 @@
 import { token } from "../test-provider";
 import { withCache } from ".";
 import { TokenResult } from "../token-result";
-import { OboProvider } from "../obo";
+import { type OboProvider } from "../obo";
 
 describe("withCache", () => {
   it("measures cache hits", async () => {
