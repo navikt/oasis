@@ -1,0 +1,10 @@
+{
+  "root": false,
+  "extends": "//",
+  "files": {
+    "includes": ["./src/**/*", "./biome.json", "package.json"]
+  },
+  "linter": {
+    "rules": {}
+  }
+}

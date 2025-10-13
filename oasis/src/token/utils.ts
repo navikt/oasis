@@ -1,7 +1,7 @@
 export const decodeJwt = (token: string): Record<string, unknown> => {
   try {
     return JSON.parse(atob(token.split(".")[1]));
-  } catch (e) {
+  } catch {
     throw new Error("Invalid JWT");
   }
 };

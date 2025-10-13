@@ -15,14 +15,12 @@
   "scripts": {
     "build": "tsup",
     "test": "vitest",
+    "lint": "eslint src",
     "type-check": "tsc --pretty --noEmit",
     "gen:texas": "openapi-ts"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.85.1",
-    "@typescript-eslint/eslint-plugin": "^8.16.0",
-    "@typescript-eslint/parser": "^8.16.0",
-    "eslint": "^9.28.0",
     "jose": "^5.9.6",
     "msw": "^2.11.5",
     "node-mocks-http": "^1.17.2",

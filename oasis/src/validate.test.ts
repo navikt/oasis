@@ -7,7 +7,7 @@ import {
   validateAzureToken,
   validateTokenxToken,
 } from "./validate";
-import { jwk, token } from "./test-provider";
+import { token } from "./test-provider";
 import { expectNotOK, expectOK } from "./test-expect";
 import type { IntrospectRequest, IntrospectResponse } from "./texas/types.gen";
 import { decodeJwt } from "./token/utils";
