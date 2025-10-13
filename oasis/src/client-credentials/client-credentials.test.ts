@@ -1,4 +1,4 @@
-import { setupServer, SetupServer } from "msw/node";
+import { setupServer, type SetupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
 import { decodeJwt } from "jose";
 

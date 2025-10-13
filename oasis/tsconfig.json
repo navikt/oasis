@@ -1,15 +1,18 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "target": "ES6",
-    "skipLibCheck": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022"],
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
     "strict": true,
     "esModuleInterop": true,
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "incremental": true,
-    "resolveJsonModule": true,
-    "declaration": true
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": true
   },
-  "include": ["./src"]
+  "include": ["src"]
 }

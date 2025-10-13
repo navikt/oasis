@@ -1,6 +1,6 @@
 import { createRemoteJWKSet, decodeJwt, jwtVerify } from "jose";
 import { HttpResponse, http } from "msw";
-import { SetupServer, setupServer } from "msw/node";
+import { type SetupServer, setupServer } from "msw/node";
 import {
   requestTokenxOboToken,
   requestAzureOboToken,

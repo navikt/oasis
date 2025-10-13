@@ -10,12 +10,12 @@ export {
   validateAzureToken,
   validateIdportenToken,
   validateTokenxToken,
-  ValidationResult,
+  type ValidationResult,
 } from "./validate";
 export {
   parseAzureUserToken,
   parseIdportenToken,
-  ParseResult,
+  type ParseResult,
 } from "./parse-token";
 export { getToken } from "./get-token";
 export { expiresIn } from "./expires-in";

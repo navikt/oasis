@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { OboProvider } from "../obo";
-import { ClientCredientialsProvider } from "../client-credentials";
+import { type OboProvider } from "../obo";
+import { type ClientCredientialsProvider } from "../client-credentials";
 import { expiresIn } from "../expires-in";
 import SieveCache from "./cache";
 import { TokenResult } from "../token-result";

@@ -40,7 +40,7 @@ export const texas = {
       );
     }
 
-    return response.json();
+    return (await response.json()) as IntrospectResponse;
   },
   exchange: async (
     token: string,
@@ -70,7 +70,7 @@ export const texas = {
       );
     }
 
-    return response.json();
+    return (await response.json()) as TokenResponse;
   },
   token: async (
     provider: IdentityProvider,
@@ -98,6 +98,6 @@ export const texas = {
       );
     }
 
-    return response.json();
+    return (await response.json()) as TokenResponse;
   },
 };
