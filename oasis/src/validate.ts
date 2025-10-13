@@ -1,6 +1,6 @@
 import { texas } from "./texas/texas";
+import type { IdentityProvider } from "./texas/types.gen";
 import { stripBearer } from "./token/utils";
-import { type IdentityProvider } from "./texas/types.gen";
 
 type ErrorTypes = "token expired" | "unknown";
 

@@ -1,16 +1,16 @@
-import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { HttpResponse, http } from "msw";
 import { type SetupServer, setupServer } from "msw/node";
-import {
-  validateToken,
-  validateIdportenToken,
-  validateAzureToken,
-  validateTokenxToken,
-} from "./validate";
-import { token } from "./test-provider";
+import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { expectNotOK, expectOK } from "./test-expect";
+import { token } from "./test-provider";
 import type { IntrospectRequest, IntrospectResponse } from "./texas/types.gen";
 import { decodeJwt } from "./token/utils";
+import {
+  validateAzureToken,
+  validateIdportenToken,
+  validateToken,
+  validateTokenxToken,
+} from "./validate";
 
 describe("validate token", () => {
   let server: SetupServer;

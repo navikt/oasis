@@ -1,17 +1,15 @@
-import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
-import { setupServer, type SetupServer } from "msw/node";
-import { http, HttpResponse } from "msw";
 import { decodeJwt } from "jose";
-
-import { token } from "../test-provider";
-
-import { requestAzureClientCredentialsToken } from "./";
+import { HttpResponse, http } from "msw";
+import { type SetupServer, setupServer } from "msw/node";
+import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { expectNotOK, expectOK } from "../test-expect";
+import { token } from "../test-provider";
 import type {
   ErrorResponse,
   TokenRequest,
   TokenResponse,
 } from "../texas/types.gen";
+import { requestAzureClientCredentialsToken } from "./";
 
 describe("request azure client-credentials token", () => {
   let server: SetupServer;

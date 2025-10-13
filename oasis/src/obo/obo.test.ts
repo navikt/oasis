@@ -1,19 +1,19 @@
-import { describe, afterEach, beforeAll, afterAll, it, expect } from "vitest";
 import { HttpResponse, http } from "msw";
 import { type SetupServer, setupServer } from "msw/node";
-import {
-  requestTokenxOboToken,
-  requestAzureOboToken,
-  requestOboToken,
-} from ".";
-import { jwkPrivate, token } from "../test-provider";
+import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { expectNotOK, expectOK } from "../test-expect";
+import { jwkPrivate, token } from "../test-provider";
 import type {
   ErrorResponse,
   TokenExchangeRequest,
   TokenExchangeResponse,
 } from "../texas/types.gen";
 import { decodeJwt } from "../token/utils";
+import {
+  requestAzureOboToken,
+  requestOboToken,
+  requestTokenxOboToken,
+} from ".";
 
 describe("request obo token", () => {
   afterEach(() => {

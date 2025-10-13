@@ -1,11 +1,11 @@
-import {
-  type ErrorResponse,
-  type IdentityProvider,
-  type IntrospectRequest,
-  type IntrospectResponse,
-  type TokenExchangeRequest,
-  type TokenRequest,
-  type TokenResponse,
+import type {
+  ErrorResponse,
+  IdentityProvider,
+  IntrospectRequest,
+  IntrospectResponse,
+  TokenExchangeRequest,
+  TokenRequest,
+  TokenResponse,
 } from "./types.gen";
 
 const getTexasConfig = () => ({
