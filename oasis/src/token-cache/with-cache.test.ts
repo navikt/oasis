@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
+import type { OboProvider } from "../obo";
 import { token } from "../test-provider";
-import { withCache } from ".";
 import { TokenResult } from "../token-result";
-import { type OboProvider } from "../obo";
+import { withCache } from ".";
 
 describe("withCache", () => {
   it("measures cache hits", async () => {

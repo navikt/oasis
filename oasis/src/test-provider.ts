@@ -1,4 +1,4 @@
-import { SignJWT, exportJWK, generateKeyPair } from "jose";
+import { exportJWK, generateKeyPair, SignJWT } from "jose";
 
 const alg = "RS256";
 

@@ -1,22 +1,21 @@
+export { requestAzureClientCredentialsToken } from "./client-credentials";
+export { expiresIn } from "./expires-in";
+export { getToken } from "./get-token";
 export {
-  requestOboToken,
   requestAzureOboToken,
+  requestOboToken,
   requestTokenxOboToken,
 } from "./obo";
-export { requestAzureClientCredentialsToken } from "./client-credentials";
-
 export {
-  validateToken,
-  validateAzureToken,
-  validateIdportenToken,
-  validateTokenxToken,
-  type ValidationResult,
-} from "./validate";
-export {
+  type ParseResult,
   parseAzureUserToken,
   parseIdportenToken,
-  type ParseResult,
 } from "./parse-token";
-export { getToken } from "./get-token";
-export { expiresIn } from "./expires-in";
 export { TokenResult } from "./token-result";
+export {
+  type ValidationResult,
+  validateAzureToken,
+  validateIdportenToken,
+  validateToken,
+  validateTokenxToken,
+} from "./validate";

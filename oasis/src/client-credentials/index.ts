@@ -1,7 +1,7 @@
-import { withCache } from "../token-cache";
-import { TokenResult } from "../token-result";
 import { texas } from "../texas/texas";
 import type { IdentityProvider } from "../texas/types.gen";
+import { withCache } from "../token-cache";
+import { TokenResult } from "../token-result";
 
 export type ClientCredientialsProvider = (
   scope: string,

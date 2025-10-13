@@ -74,7 +74,7 @@ class SieveCache {
 
   private findNodeToEvict(): Node | null {
     let node = this.hand || this.tail;
-    while (node && node.visited) {
+    while (node?.visited) {
       node.visited = false;
       node = node.prev || null;
     }

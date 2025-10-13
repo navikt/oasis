@@ -1,8 +1,8 @@
-import { withCache } from "../token-cache";
-import { TokenResult } from "../token-result";
 import { texas } from "../texas/texas";
 import type { IdentityProvider } from "../texas/types.gen";
 import { stripBearer } from "../token/utils";
+import { withCache } from "../token-cache";
+import { TokenResult } from "../token-result";
 
 export type OboProvider = (
   token: string,
