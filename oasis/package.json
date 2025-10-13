@@ -10,10 +10,12 @@
   "scripts": {
     "build": "tsc --noEmit false",
     "test": "jest",
-    "type-check": "tsc --pretty --noEmit"
+    "type-check": "tsc --pretty --noEmit",
+    "gen:texas": "openapi-ts"
   },
   "keywords": [],
   "devDependencies": {
+    "@hey-api/openapi-ts": "^0.85.1",
     "@types/jest": "^29.5.12",
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.16.0",
