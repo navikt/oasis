@@ -10,4 +10,5 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   metafile: true,
+  external: ["node:http"],
 });

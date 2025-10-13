@@ -2,8 +2,8 @@ import { HttpResponse, http } from "msw";
 import { type SetupServer, setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
-import { expectNotOK, expectOK } from "./test-expect";
-import { token } from "./test-provider";
+import { expectNotOK, expectOK } from "./test-utils/test-expect";
+import { token } from "./test-utils/test-provider";
 import type { IntrospectRequest, IntrospectResponse } from "./texas/types.gen";
 import { decodeJwt } from "./token/utils";
 import {

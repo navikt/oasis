@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { isIdportenLoginLevel } from "./login-level";
-import { token } from "./test-provider";
+import { token } from "./test-utils/test-provider";
 
 describe("login level", () => {
   it("should return true for login level High when acr is idporten-loa-high", async () => {

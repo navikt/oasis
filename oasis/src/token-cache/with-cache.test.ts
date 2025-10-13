@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { OboProvider } from "../obo";
-import { token } from "../test-provider";
+import { token } from "../test-utils/test-provider";
 import { TokenResult } from "../token-result";
 
 import { withCache } from ".";

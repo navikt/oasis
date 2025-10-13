@@ -1,6 +1,10 @@
-import type { IncomingMessage } from "node:http";
+import type { IncomingHttpHeaders } from "node:http";
 
 import { stripBearer } from "./token/utils";
+
+type IncomingMessageIsh = {
+  headers: IncomingHttpHeaders;
+};
 
 /**
  * Extracts token for your convenience.
@@ -9,10 +13,10 @@ import { stripBearer } from "./token/utils";
  */
 export function getToken(val: string): string;
 export function getToken(
-  val: Request | IncomingMessage | Headers,
+  val: Request | IncomingMessageIsh | Headers,
 ): string | null;
 export function getToken(
-  val: Request | IncomingMessage | Headers | string,
+  val: Request | IncomingMessageIsh | Headers | string,
 ): string | null {
   if (typeof val === "string") {
     return stripBearer(val);
