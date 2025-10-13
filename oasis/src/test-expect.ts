@@ -17,5 +17,5 @@ export function expectOK<T extends AnyOkUnion>(
 export function expectNotOK<T extends AnyOkUnion>(
   result: T,
 ): asserts result is Extract<T, { ok: false }> {
-  expect(result.ok, "Result was OK but was expected not to be").toBe(false);
+  expect(result.ok, "Expected error, but was OK").toBe(false);
 }

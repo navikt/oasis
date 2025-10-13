@@ -9,8 +9,47 @@ import {
 } from "./validate";
 import { jwk, token } from "./test-provider";
 import { expectNotOK, expectOK } from "./test-expect";
+import type { IntrospectRequest, IntrospectResponse } from "./texas/types.gen";
+import { decodeJwt } from "./token/utils";
 
 describe("validate token", () => {
+  let server: SetupServer;
+
+  beforeAll(() => {
+    process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT =
+      "http://texas/api/v1/introspect";
+
+    server = setupServer(
+      http.post<never, IntrospectRequest, IntrospectResponse>(
+        process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT,
+        async ({ request }) => {
+          const body = await request.json();
+
+          if (body.identity_provider === "idporten") {
+            return HttpResponse.json({
+              active: true,
+              iss: "idporten_issuer",
+            });
+          } else if (body.identity_provider === "azuread") {
+            return HttpResponse.json({
+              active: true,
+              iss: "azure_issuer",
+            });
+          }
+
+          throw Error(`Not implemented: ${body.identity_provider}`);
+        },
+      ),
+    );
+    server.listen();
+  });
+
+  afterAll(() => {
+    delete process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT;
+
+    server.close();
+  });
+
   afterEach(() => {
     delete process.env.IDPORTEN_ISSUER;
     delete process.env.AZURE_OPENID_CONFIG_ISSUER;
@@ -35,24 +74,22 @@ describe("validate token", () => {
   });
 
   it("selects idporten", async () => {
-    process.env.IDPORTEN_JWKS_URI = "http://idporten-provider.test/jwks";
     process.env.IDPORTEN_ISSUER = "idporten_issuer";
 
     const result = await validateToken(await token());
-    expectNotOK(result);
+    expectOK(result);
+    expect(result.payload.iss).toEqual("idporten_issuer");
   }, 10_000);
 
   it("selects azure", async () => {
-    process.env.AZURE_OPENID_CONFIG_JWKS_URI =
-      "http://azure-provider.test/jwks";
     process.env.AZURE_OPENID_CONFIG_ISSUER = "azure_issuer";
 
     const result = await validateToken(await token());
-    expectNotOK(result);
+    expectOK(result);
+    expect(result.payload.iss).toEqual("azure_issuer");
   }, 10_000);
 
   it("doesn't select tokenx", async () => {
-    process.env.TOKEN_X_JWKS_URI = "http://tokenx-provider.test/jwks";
     process.env.TOKEN_X_ISSUER = "tokenx_issuer";
 
     const result = await validateToken(await token());
@@ -62,23 +99,46 @@ describe("validate token", () => {
 
 describe("validate idporten token", () => {
   let server: SetupServer;
-  let count = 0;
 
   beforeAll(() => {
-    process.env.IDPORTEN_JWKS_URI = "http://idporten-provider.test/jwks";
+    process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT =
+      "http://texas/api/v1/introspect";
     process.env.IDPORTEN_ISSUER = "idporten_issuer";
-    process.env.IDPORTEN_AUDIENCE = "idporten_audience";
 
     server = setupServer(
-      http.get(process.env.IDPORTEN_JWKS_URI, async () => {
-        count += 1;
-        return HttpResponse.json({ keys: [await jwk()] });
-      }),
+      http.post<never, IntrospectRequest, IntrospectResponse>(
+        process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT,
+        async ({ request }) => {
+          const body = await request.json();
+          const pid = decodeJwt(body.token).pid;
+
+          if (body.identity_provider === "idporten") {
+            return HttpResponse.json({
+              active: true,
+              iss: "idporten_issuer",
+              pid: pid ?? "not set",
+            });
+          } else if (body.identity_provider === "azuread") {
+            return HttpResponse.json({
+              active: true,
+              iss: "azure_issuer",
+              pid: pid ?? "not set",
+            });
+          }
+
+          throw Error(`Not implemented: ${body.identity_provider}`);
+        },
+      ),
     );
     server.listen();
   });
 
-  afterAll(() => server.close());
+  afterAll(() => {
+    delete process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT;
+    delete process.env.IDPORTEN_ISSUER;
+
+    server.close();
+  });
 
   it("succeeds for valid token", async () => {
     const result = await validateIdportenToken(
@@ -93,34 +153,6 @@ describe("validate idporten token", () => {
     expect(result.payload.pid).toBe("12345678901");
   });
 
-  it("only calls /jwks once", async () => {
-    await validateIdportenToken(
-      await token({
-        audience: "idporten_audience",
-        issuer: "idporten_issuer",
-      }),
-    );
-    await validateIdportenToken(
-      await token({
-        audience: "idporten_audience",
-        issuer: "idporten_issuer",
-      }),
-    );
-    expect(count).toBe(1);
-  });
-
-  it("fails verification when issuer is not idporten", async () => {
-    const result = await validateIdportenToken(
-      await token({
-        audience: "idporten_audience",
-        issuer: "not idporten",
-      }),
-    );
-
-    expectNotOK(result);
-    expect(result.error).not.toBeNull();
-  });
-
   it("works with Bearer prefix", async () => {
     const result = await validateIdportenToken(
       `Bearer ${await token({
@@ -131,62 +163,44 @@ describe("validate idporten token", () => {
 
     expectOK(result);
   });
-
-  it("fails verification when audience is not idporten", async () => {
-    const result = await validateIdportenToken(
-      await token({
-        audience: "not idporten",
-        issuer: "idporten_issuer",
-      }),
-    );
-
-    expectNotOK(result);
-    expect(result.error).not.toBeNull();
-  });
-
-  it("fails verification when alg is not RS256", async () => {
-    const result = await validateIdportenToken(
-      await token({
-        audience: "idporten_audience",
-        issuer: "idporten_issuer",
-        algorithm: "PS256",
-      }),
-    );
-    expectNotOK(result);
-  });
-
-  it("fails verification when token is expired", async () => {
-    const result = await validateIdportenToken(
-      await token({
-        audience: "idporten_audience",
-        issuer: "idporten_issuer",
-        exp: "5 minutes ago",
-      }),
-    );
-
-    expectNotOK(result);
-    expect(result.errorType).toBe("token expired");
-  });
 });
 
 describe("validate azure token", () => {
   let server: SetupServer;
 
   beforeAll(() => {
-    process.env.AZURE_OPENID_CONFIG_JWKS_URI =
-      "http://azure-provider.test/jwks";
+    process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT =
+      "http://texas/api/v1/introspect";
     process.env.AZURE_OPENID_CONFIG_ISSUER = "azure_issuer";
-    process.env.AZURE_APP_CLIENT_ID = "azure_audience";
 
     server = setupServer(
-      http.get(process.env.AZURE_OPENID_CONFIG_JWKS_URI, async () =>
-        HttpResponse.json({ keys: [await jwk()] }),
+      http.post<never, IntrospectRequest, IntrospectResponse>(
+        process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT,
+        async ({ request }) => {
+          const body = await request.json();
+          const pid = decodeJwt(body.token).pid;
+
+          if (body.identity_provider === "azuread") {
+            return HttpResponse.json({
+              active: true,
+              iss: "azure_issuer",
+              pid: pid ?? "not set",
+            });
+          }
+
+          throw Error(`Not implemented: ${body.identity_provider}`);
+        },
       ),
     );
     server.listen();
   });
 
-  afterAll(() => server.close());
+  afterAll(() => {
+    delete process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT;
+    delete process.env.AZURE_OPENID_CONFIG_ISSUER;
+
+    server.close();
+  });
 
   it("succeeds for valid token", async () => {
     const result = await validateAzureToken(
@@ -203,19 +217,38 @@ describe("validate tokenx token", () => {
   let server: SetupServer;
 
   beforeAll(() => {
-    process.env.TOKEN_X_JWKS_URI = "http://tokenx-provider.test/jwks";
+    process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT =
+      "http://texas/api/v1/introspect";
     process.env.TOKEN_X_ISSUER = "tokenx_issuer";
-    process.env.TOKEN_X_CLIENT_ID = "tokenx_audience";
 
     server = setupServer(
-      http.get(process.env.TOKEN_X_JWKS_URI, async () =>
-        HttpResponse.json({ keys: [await jwk()] }),
+      http.post<never, IntrospectRequest, IntrospectResponse>(
+        process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT,
+        async ({ request }) => {
+          const body = await request.json();
+          const pid = decodeJwt(body.token).pid;
+
+          if (body.identity_provider === "tokenx") {
+            return HttpResponse.json({
+              active: true,
+              iss: "tokenx_issuer",
+              pid: pid ?? "not set",
+            });
+          }
+
+          throw Error(`Not implemented: ${body.identity_provider}`);
+        },
       ),
     );
     server.listen();
   });
 
-  afterAll(() => server.close());
+  afterAll(() => {
+    delete process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT;
+    delete process.env.TOKEN_X_ISSUER;
+
+    server.close();
+  });
 
   it("succeeds for valid token", async () => {
     const result = await validateTokenxToken(
