@@ -6,7 +6,8 @@ export default async function authenticatedHandler(
   req: NextApiRequest,
   res: NextApiResponse<string>,
 ) {
-  const token = req.headers.authorization!.replace("Bearer ", "");
+  const token = req.headers.authorization?.replace("Bearer ", "");
+  if (!token) return res.status(401).send("No token");
 
   const result = await validateToken(token);
   if (result.ok) {

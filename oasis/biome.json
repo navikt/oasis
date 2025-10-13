@@ -5,6 +5,9 @@
     "includes": ["./src/**/*", "./biome.json", "package.json"]
   },
   "linter": {
-    "rules": {}
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
   }
 }

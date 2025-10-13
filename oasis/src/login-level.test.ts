@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { isIdportenLoginLevel } from "./login-level";
 import { token } from "./test-provider";
 

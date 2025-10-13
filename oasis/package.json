@@ -15,17 +15,17 @@
   "scripts": {
     "build": "tsup",
     "test": "vitest",
-    "lint": "eslint src",
+    "lint": "biome check",
     "type-check": "tsc --pretty --noEmit",
     "gen:texas": "openapi-ts"
   },
   "devDependencies": {
-    "@hey-api/openapi-ts": "^0.85.1",
+    "@hey-api/openapi-ts": "^0.85.2",
     "jose": "^5.9.6",
     "msw": "^2.11.5",
     "node-mocks-http": "^1.17.2",
     "tsup": "^8.5.0",
-    "typescript": "^5.7.2",
+    "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   }
 }

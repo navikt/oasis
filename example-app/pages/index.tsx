@@ -1,8 +1,8 @@
-import { GetServerSideProps } from "next";
+import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const testToken =
     process.env.NODE_ENV === "development"
       ? await (await require("../test-provider")).token("213")
@@ -60,7 +60,7 @@ export default function Index({ testToken }: IndexProps) {
       redirect: "manual",
     });
 
-    if (res.status == 200) alert(await res.text());
+    if (res.status === 200) alert(await res.text());
     if (res.status !== 200) alert("Not authenticated");
   };
 
@@ -80,10 +80,10 @@ export default function Index({ testToken }: IndexProps) {
       <CurlForLocalhost token={testToken} />
 
       <h1>Perform authenticated API request</h1>
-      <button onClick={doAuthenticatedRequest(false)}>
+      <button type="button" onClick={doAuthenticatedRequest(false)}>
         Perform API request
       </button>
-      <button onClick={doAuthenticatedRequest(true)}>
+      <button type="button" onClick={doAuthenticatedRequest(true)}>
         Perform API request with token exchange
       </button>
     </>

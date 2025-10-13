@@ -1,8 +1,10 @@
 import { createHash } from "node:crypto";
+
 import type { ClientCredientialsProvider } from "../client-credentials";
 import { expiresIn } from "../expires-in";
 import type { OboProvider } from "../obo";
 import { TokenResult } from "../token-result";
+
 import SieveCache from "./cache";
 
 function sha256(content: string): string {
