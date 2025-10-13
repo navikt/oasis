@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.85.2",
+    "@types/node": "^24.7.2",
     "jose": "^5.9.6",
     "msw": "^2.11.5",
     "node-mocks-http": "^1.17.2",
