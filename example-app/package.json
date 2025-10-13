@@ -1,28 +1,24 @@
 {
   "name": "example-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "next.config.js",
+  "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\"",
     "dev": "next dev",
     "build": "next build",
-    "lint": "next lint"
+    "lint": "biome check"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@navikt/oasis": "*",
-    "next": "^15.0.3",
-    "react": "^19.1.0"
+    "next": "^15.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/react": "^19.1.7",
-    "@types/react-dom": "^19.1.6",
-    "eslint-config-next": "^15.0.3",
-    "jose": "^5.2.3",
-    "msw": "^2.1.7",
-    "typescript": "^5.3.3"
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "eslint-config-next": "^15.5.4",
+    "jose": "^6.1.0",
+    "msw": "^2.11.5",
+    "typescript": "^5.9.3"
   }
 }

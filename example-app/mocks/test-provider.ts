@@ -1,9 +1,11 @@
-import { SignJWT, exportJWK, importJWK } from "jose";
+/** biome-ignore-all lint/style/noNonNullAssertion: Only used in mocks */
 
-const privateKey = () => importJWK(JSON.parse(process.env.PRIVATE_KEY!));
+import { exportJWK, importJWK, SignJWT } from "jose";
+
+const privateKey = () => importJWK(JSON.parse(process.env.PRIVATE_KEY!), 'RS256');
+
 export const jwk = async () =>
   exportJWK(await importJWK(JSON.parse(process.env.PUBLIC_KEY!)));
-export const jwkPrivate = async () => exportJWK(await privateKey());
 
 export const token = async (
   pid: string,
