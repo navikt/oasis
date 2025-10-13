@@ -14,6 +14,6 @@ describe("expires in", () => {
   });
 
   it("throws error for token without exp", async () => {
-    expect(async () => expiresIn(await tokenWithoutExp())).rejects.toThrow();
+    await expect(async () => expiresIn(await tokenWithoutExp())).rejects.toThrow();
   });
 });
