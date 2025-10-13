@@ -18,7 +18,8 @@ jobs:
           node-version: 24
           cache: npm
 
-      - run: npm install --no-save --no-audit --prefer-offline --ignore-scripts
+      - run: npm ci
+      - run: npm run lint:ci
       - run: npm test
 
   build:

@@ -19,5 +19,6 @@ jobs:
           node-version-file: package.json
           cache: npm
 
-      - run: npm install
+      - run: npm ci
+      - run: npm run lint:ci
       - run: npm test
