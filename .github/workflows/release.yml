@@ -23,6 +23,7 @@ jobs:
 
       - run: npm ci
       - run: npm test
+      - run: npm lint
       - run: npm run build-lib
 
       - run: |
