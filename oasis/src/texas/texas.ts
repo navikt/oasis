@@ -5,7 +5,7 @@ import {
   type TokenExchangeRequest,
   type TokenRequest,
   type TokenResponse,
-} from "./types.gen.ts";
+} from "./types.gen";
 
 const getTexasConfig = () => ({
   introspection: process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT,
@@ -44,7 +44,7 @@ export const texas = {
   },
   exchange: async (
     token: string,
-    target: `${string}:${string}:${string}`,
+    target: string,
     provider: IdentityProvider,
   ): Promise<TokenResponse> => {
     const config = getTexasConfig();

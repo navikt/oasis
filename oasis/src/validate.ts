@@ -1,7 +1,21 @@
-import { JWTPayload, createRemoteJWKSet, errors, jwtVerify } from "jose";
-import { stripBearer } from "./strip-bearer";
+import { texas } from "./texas/texas";
+import { stripBearer } from "./token/utils";
+import { IdentityProvider } from "./texas/types.gen";
 
 type ErrorTypes = "token expired" | "unknown";
+
+type JWTPayload = {
+  active: boolean;
+  aud: string;
+  azp: string;
+  exp: number;
+  iat: number;
+  iss: string;
+  jti: string;
+  nbf: number;
+  sub: string;
+  tid: string;
+};
 
 export type ValidationResult<Payload = unknown> =
   | {
@@ -29,43 +43,20 @@ const ValidationResult = {
   }),
 };
 
-let remoteJWKSet: ReturnType<typeof createRemoteJWKSet>;
-
-const getJwkSet = (jwksUri: string): ReturnType<typeof createRemoteJWKSet> => {
-  if (!remoteJWKSet) {
-    remoteJWKSet = createRemoteJWKSet(new URL(jwksUri));
-  }
-
-  return remoteJWKSet;
-};
-
-const validateJwt = async ({
-  token,
-  jwksUri,
-  issuer,
-  audience,
-}: {
-  token: string;
-  jwksUri: string;
-  issuer: string;
-  audience: string;
-}): Promise<ValidationResult> => {
+const validateJwt = async (
+  token: string,
+  provider: IdentityProvider,
+): Promise<ValidationResult> => {
   try {
-    const { payload } = await jwtVerify(
-      stripBearer(token),
-      getJwkSet(jwksUri),
-      {
-        issuer,
-        audience,
-        algorithms: ["RS256"],
-      },
-    );
-    return ValidationResult.Ok(payload);
+    const payload = await texas.introspect(stripBearer(token), provider);
+
+    if (!payload.active) {
+      return ValidationResult.Error("token expired");
+    }
+
+    return ValidationResult.Ok(payload as JWTPayload);
   } catch (e) {
-    return ValidationResult.Error(
-      e as Error,
-      e instanceof errors.JWTExpired ? "token expired" : "unknown",
-    );
+    return ValidationResult.Error(e as Error, "unknown");
   }
 };
 
@@ -81,13 +72,9 @@ export type IdportenPayload = {
  */
 export const validateIdportenToken = (
   token: string,
-): Promise<ValidationResult<Partial<IdportenPayload>>> =>
-  validateJwt({
-    token,
-    jwksUri: process.env.IDPORTEN_JWKS_URI!,
-    issuer: process.env.IDPORTEN_ISSUER!,
-    audience: process.env.IDPORTEN_AUDIENCE!,
-  });
+): Promise<ValidationResult<Partial<IdportenPayload>>> => {
+  return validateJwt(token, "idporten");
+};
 
 export type AzurePayload = {
   NAVident: string;
@@ -108,12 +95,7 @@ export type AzurePayload = {
 export const validateAzureToken = (
   token: string,
 ): Promise<ValidationResult<Partial<AzurePayload>>> =>
-  validateJwt({
-    token,
-    jwksUri: process.env.AZURE_OPENID_CONFIG_JWKS_URI!,
-    issuer: process.env.AZURE_OPENID_CONFIG_ISSUER!,
-    audience: process.env.AZURE_APP_CLIENT_ID!,
-  });
+  validateJwt(token, "azuread");
 
 /**
  * Validates token issued by Tokenx. Requires Tokenx to be enabled in nais
@@ -122,12 +104,7 @@ export const validateAzureToken = (
  * @param token Token issued by Tokenx.
  */
 export const validateTokenxToken = (token: string): Promise<ValidationResult> =>
-  validateJwt({
-    token,
-    jwksUri: process.env.TOKEN_X_JWKS_URI!,
-    issuer: process.env.TOKEN_X_ISSUER!,
-    audience: process.env.TOKEN_X_CLIENT_ID!,
-  });
+  validateJwt(token, "tokenx");
 
 /**
  * Validates token issued by Idporten or Azure. Requires either Idporten or
