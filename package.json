@@ -19,12 +19,13 @@
     "example-app"
   ],
   "devDependencies": {
-    "eslint": "^9.28.0",
+    "@biomejs/biome": "2.2.6",
     "husky": "^9.0.11",
-    "lint-staged": "^15.2.2",
-    "prettier": "^3.2.5"
+    "lint-staged": "^15.2.2"
   },
   "prettier": {
+    "printWidth": 120,
+    "tabWidth": 2,
     "overrides": [
       {
         "files": "*.yaml",
@@ -36,7 +37,9 @@
     ]
   },
   "lint-staged": {
-    "*.{md,html,css,json,graphql,graphqls}": "prettier --write",
-    "*.{ts,tsx}": "eslint --fix --max-warnings=0"
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+      "biome format --write --no-errors-on-unmatched",
+      "biome lint --write --no-errors-on-unmatched"
+    ]
   }
 }

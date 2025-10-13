@@ -6,7 +6,7 @@ import {
   requestAzureOboToken,
   requestOboToken,
 } from ".";
-import { jwk, jwkPrivate, token } from "../test-provider";
+import { jwkPrivate, token } from "../test-provider";
 import { expectNotOK, expectOK } from "../test-expect";
 import type {
   ErrorResponse,

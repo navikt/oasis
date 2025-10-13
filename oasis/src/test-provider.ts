@@ -5,7 +5,6 @@ const alg = "RS256";
 const cachedKeyPair = generateKeyPair(alg);
 const privateKey = async () => (await cachedKeyPair).privateKey;
 
-export const jwk = async () => exportJWK((await cachedKeyPair).publicKey);
 export const jwkPrivate = async () => exportJWK(await privateKey());
 
 export const token = async ({
