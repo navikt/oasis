@@ -1,8 +1,12 @@
 {
   "name": "oasis",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "engineStrict": true,
+  "engines": {
+    "node": "24"
+  },
   "scripts": {
     "test": "npm run -w oasis test",
     "build": "npm run build -w example-app",
@@ -10,9 +14,6 @@
     "type-check": "npm run type-check -w oasis",
     "prepare": "husky"
   },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
   "workspaces": [
     "oasis",
     "example-app"
