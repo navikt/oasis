@@ -1,11 +1,12 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { requestOboToken, validateToken } from "@navikt/oasis";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function authenticatedHandler(
   req: NextApiRequest,
   res: NextApiResponse<string>,
 ) {
-  const token = req.headers.authorization!.replace("Bearer ", "");
+  const token = req.headers.authorization?.replace("Bearer ", "");
+  if (!token) return res.status(401).send("No token");
 
   const validationResult = await validateToken(token);
 

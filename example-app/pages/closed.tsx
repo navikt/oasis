@@ -1,13 +1,12 @@
 import { validateToken } from "@navikt/oasis";
 import { decodeJwt } from "jose";
-import { GetServerSideProps } from "next";
+import type { GetServerSideProps } from "next";
 
 export const getServerSideProps: GetServerSideProps<ClosedPageProps> = async ({
   req,
 }) => {
   if (req.headers.authorization) {
-    const token = req.headers.authorization!.replace("Bearer ", "");
-
+    const token = req.headers.authorization?.replace("Bearer ", "");
     const result = await validateToken(token);
 
     if (result.ok) {

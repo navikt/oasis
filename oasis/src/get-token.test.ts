@@ -1,5 +1,6 @@
 import { createRequest } from "node-mocks-http";
 import { describe, expect, it } from "vitest";
+
 import { getToken } from "./get-token";
 
 describe("getToken", () => {
