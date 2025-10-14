@@ -2,6 +2,10 @@ import { HttpResponse, http } from "msw";
 import { type SetupServer, setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
+import {
+  clearTexasNaisTestEnvs,
+  setTexasNaisTestEnvs,
+} from "../test-utils/test-envs";
 import { expectNotOK, expectOK } from "../test-utils/test-expect";
 import { jwkPrivate, token } from "../test-utils/test-provider";
 import type {
@@ -71,15 +75,14 @@ describe("request tokenX obo token", () => {
   let server: SetupServer;
 
   beforeAll(async () => {
-    process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT =
-      "http://texas/api/v1/token/exchange";
+    const texasEnvs = setTexasNaisTestEnvs();
 
     server = setupServer(
       http.post<
         never,
         TokenExchangeRequest,
         TokenExchangeResponse | ErrorResponse
-      >(process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT, async ({ request }) => {
+      >(texasEnvs.exchange, async ({ request }) => {
         const body = await request.json();
 
         if (body.target === "error-audience") {
@@ -114,8 +117,13 @@ describe("request tokenX obo token", () => {
     );
     server.listen();
   });
+
   afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
+  afterAll(() => {
+    clearTexasNaisTestEnvs();
+
+    server.close();
+  });
 
   it("returns token when exchanges succeeds", async () => {
     const jwt = await token({
@@ -220,57 +228,16 @@ describe("request azure obo token", () => {
   let server: SetupServer;
 
   beforeAll(async () => {
-    process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT =
-      "http://texas/api/v1/token/exchange";
+    const texasEnv = setTexasNaisTestEnvs();
 
     server = setupServer(
       http.post<
         never,
         TokenExchangeRequest,
         TokenExchangeResponse | ErrorResponse
-      >(process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT, async ({ request }) => {
+      >(texasEnv.exchange, async ({ request }) => {
         const body = await request.json();
 
-        /*if (client_assert_token.payload.aud !== "http://azure.test/token") {
-          console.error(
-            "wrong client_assert.aud",
-            client_assert_token.payload.aud,
-          );
-          return HttpResponse.json({});
-        } else if (
-          grant_type !== "urn:ietf:params:oauth:grant-type:jwt-bearer"
-        ) {
-          console.error("wrong grant_type");
-          return HttpResponse.json({});
-        } else if (requested_token_use !== "on_behalf_of") {
-          console.error("wrong requested_token_use");
-          return HttpResponse.json({});
-        } else if (client_id !== "azure_client_id") {
-          console.error("wrong client_id");
-          return HttpResponse.json({});
-        } else if (
-          client_assertion_type !==
-          "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
-        ) {
-          console.error("wrong client_assertion_type");
-          return HttpResponse.json({});
-        } else if (
-          Math.abs(
-            client_assert_token.payload.nbf! - Math.floor(Date.now() / 1000),
-          ) > 10
-        ) {
-          console.error("wrong client_assert_token.payload.nbf");
-          return HttpResponse.json({});
-        } else if (!client_assert_token.payload.jti) {
-          console.error("missing client_assert_token.payload.jti");
-          return HttpResponse.json({});
-        } else if (
-          client_assert_token.payload.exp! - Math.floor(Date.now() / 1000) >
-          120
-        ) {
-          console.error("client_assert_token.payload.exp too large");
-          return HttpResponse.json({});
-        } else*/
         if (body.target === "error-audience") {
           return HttpResponse.json(
             {
@@ -294,7 +261,11 @@ describe("request azure obo token", () => {
     server.listen();
   });
   afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
+  afterAll(() => {
+    clearTexasNaisTestEnvs();
+
+    server.close();
+  });
 
   it("returns token when exchanges succeeds", async () => {
     const jwt = await token({

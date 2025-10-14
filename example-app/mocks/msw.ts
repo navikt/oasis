@@ -39,6 +39,15 @@ export const server = setupServer(
   }),
   http.post(process.env.NAIS_TOKEN_ENDPOINT!, async () => {
     console.log("Mocking token endpoint");
-    return HttpResponse.json({ error: "what" }, { status: 400 });
+    return HttpResponse.json(
+      {
+        access_token: await createTestToken("foo", {
+          issuer: "http://localhost:8080/tokenx",
+        }),
+        expires_in: 3599,
+        token_type: "Bearer",
+      },
+      { status: 200 },
+    );
   }),
 );

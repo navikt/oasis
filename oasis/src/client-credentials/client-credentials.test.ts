@@ -2,6 +2,10 @@ import { HttpResponse, http } from "msw";
 import { type SetupServer, setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
+import {
+  clearTexasNaisTestEnvs,
+  setTexasNaisTestEnvs,
+} from "../test-utils/test-envs";
 import { expectNotOK, expectOK } from "../test-utils/test-expect";
 import { token } from "../test-utils/test-provider";
 import type {
@@ -17,11 +21,11 @@ describe("request azure client-credentials token", () => {
   let server: SetupServer;
 
   beforeAll(async () => {
-    process.env.NAIS_TOKEN_ENDPOINT = "http://texas/api/v1/token";
+    const texasEnv = setTexasNaisTestEnvs();
 
     server = setupServer(
       http.post<never, TokenRequest, TokenResponse | ErrorResponse>(
-        process.env.NAIS_TOKEN_ENDPOINT,
+        texasEnv.token,
         async ({ request }) => {
           const body = await request.json();
 
@@ -49,7 +53,11 @@ describe("request azure client-credentials token", () => {
     server.listen();
   });
   afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
+  afterAll(() => {
+    clearTexasNaisTestEnvs();
+
+    server.close();
+  });
 
   it("returns token when exchanges succeeds", async () => {
     const result = await requestAzureClientCredentialsToken(
