@@ -2,6 +2,10 @@ import { HttpResponse, http } from "msw";
 import { type SetupServer, setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
+import {
+  clearTexasNaisTestEnvs,
+  setTexasNaisTestEnvs,
+} from "./test-utils/test-envs";
 import { expectNotOK, expectOK } from "./test-utils/test-expect";
 import { token } from "./test-utils/test-provider";
 import type { IntrospectRequest, IntrospectResponse } from "./texas/types.gen";
@@ -17,12 +21,11 @@ describe("validate token", () => {
   let server: SetupServer;
 
   beforeAll(() => {
-    process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT =
-      "http://texas/api/v1/introspect";
+    const texasEnv = setTexasNaisTestEnvs();
 
     server = setupServer(
       http.post<never, IntrospectRequest, IntrospectResponse>(
-        process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT,
+        texasEnv.introspection,
         async ({ request }) => {
           const body = await request.json();
 
@@ -46,7 +49,7 @@ describe("validate token", () => {
   });
 
   afterAll(() => {
-    delete process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT;
+    clearTexasNaisTestEnvs();
 
     server.close();
   });
@@ -102,13 +105,12 @@ describe("validate idporten token", () => {
   let server: SetupServer;
 
   beforeAll(() => {
-    process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT =
-      "http://texas/api/v1/introspect";
+    const texasEnv = setTexasNaisTestEnvs();
     process.env.IDPORTEN_ISSUER = "idporten_issuer";
 
     server = setupServer(
       http.post<never, IntrospectRequest, IntrospectResponse>(
-        process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT,
+        texasEnv.introspection,
         async ({ request }) => {
           const body = await request.json();
           const pid = decodeJwt(body.token).pid;
@@ -135,7 +137,7 @@ describe("validate idporten token", () => {
   });
 
   afterAll(() => {
-    delete process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT;
+    clearTexasNaisTestEnvs();
     delete process.env.IDPORTEN_ISSUER;
 
     server.close();
@@ -170,13 +172,12 @@ describe("validate azure token", () => {
   let server: SetupServer;
 
   beforeAll(() => {
-    process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT =
-      "http://texas/api/v1/introspect";
+    const texasEnv = setTexasNaisTestEnvs();
     process.env.AZURE_OPENID_CONFIG_ISSUER = "azure_issuer";
 
     server = setupServer(
       http.post<never, IntrospectRequest, IntrospectResponse>(
-        process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT,
+        texasEnv.introspection,
         async ({ request }) => {
           const body = await request.json();
           const pid = decodeJwt(body.token).pid;
@@ -197,7 +198,7 @@ describe("validate azure token", () => {
   });
 
   afterAll(() => {
-    delete process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT;
+    clearTexasNaisTestEnvs();
     delete process.env.AZURE_OPENID_CONFIG_ISSUER;
 
     server.close();
@@ -218,13 +219,12 @@ describe("validate tokenx token", () => {
   let server: SetupServer;
 
   beforeAll(() => {
-    process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT =
-      "http://texas/api/v1/introspect";
+    const texasEnv = setTexasNaisTestEnvs();
     process.env.TOKEN_X_ISSUER = "tokenx_issuer";
 
     server = setupServer(
       http.post<never, IntrospectRequest, IntrospectResponse>(
-        process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT,
+        texasEnv.introspection,
         async ({ request }) => {
           const body = await request.json();
           const pid = decodeJwt(body.token).pid;
@@ -245,7 +245,7 @@ describe("validate tokenx token", () => {
   });
 
   afterAll(() => {
-    delete process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT;
+    clearTexasNaisTestEnvs();
     delete process.env.TOKEN_X_ISSUER;
 
     server.close();

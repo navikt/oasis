@@ -8,24 +8,12 @@ import type {
   TokenResponse,
 } from "./types.gen";
 
-const getTexasConfig = () => ({
-  introspection: process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT,
-  exchange: process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT,
-  token: process.env.NAIS_TOKEN_ENDPOINT,
-});
-
 export const texas = {
   introspect: async (
     token: string,
     provider: IdentityProvider,
   ): Promise<IntrospectResponse> => {
     const config = getTexasConfig();
-    if (config.introspection == null) {
-      throw Error(
-        "This ain't texas! Unable to find NAIS_TOKEN_INTROSPECTION_ENDPOINT environment. Are you in NAIS?",
-      );
-    }
-
     const response = await fetch(config.introspection, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -49,12 +37,6 @@ export const texas = {
     provider: IdentityProvider,
   ): Promise<TokenResponse> => {
     const config = getTexasConfig();
-    if (config.exchange == null) {
-      throw Error(
-        "This ain't texas! Unable to find NAIS_TOKEN_EXCHANGE_ENDPOINT environment. Are you in NAIS?",
-      );
-    }
-
     const response = await fetch(config.exchange, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -86,12 +68,6 @@ export const texas = {
     target: `api://${string}.${string}.${string}/.default`,
   ): Promise<TokenResponse> => {
     const config = getTexasConfig();
-    if (config.token == null) {
-      throw Error(
-        "This ain't texas! Unable to find NAIS_TOKEN_ENDPOINT environment. Are you in NAIS?",
-      );
-    }
-
     const response = await fetch(config.token, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -117,4 +93,22 @@ export const texas = {
 
     return (await response.json()) as TokenResponse;
   },
+};
+
+const getTexasConfig = () => {
+  if (
+    !process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT ||
+    !process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT ||
+    !process.env.NAIS_TOKEN_ENDPOINT
+  ) {
+    throw Error(
+      "This ain't texas! Missing NAIS_TOKEN_-environment variables. Are you in NAIS?",
+    );
+  }
+
+  return {
+    introspection: process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT,
+    exchange: process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT,
+    token: process.env.NAIS_TOKEN_ENDPOINT,
+  };
 };
