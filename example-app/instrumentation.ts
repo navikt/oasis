@@ -9,7 +9,12 @@ export async function register() {
 
     process.env.PRIVATE_KEY = JSON.stringify(await exportJWK(key.privateKey));
     process.env.PUBLIC_KEY = JSON.stringify(await exportJWK(key.publicKey));
-    process.env.TOKEN_X_PRIVATE_JWK = process.env.PRIVATE_KEY;
+
+    process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT =
+      "http://texas/api/v1/introspect";
+    process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT =
+      "http://texas/api/v1/exchange/token";
+    process.env.NAIS_TOKEN_ENDPOINT = "http://texas/api/v1/token";
 
     const { server } = await import("./mocks/msw");
     server.listen();
