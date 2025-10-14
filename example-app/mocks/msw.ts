@@ -2,7 +2,8 @@
 
 import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
-import { createTestToken } from "@/mocks/jwt";
+
+import { createTestToken } from "./jwt";
 
 export const server = setupServer(
   http.post(process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT!, async () => {
