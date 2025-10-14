@@ -46,6 +46,9 @@ jobs:
     name: Deploy with Azure AD
     needs: [test, build]
     runs-on: ubuntu-latest
+    environment:
+      name: azure-gcp
+      url: https://oasis-azure.intern.dev.nav.no
     permissions:
       id-token: write
       contents: read
@@ -62,6 +65,10 @@ jobs:
     name: Deploy with IDporten
     needs: [test, build]
     runs-on: ubuntu-latest
+    environment:
+      name: idporten-gcp
+      url: https://oasis-idporten.intern.dev.nav.no
+
     permissions:
       id-token: write
       contents: read
