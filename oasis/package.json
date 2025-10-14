@@ -9,6 +9,10 @@
   },
   "type": "module",
   "types": "./dist/index.d.ts",
+  "files": [
+    "package.json",
+    "dist"
+  ],
   "exports": {
     ".": "./dist/index.js"
   },
