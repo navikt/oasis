@@ -2,6 +2,12 @@
   "root": false,
   "extends": "//",
   "files": {
-    "includes": ["./*.ts", "./pages/**/*", "./biome.json", "package.json"]
+    "includes": [
+      "./*.ts",
+      "./pages/**/*",
+      "./mocks/**/*",
+      "./biome.json",
+      "package.json"
+    ]
   }
 }

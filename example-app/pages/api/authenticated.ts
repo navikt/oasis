@@ -13,6 +13,8 @@ export default async function authenticatedHandler(
   if (result.ok) {
     res.status(200).send(`Authenticated as ${decodeJwt(token).sub}`);
   } else {
-    res.status(401).send("Invalid token");
+    res
+      .status(401)
+      .send(`Invalid token, ${result.errorType} (${result.error})`);
   }
 }
