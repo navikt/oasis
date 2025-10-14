@@ -25,19 +25,6 @@
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2"
   },
-  "prettier": {
-    "printWidth": 120,
-    "tabWidth": 2,
-    "overrides": [
-      {
-        "files": "*.yaml",
-        "options": {
-          "semi": true,
-          "bracketSpacing": false
-        }
-      }
-    ]
-  },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
       "biome format --write --no-errors-on-unmatched",
