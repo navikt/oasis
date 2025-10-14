@@ -1,8 +1,9 @@
-name: Release
+name: Release 4.0.0 beta
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - feat/texas
 
 permissions:
   contents: read
@@ -14,8 +15,8 @@ jobs:
       contents: "read"
       packages: "write"
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # ratchet:actions/checkout@v4
-      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # ratchet:actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           registry-url: https://npm.pkg.github.com
@@ -27,7 +28,10 @@ jobs:
       - run: npm run build-lib
 
       - run: |
-          npm version -w oasis --allow-same-version --no-git-tag-version ${{ github.event.release.tag_name }}
-          npm publish -w oasis
+          TEMP_VERSION=$(date +'%Y%m%d%H%M%S')
+          jq --arg v "4.0.0-$TEMP_VERSION" '.version = $v' package.json > package.tmp.json && mv package.tmp.json package.json
+
+          npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: oasis
