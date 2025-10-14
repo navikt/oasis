@@ -66,6 +66,14 @@ export const texas = {
     });
 
     if (!response.ok) {
+      if (
+        response.status === 400 &&
+        response.headers.get("Content-Type") === "application/json"
+      ) {
+        const errorResponse = (await response.json()) as ErrorResponse;
+        throw Error(errorResponse.error_description);
+      }
+
       throw Error(
         `Token exchange failed: ${response.status} ${response.statusText}, cause: ${await response.text()}`,
       );
