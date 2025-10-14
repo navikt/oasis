@@ -14,9 +14,10 @@ spec:
   readiness:
     path: "/api/internal/isready"
     initialDelay: 1
-  prometheus:
-    enabled: true
-    path: "/api/internal/metrics"
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: nodejs
   replicas:
     min: 2
     max: 2
