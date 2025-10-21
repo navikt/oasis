@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
+import { token, tokenWithoutExp } from "../test/test-provider";
+
 import { expiresIn } from "./expires-in";
-import { token, tokenWithoutExp } from "./test-utils/test-provider";
 
 describe("expires in", () => {
   it("exposes time until exp", async () => {

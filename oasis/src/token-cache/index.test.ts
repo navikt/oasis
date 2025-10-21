@@ -1,8 +1,8 @@
 import { type MetricValue, register } from "prom-client";
 import { afterEach, describe, expect, it } from "vitest";
 
-import type { OboProvider } from "../obo";
-import { token } from "../test-utils/test-provider";
+import { token } from "../test/test-provider";
+import type { InternalOboProvider } from "../token-exchange/obo/exchange";
 import { TokenResult } from "../token-result";
 
 import { withCache } from ".";
@@ -12,10 +12,10 @@ describe("withCache", () => {
     register.resetMetrics();
   });
   it("measures cache hits", async () => {
-    const oboProvider: OboProvider = async (_, audience) =>
+    const oboProvider: InternalOboProvider = async (_, audience) =>
       Promise.resolve(TokenResult.Ok(await token({ audience })));
-    const cacheProvider = withCache(oboProvider, "maskinporten");
-    const obo1 = await cacheProvider("token1", "audience");
+    const cacheProvider = withCache(oboProvider);
+    const obo1 = await cacheProvider("maskinporten", "token1", "audience");
 
     // Ensure that the cache miss has been counted
     const cacheMissCounter = await getPrometheusMetric(
@@ -30,7 +30,7 @@ describe("withCache", () => {
     expect(obo1).not.toBeNull();
     expect(obo1).not.toBe("token1");
 
-    const obo2 = await cacheProvider("token1", "audience");
+    const obo2 = await cacheProvider("maskinporten", "token1", "audience");
     // Ensure that the cache hit has been counted
     const cacheHitCounter = await getPrometheusMetric("oasis_cache_hits_total");
     expect(cacheHitCounter?.value).toBe(1);

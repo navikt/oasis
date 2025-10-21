@@ -2,7 +2,14 @@
   "root": false,
   "extends": "//",
   "files": {
-    "includes": ["./src/**/*", "./biome.json", "package.json", "tsconfig.json"]
+    "includes": [
+      "./src/**/*",
+      "./biome.json",
+      "package.json",
+      "tsconfig.json",
+      "tsup.config.ts",
+      "vitest.config.ts"
+    ]
   },
   "linter": {
     "enabled": true,

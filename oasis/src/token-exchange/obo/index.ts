@@ -1,31 +1,10 @@
-import { texas } from "../texas/texas";
-import type { IdentityProvider } from "../texas/types.gen";
-import { stripBearer } from "../token/utils";
-import { withCache } from "../token-cache";
-import { TokenResult } from "../token-result";
+import { stripBearer } from "../../lib/utils";
+import type { IdentityProvider } from "../../texas/types.gen";
+import { withCache } from "../../token-cache";
+import { TokenResult } from "../../token-result";
 
+import { grantOboToken } from "./exchange";
 import { withPrometheus } from "./prometheus";
-
-export type OboProvider = (
-  token: string,
-  audience: string,
-) => Promise<TokenResult>;
-
-const grantOboToken: (
-  token: string,
-  target: string,
-  provider: IdentityProvider,
-) => Promise<TokenResult> = async (token, target, provider) => {
-  try {
-    const { access_token } = await texas.exchange(token, target, provider);
-
-    return access_token
-      ? TokenResult.Ok(access_token)
-      : TokenResult.Error(Error("TokenSet does not contain an access_token"));
-  } catch (e) {
-    return TokenResult.Error(e as Error);
-  }
-};
 
 /**
  * Requests on-behalf-of token from Azure. Requires Azure to be enabled in nais
@@ -34,14 +13,15 @@ const grantOboToken: (
  * @param token Token from your client (assertion).
  * @param audience The target app you request a token for (scope).
  */
-export const requestAzureOboToken: OboProvider = withCache(
-  withPrometheus(
-    (token: string, scope: string): Promise<TokenResult> =>
-      grantOboToken(token, scope, "azuread"),
-    "azuread",
-  ),
-  "azuread",
-);
+export const requestAzureOboToken = async (
+  token: string,
+  audience: string,
+): Promise<TokenResult> =>
+  withCache(
+    withPrometheus((provider: IdentityProvider, token, target) =>
+      grantOboToken(provider, token, target),
+    ),
+  )("azuread", token, audience);
 
 /**
  * Requests on-behalf-of token from Tokenx. Requires Tokenx to be enabled in
@@ -50,14 +30,15 @@ export const requestAzureOboToken: OboProvider = withCache(
  * @param token Token from your client (subject token).
  * @param audience The target app you request a token for.
  */
-export const requestTokenxOboToken: OboProvider = withCache(
-  withPrometheus(
-    (token: string, audience: string): Promise<TokenResult> =>
-      grantOboToken(token, audience, "tokenx"),
-    "tokenx",
-  ),
-  "tokenx",
-);
+export const requestTokenxOboToken = async (
+  token: string,
+  audience: string,
+): Promise<TokenResult> =>
+  withCache(
+    withPrometheus((provider: IdentityProvider, token, audience) =>
+      grantOboToken(provider, token, audience),
+    ),
+  )("tokenx", token, audience);
 
 /**
  * Requests on-behalf-of token from Tokenx or Azure. Requires either Tokenx or
@@ -66,7 +47,10 @@ export const requestTokenxOboToken: OboProvider = withCache(
  * @param token Token from your client (subject token).
  * @param audience The target app you request a token for.
  */
-export const requestOboToken: OboProvider = async (token, audience) => {
+export const requestOboToken = async (
+  token: string,
+  audience: string,
+): Promise<TokenResult> => {
   if (!token) return TokenResult.Error("empty token");
   if (!audience) return TokenResult.Error("empty audience");
 

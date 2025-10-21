@@ -1,5 +1,5 @@
-import { decodeJwt } from "./token/utils";
-import type { AzurePayload, IdportenPayload } from "./validate";
+import { decodeJwt } from "../lib/utils";
+import type { AzurePayload, IdportenPayload } from "../token-validation";
 
 export type ParseResult<Payload> =
   | { ok: false; error: Error }

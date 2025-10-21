@@ -5,22 +5,22 @@ import {
 } from "prom-client";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { token } from "../test-utils/test-provider";
-import { TokenResult } from "../token-result";
+import { token } from "../../test/test-provider";
+import { TokenResult } from "../../token-result";
 
+import type { InternalOboProvider } from "./exchange";
 import { withPrometheus } from "./prometheus";
-
-import type { OboProvider } from ".";
 
 describe("withPrometheus", () => {
   afterEach(() => {
     register.resetMetrics();
   });
+
   it("measures time spent getting token", async () => {
-    const oboProvider: OboProvider = async (_, audience) =>
+    const oboProvider: InternalOboProvider = async (_, audience) =>
       Promise.resolve(TokenResult.Ok(await token({ audience })));
-    const timedProvider = withPrometheus(oboProvider, "maskinporten");
-    const obo1 = await timedProvider("token1", "audience");
+    const timedProvider = withPrometheus(oboProvider);
+    const obo1 = await timedProvider("maskinporten", "token1", "audience");
 
     // Ensure that the exchange has been counted
     const tokenExchangesCounter = await getPrometheusMetric(
@@ -52,10 +52,10 @@ describe("withPrometheus", () => {
   });
 
   it("measures errors in token exchange", async () => {
-    const oboProvider: OboProvider = async () =>
+    const oboProvider: InternalOboProvider = async () =>
       Promise.resolve(TokenResult.Error(""));
-    const timedProvider = withPrometheus(oboProvider, "idporten");
-    const obo1 = await timedProvider("token1", "audience");
+    const timedProvider = withPrometheus(oboProvider);
+    const obo1 = await timedProvider("idporten", "token1", "audience");
 
     // Ensure that the exchange has been counted
     const tokenExchangesCounter = await getPrometheusMetric(

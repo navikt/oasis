@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 
+import { expectNotOK, expectOK } from "../test/test-expect";
+import { token } from "../test/test-provider";
+
 import { parseAzureUserToken, parseIdportenToken } from "./parse-token";
-import { expectNotOK, expectOK } from "./test-utils/test-expect";
-import { token } from "./test-utils/test-provider";
 
 describe("parseIdportenToken", () => {
   it("should return pid", async () => {

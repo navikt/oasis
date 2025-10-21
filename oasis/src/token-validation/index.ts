@@ -1,64 +1,6 @@
-import { texas } from "./texas/texas";
-import type { IdentityProvider } from "./texas/types.gen";
-import { stripBearer } from "./token/utils";
-
-type ErrorTypes = "token expired" | "unknown";
-
-type JWTPayload = {
-  active: boolean;
-  aud: string;
-  azp: string;
-  exp: number;
-  iat: number;
-  iss: string;
-  jti: string;
-  nbf: number;
-  sub: string;
-  tid: string;
-};
-
-export type ValidationResult<Payload = unknown> =
-  | {
-      ok: true;
-      payload: Payload & JWTPayload;
-    }
-  | {
-      ok: false;
-      error: Error;
-      errorType: ErrorTypes;
-    };
-
-const ValidationResult = {
-  Error: (
-    error: Error | string,
-    errorType: ErrorTypes | undefined = "unknown",
-  ): ValidationResult => ({
-    ok: false,
-    error: typeof error === "string" ? Error(error) : error,
-    errorType,
-  }),
-  Ok: (payload: JWTPayload): ValidationResult => ({
-    ok: true,
-    payload,
-  }),
-};
-
-const validateJwt = async (
-  token: string,
-  provider: IdentityProvider,
-): Promise<ValidationResult> => {
-  try {
-    const payload = await texas.introspect(stripBearer(token), provider);
-
-    if (!payload.active) {
-      return ValidationResult.Error("token expired");
-    }
-
-    return ValidationResult.Ok(payload as JWTPayload);
-  } catch (e) {
-    return ValidationResult.Error(e as Error, "unknown");
-  }
-};
+import { getAzureEnvs, getIdportenEnvs, getTokenXEnvs } from "./envs";
+import { ValidationResult } from "./types";
+import { validateJwt } from "./validate";
 
 export type IdportenPayload = {
   pid: string;
@@ -72,9 +14,11 @@ export type IdportenPayload = {
  */
 export const validateIdportenToken = (
   token: string,
-): Promise<ValidationResult<Partial<IdportenPayload>>> => {
-  return validateJwt(token, "idporten");
-};
+): Promise<ValidationResult<Partial<IdportenPayload>>> =>
+  validateJwt({
+    token,
+    ...getIdportenEnvs(),
+  });
 
 export type AzurePayload = {
   NAVident: string;
@@ -95,7 +39,10 @@ export type AzurePayload = {
 export const validateAzureToken = (
   token: string,
 ): Promise<ValidationResult<Partial<AzurePayload>>> =>
-  validateJwt(token, "azuread");
+  validateJwt({
+    token,
+    ...getAzureEnvs(),
+  });
 
 /**
  * Validates token issued by Tokenx. Requires Tokenx to be enabled in nais
@@ -104,7 +51,10 @@ export const validateAzureToken = (
  * @param token Token issued by Tokenx.
  */
 export const validateTokenxToken = (token: string): Promise<ValidationResult> =>
-  validateJwt(token, "tokenx");
+  validateJwt({
+    token,
+    ...getTokenXEnvs(),
+  });
 
 /**
  * Validates token issued by Idporten or Azure. Requires either Idporten or

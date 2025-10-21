@@ -3,24 +3,24 @@ import { type SetupServer, setupServer } from "msw/node";
 import { register } from "prom-client";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
+import { decodeJwt } from "../../lib/utils";
 import {
   clearTexasNaisTestEnvs,
   setTexasNaisTestEnvs,
-} from "../test-utils/test-envs";
-import { expectNotOK, expectOK } from "../test-utils/test-expect";
-import { jwkPrivate, token } from "../test-utils/test-provider";
+} from "../../test/test-envs";
+import { expectNotOK, expectOK } from "../../test/test-expect";
+import { jwkPrivate, token } from "../../test/test-provider";
 import type {
   ErrorResponse,
   TokenExchangeRequest,
   TokenExchangeResponse,
-} from "../texas/types.gen";
-import { decodeJwt } from "../token/utils";
+} from "../../texas/types.gen";
 
 import {
   requestAzureOboToken,
   requestOboToken,
   requestTokenxOboToken,
-} from ".";
+} from "./index";
 
 describe("request obo token", () => {
   afterEach(() => {
@@ -29,16 +29,23 @@ describe("request obo token", () => {
   });
 
   it("fails for empty token", async () => {
+    process.env.TOKEN_X_ISSUER = "tokenx_issuer";
+
     const result = await requestOboToken("", "");
     expectNotOK(result);
   });
 
   it("fails for empty audience", async () => {
+    process.env.TOKEN_X_ISSUER = "tokenx_issuer";
+
     const result = await requestOboToken(await token(), "");
     expectNotOK(result);
   });
 
-  it("fails with no identity provider", async () => {
+  it("fails with no identity provider in envs", async () => {
+    delete process.env.TOKEN_X_ISSUER;
+    delete process.env.AZURE_OPENID_CONFIG_ISSUER;
+
     const result = await requestOboToken(await token(), "audience");
     expectNotOK(result);
   });
