@@ -40,6 +40,7 @@ export const requestAzureOboToken: OboProvider = withCache(
       grantOboToken(token, scope, "azuread"),
     "azuread",
   ),
+  "azuread",
 );
 
 /**
@@ -55,6 +56,7 @@ export const requestTokenxOboToken: OboProvider = withCache(
       grantOboToken(token, audience, "tokenx"),
     "tokenx",
   ),
+  "tokenx",
 );
 
 /**
