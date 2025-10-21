@@ -1,6 +1,6 @@
 import type { IncomingHttpHeaders } from "node:http";
 
-import { stripBearer } from "./token/utils";
+import { stripBearer } from "../lib/utils";
 
 type IncomingMessageLike = {
   headers: IncomingHttpHeaders;

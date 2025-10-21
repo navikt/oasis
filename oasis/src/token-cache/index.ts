@@ -1,11 +1,11 @@
 import { createHash } from "node:crypto";
 import { Counter } from "prom-client";
 
-import type { ClientCredientialsProvider } from "../client-credentials";
-import { expiresIn } from "../expires-in";
-import type { OboProvider } from "../obo";
 import type { IdentityProvider } from "../texas/types.gen";
+import type { InternalClientCredientialsProvider } from "../token-exchange/m2m/exchange";
+import type { InternalOboProvider } from "../token-exchange/obo/exchange";
 import { TokenResult } from "../token-result";
+import { expiresIn } from "../token-utils/expires-in";
 
 import SieveCache from "./cache";
 
@@ -50,21 +50,21 @@ function getCache() {
   return cache;
 }
 
+export function withCache(provider: InternalOboProvider): InternalOboProvider;
 export function withCache(
-  clientCredentialsProvider: ClientCredientialsProvider,
-  provider: IdentityProvider,
-): ClientCredientialsProvider;
+  provider: InternalClientCredientialsProvider,
+  variant: "client-credentials",
+): InternalClientCredientialsProvider;
 export function withCache(
-  clientCredentialsProvider: OboProvider,
-  provider: IdentityProvider,
-): OboProvider;
-export function withCache(
-  oboProvider: ClientCredientialsProvider | OboProvider,
-  provider: IdentityProvider,
-): ClientCredientialsProvider | OboProvider {
-  return async (token, audience) => {
+  oboProvider: InternalOboProvider | InternalClientCredientialsProvider,
+): InternalOboProvider | InternalClientCredientialsProvider {
+  return async (
+    provider: IdentityProvider,
+    scopeOrToken: string,
+    audienceOrNothing: string,
+  ): Promise<TokenResult> => {
     const cache = getCache();
-    const key = sha256(token + audience);
+    const key = sha256(scopeOrToken + audienceOrNothing);
     const cachedToken = cache.get(key);
 
     if (cachedToken) {
@@ -73,20 +73,22 @@ export function withCache(
     }
 
     prometheus.cacheMisses.labels({ provider }).inc();
-    return oboProvider(token, audience).then((result) => {
-      if (result.ok) {
-        try {
-          const leeway = 5; // seconds
-          const ttl = expiresIn(result.token) - leeway;
-          if (ttl > 0) {
-            cache.set(key, result.token, ttl);
+    return oboProvider(provider, scopeOrToken, audienceOrNothing).then(
+      (result) => {
+        if (result.ok) {
+          try {
+            const leeway = 5; // seconds
+            const ttl = expiresIn(result.token) - leeway;
+            if (ttl > 0) {
+              cache.set(key, result.token, ttl);
+            }
+          } catch (e) {
+            console.warn(e);
           }
-        } catch (e) {
-          console.warn(e);
         }
-      }
 
-      return result;
-    });
+        return result;
+      },
+    );
   };
 }

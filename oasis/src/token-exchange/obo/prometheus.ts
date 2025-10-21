@@ -1,8 +1,8 @@
 import { Counter, Histogram } from "prom-client";
 
-import type { IdentityProvider } from "../texas/types.gen";
+import type { IdentityProvider } from "../../texas/types.gen";
 
-import type { OboProvider } from ".";
+import type { InternalOboProvider } from "./exchange";
 
 export class AuthMetrics {
   public tokenExchangeDurationHistogram = new Histogram({
@@ -34,15 +34,14 @@ type AuthMetricsGlobal = typeof global & {
 const prometheus = (global as AuthMetricsGlobal)[authMetricsSymbol];
 
 export function withPrometheus(
-  oboProvider: OboProvider,
-  provider: IdentityProvider,
-): OboProvider {
-  return async (token, audience) => {
+  oboProvider: InternalOboProvider,
+): InternalOboProvider {
+  return async (provider: IdentityProvider, token, audience) => {
     const measureTokenExchange = prometheus.tokenExchangeDurationHistogram
       .labels({ provider })
       .startTimer();
 
-    const oboToken = await oboProvider(token, audience);
+    const oboToken = await oboProvider(provider, token, audience);
 
     measureTokenExchange();
 

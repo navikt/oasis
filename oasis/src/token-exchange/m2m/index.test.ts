@@ -2,20 +2,20 @@ import { HttpResponse, http } from "msw";
 import { type SetupServer, setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
+import { decodeJwt } from "../../lib/utils";
 import {
   clearTexasNaisTestEnvs,
   setTexasNaisTestEnvs,
-} from "../test-utils/test-envs";
-import { expectNotOK, expectOK } from "../test-utils/test-expect";
-import { token } from "../test-utils/test-provider";
+} from "../../test/test-envs";
+import { expectNotOK, expectOK } from "../../test/test-expect";
+import { token } from "../../test/test-provider";
 import type {
   ErrorResponse,
   TokenRequest,
   TokenResponse,
-} from "../texas/types.gen";
-import { decodeJwt } from "../token/utils";
+} from "../../texas/types.gen";
 
-import { requestAzureClientCredentialsToken } from "./";
+import { requestAzureClientCredentialsToken } from "./index";
 
 describe("request azure client-credentials token", () => {
   let server: SetupServer;

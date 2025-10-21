@@ -5,4 +5,7 @@ export default defineConfig({
     testTimeout: 50000,
     include: ["src/**/*.test.ts"],
   },
+  define: {
+    LIB_VERSION: JSON.stringify("x.x.x-tests"),
+  },
 });

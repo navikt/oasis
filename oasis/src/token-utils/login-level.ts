@@ -1,4 +1,4 @@
-import { decodeJwt } from "./token/utils";
+import { decodeJwt } from "../lib/utils";
 
 type Level = "High" | "Substantial";
 
