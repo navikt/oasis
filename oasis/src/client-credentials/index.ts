@@ -14,7 +14,10 @@ export type ClientCredientialsProvider = (
  * @param audience The target app you request a token for.
  */
 export const requestAzureClientCredentialsToken: ClientCredientialsProvider =
-  withCache(async (scope) => grantClientCredentialsToken("azuread", scope));
+  withCache(
+    async (scope) => grantClientCredentialsToken("azuread", scope),
+    "azuread",
+  );
 
 const grantClientCredentialsToken: (
   provider: IdentityProvider,
