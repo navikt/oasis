@@ -37,7 +37,7 @@ export function parseIdportenToken(
 /**
  * Parses Azure user token, returning NAVIdent if present (this must be enabled
  * as extra claims in nais configuration). This does not support parsing Azure
- * machine tokens.
+ * machine tokens
  *
  * @param token Validated token issued by Azure.
  */
