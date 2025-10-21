@@ -25,13 +25,14 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run lint
-      - run: npm run build-lib
-
-      - run: |
+      - name: Set beta version before build
+        run: |
           TEMP_VERSION=$(date +'%Y%m%d%H%M%S')
           jq --arg v "4.0.0-$TEMP_VERSION" '.version = $v' package.json > package.tmp.json && mv package.tmp.json package.json
+        working-directory: oasis
 
-          npm publish --tag beta
+      - run: npm run build-lib
+      - run: npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: oasis
