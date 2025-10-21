@@ -1,5 +1,6 @@
 import { HttpResponse, http } from "msw";
 import { type SetupServer, setupServer } from "msw/node";
+import { register } from "prom-client";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
 import {
@@ -135,6 +136,22 @@ describe("request tokenX obo token", () => {
     expectOK(result);
     expect(decodeJwt(result.token).iss).toBe("urn:tokenx:dings");
     expect(decodeJwt(result.token).nbf).toBe(undefined);
+  });
+
+  it("has a prometheus named tokenx", async () => {
+    const jwt = await token({
+      audience: "idporten_audience",
+      issuer: "idporten_issuer",
+    });
+    await requestTokenxOboToken(`Bearer ${jwt}`, "audience");
+
+    const metric = await register
+      .getSingleMetric("oasis_token_exchanges")
+      ?.get();
+
+    expect(metric?.values[0].labels).toMatchObject({
+      provider: "tokenx",
+    });
   });
 
   it("accepts Bearer prefix", async () => {

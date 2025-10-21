@@ -4,6 +4,8 @@ import { stripBearer } from "../token/utils";
 import { withCache } from "../token-cache";
 import { TokenResult } from "../token-result";
 
+import { withPrometheus } from "./prometheus";
+
 export type OboProvider = (
   token: string,
   audience: string,
@@ -33,8 +35,11 @@ const grantOboToken: (
  * @param audience The target app you request a token for (scope).
  */
 export const requestAzureOboToken: OboProvider = withCache(
-  (token: string, scope: string): Promise<TokenResult> =>
-    grantOboToken(token, scope, "azuread"),
+  withPrometheus(
+    (token: string, scope: string): Promise<TokenResult> =>
+      grantOboToken(token, scope, "azuread"),
+    "azuread",
+  ),
 );
 
 /**
@@ -45,8 +50,11 @@ export const requestAzureOboToken: OboProvider = withCache(
  * @param audience The target app you request a token for.
  */
 export const requestTokenxOboToken: OboProvider = withCache(
-  (token: string, audience: string): Promise<TokenResult> =>
-    grantOboToken(token, audience, "tokenx"),
+  withPrometheus(
+    (token: string, audience: string): Promise<TokenResult> =>
+      grantOboToken(token, audience, "tokenx"),
+    "tokenx",
+  ),
 );
 
 /**
