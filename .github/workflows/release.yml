@@ -14,20 +14,24 @@ jobs:
       contents: "read"
       packages: "write"
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # ratchet:actions/checkout@v4
-      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # ratchet:actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - run: corepack enable
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           registry-url: https://npm.pkg.github.com
           cache: npm
 
-      - run: npm ci
-      - run: npm test
-      - run: npm run lint
-      - run: npm run build:lib
+      - run: yarn --immutable
+      - run: yarn test
+      - run: yarn lint
 
+     # TODO: set version before build (for otel version)
+      - run: yarn build:lib
+
+     # TODO: Deploy @navikt/texas and @navikt/oasis together
       - run: |
           npm version -w oasis --allow-same-version --no-git-tag-version ${{ github.event.release.tag_name }}
-          npm publish -w oasis
+          yarn npm publish -w oasis
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

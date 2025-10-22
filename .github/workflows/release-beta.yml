@@ -17,30 +17,31 @@ jobs:
       packages: "write"
     steps:
       - uses: actions/checkout@v5
+      - run: corepack enable
       - uses: actions/setup-node@v5
         with:
           node-version: 24
           registry-url: https://npm.pkg.github.com
           cache: npm
 
-      - run: npm ci
-      - run: npm run build -w @navikt/texas
-      - run: npm test
-      - run: npm run lint
+      - run: yarn --immutable
+      - run: yarn workspace @navikt/texas build
+      - run: yarn test
+      - run: yarn lint:ci
       - name: Set beta version before build
         run: |
           TEMP_VERSION=$(date +'%Y%m%d%H%M%S')
           jq --arg v "4.1.0-$TEMP_VERSION" '.version = $v' libs/texas/package.json > libs/texas/package.tmp.json && mv libs/texas/package.tmp.json libs/texas/package.json
           jq --arg v "4.1.0-$TEMP_VERSION" '.version = $v' libs/oasis/package.json > libs/oasis/package.tmp.json && mv libs/oasis/package.tmp.json libs/oasis/package.json
 
-      - run: npm run build:lib
+      - run: yarn build:lib
 
-      - run: npm publish --tag next
+      - run: yarn npm publish --tag next
         working-directory: libs/texas
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: npm publish --tag next
+      - run: yarn npm publish --tag next
         working-directory: libs/oasis
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
