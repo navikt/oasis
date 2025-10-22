@@ -1,4 +1,4 @@
-FROM node:24@sha256:0a687f450869e3eafc9e719ce2a4873c601818562108bf03b4f030c6c8cf4245 AS builder
+FROM node:25@sha256:7b8866cb97c1cd1f0ceff11a9772d890c07faaad4f0188f1d9ac1d2b285945a9 AS builder
 
 WORKDIR /app
 
