@@ -1,6 +1,6 @@
+import texas, { type IdentityProvider } from "@navikt/texas";
+
 import { failSpan, OtelTaxonomy, spanAsync } from "../../lib/otel";
-import { texas } from "../../texas/texas";
-import type { IdentityProvider } from "../../texas/types.gen";
 import { TokenResult } from "../../token-result";
 
 export type InternalClientCredientialsProvider = (

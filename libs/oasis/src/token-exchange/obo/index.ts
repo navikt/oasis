@@ -1,5 +1,6 @@
+import type { IdentityProvider } from "@navikt/texas";
+
 import { stripBearer } from "../../lib/utils";
-import type { IdentityProvider } from "../../texas/types.gen";
 import { withCache } from "../../token-cache";
 import { TokenResult } from "../../token-result";
 

@@ -1,9 +1,10 @@
-name: Release 4.0.0 beta
+name: Release 4.1.0 next
 
 on:
   push:
     branches:
       - main
+      - navikt/texas
 
 permissions:
   contents: read
@@ -23,16 +24,23 @@ jobs:
           cache: npm
 
       - run: npm ci
+      - run: npm run build -w @navikt/texas
       - run: npm test
       - run: npm run lint
       - name: Set beta version before build
         run: |
           TEMP_VERSION=$(date +'%Y%m%d%H%M%S')
-          jq --arg v "4.0.0-$TEMP_VERSION" '.version = $v' package.json > package.tmp.json && mv package.tmp.json package.json
-        working-directory: libs/oasis
+          jq --arg v "4.1.0-$TEMP_VERSION" '.version = $v' libs/texas/package.json > libs/texas/package.tmp.json && mv libs/texas/package.tmp.json libs/texas/package.json
+          jq --arg v "4.1.0-$TEMP_VERSION" '.version = $v' libs/oasis/package.json > libs/oasis/package.tmp.json && mv libs/oasis/package.tmp.json libs/oasis/package.json
 
       - run: npm run build:lib
-      - run: npm publish --tag beta
+
+      - run: npm publish --tag next
+        working-directory: libs/texas
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: npm publish --tag next
         working-directory: libs/oasis
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

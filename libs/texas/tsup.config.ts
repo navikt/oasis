@@ -2,17 +2,11 @@ import { defineConfig } from "tsup";
 
 import { sharedConfig } from "../tsup.common";
 
-import pkgJson from "./package.json";
-
 export default defineConfig({
   ...sharedConfig,
   entry: ["src/index.ts"],
   dts: {
     resolve: true,
     entry: "./src/index.ts",
-  },
-  external: ["node:http"],
-  define: {
-    LIB_VERSION: JSON.stringify(pkgJson.version),
   },
 });

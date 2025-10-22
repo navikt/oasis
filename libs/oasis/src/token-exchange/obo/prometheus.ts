@@ -1,6 +1,5 @@
+import type { IdentityProvider } from "@navikt/texas";
 import { Counter, Histogram } from "prom-client";
-
-import type { IdentityProvider } from "../../texas/types.gen";
 
 import type { InternalOboProvider } from "./exchange";
 

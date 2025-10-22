@@ -1,4 +1,5 @@
-import type { IdentityProvider } from "../../texas/types.gen";
+import type { IdentityProvider } from "@navikt/texas";
+
 import { withCache } from "../../token-cache";
 import type { TokenResult } from "../../token-result";
 
