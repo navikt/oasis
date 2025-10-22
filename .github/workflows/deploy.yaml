@@ -13,14 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - run: corepack enable
       - uses: actions/setup-node@v5
         with:
           node-version: 24
-          cache: npm
+          cache: yarn
 
-      - run: npm ci
-      - run: npm run lint:ci
-      - run: npm test
+      - run: yarn --immutable
+      - run: yarn lint:ci
+      - run: yarn workspace @navikt/texas build
+      - run: yarn test
 
   build:
     name: Build and Publish Docker image

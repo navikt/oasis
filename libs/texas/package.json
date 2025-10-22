@@ -5,7 +5,11 @@
   "description": "An even simpler client that wraps fetch and provides proper types for using nais/texas directly.",
   "engineStrict": true,
   "engines": {
-    "node": "24"
+    "node": "^20.19.0 || >= 22.12.0 || 24.x || 25.x"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com/"
   },
   "type": "module",
   "files": [
@@ -17,12 +21,11 @@
     ".": "./dist/index.js"
   },
   "scripts": {
-    "build": "node_modules/.bin/tsup",
+    "build": "tsup",
     "lint": "biome check",
     "type-check": "tsc --pretty --noEmit",
     "gen:texas": "openapi-ts"
   },
-  "dependencies": {},
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.85.2",
     "@types/node": "^24.7.2",
