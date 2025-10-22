@@ -1,8 +1,8 @@
 {
-  "name": "@navikt/oasis",
+  "name": "@navikt/texas",
   "version": "4.0.0",
   "license": "MIT",
-  "description": "A simple nais/texas client for token management in a nais application",
+  "description": "An even simpler client that wraps fetch and provides proper types for using nais/texas directly.",
   "engineStrict": true,
   "engines": {
     "node": "24"
@@ -18,24 +18,15 @@
   },
   "scripts": {
     "build": "node_modules/.bin/tsup",
-    "test": "vitest",
     "lint": "biome check",
     "type-check": "tsc --pretty --noEmit",
     "gen:texas": "openapi-ts"
   },
-  "dependencies": {
-    "@navikt/texas": "*",
-    "@opentelemetry/api": "^1.9.0",
-    "jose": "^6.1.0",
-    "prom-client": "^15.1.3"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.85.2",
     "@types/node": "^24.7.2",
-    "msw": "^2.11.5",
-    "node-mocks-http": "^1.17.2",
     "tsup": "^8.5.0",
-    "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
+    "typescript": "^5.9.3"
   }
 }

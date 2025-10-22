@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
+import type { IdentityProvider } from "@navikt/texas";
 import { Counter } from "prom-client";
 
-import type { IdentityProvider } from "../texas/types.gen";
 import type { InternalClientCredientialsProvider } from "../token-exchange/m2m/exchange";
 import type { InternalOboProvider } from "../token-exchange/obo/exchange";
 import { TokenResult } from "../token-result";
