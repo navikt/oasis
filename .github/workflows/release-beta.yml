@@ -3,7 +3,7 @@ name: Release 4.0.0 beta
 on:
   push:
     branches:
-      - feat/texas
+      - main
 
 permissions:
   contents: read
