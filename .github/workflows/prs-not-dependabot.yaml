@@ -22,5 +22,4 @@ jobs:
       - run: npm ci
       - run: npm run lint:ci
       - run: npm run test
-      - run: npm run build
-        working-directory: oasis
+      - run: npm run build:lib

@@ -8,16 +8,16 @@
     "node": "24"
   },
   "scripts": {
-    "test": "npm run -w oasis test",
+    "test": "npm run -w @navikt/oasis test",
     "lint": "biome check",
     "lint:ci": "biome ci",
-    "build": "npm run build -w example-app",
-    "build-lib": "npm run build -w oasis",
-    "type-check": "npm run type-check -w oasis",
+    "build:app": "npm run build -w example-app",
+    "build:lib": "npm run build -w @navikt/oasis",
+    "type-check": "npm run type-check -w @navikt/oasis",
     "prepare": "husky"
   },
   "workspaces": [
-    "oasis",
+    "libs/*",
     "example-app"
   ],
   "devDependencies": {

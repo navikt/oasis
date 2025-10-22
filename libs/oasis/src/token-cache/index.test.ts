@@ -5,7 +5,7 @@ import { token } from "../test/test-provider";
 import type { InternalOboProvider } from "../token-exchange/obo/exchange";
 import { TokenResult } from "../token-result";
 
-import { withCache } from ".";
+import { withCache } from "./index";
 
 describe("withCache", () => {
   afterEach(() => {
