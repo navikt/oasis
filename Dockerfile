@@ -1,17 +1,17 @@
-FROM node:23@sha256:ee8a0bc5bbaece0c538c76e7c20fde6d4db319bbd5d4e423940999f16da89aa1 AS builder
+FROM node:24@sha256:0a687f450869e3eafc9e719ce2a4873c601818562108bf03b4f030c6c8cf4245 AS builder
 
 WORKDIR /app
 
 COPY package*.json /app/
 COPY example-app /app/example-app
-COPY libs/oasis /app/oasis
+COPY libs/oasis /app/libs/oasis
 
 RUN npm ci --prefer-offline --no-audit
 
 RUN npm run build:lib
 RUN npm run build:app
 
-FROM node:23-alpine@sha256:86703151a18fcd06258e013073508c4afea8e19cd7ed451554221dd00aea83fc AS runtime
+FROM gcr.io/distroless/nodejs24-debian12@sha256:78513aa8d905a46b78d7ac3406389d17bf83f21b1e74078cb63e4c3ccf9f5ca3 AS runtime
 
 WORKDIR /app
 
