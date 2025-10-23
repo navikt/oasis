@@ -32,6 +32,8 @@ jobs:
       packages: "write"
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - run: corepack enable
       - uses: actions/setup-node@v5
         with:
@@ -42,7 +44,7 @@ jobs:
       - run: yarn --immutable
 
       - name: Bump version before build, because OTEL uses the lib version
-        run: yarn workspaces foreach -Ap version ${{ github.event.release.tag_name }}
+        run: yarn workspaces foreach --no-private -At version -i ${{ github.event.release.tag_name }}
 
       - run: yarn build:lib
 
