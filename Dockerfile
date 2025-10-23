@@ -6,7 +6,7 @@ COPY package.json /app/
 COPY yarn.lock /app/
 COPY .yarnrc.yml /app/
 COPY example-app /app/example-app
-COPY libs/oasis /app/libs/oasis
+COPY libs /app/libs
 
 RUN corepack enable
 RUN yarn --immutable
@@ -18,12 +18,11 @@ FROM gcr.io/distroless/nodejs24-debian12@sha256:78513aa8d905a46b78d7ac3406389d17
 
 WORKDIR /app
 
-ENV PORT=3000 NODE_ENV=production
 
 COPY --from=builder /app/example-app/.next/standalone/ /app/standalone
 COPY --from=builder /app/example-app/.next/static/ /app/standalone/example-app/.next/static
 
 EXPOSE 3000
-USER node
+ENV PORT=3000 NODE_ENV=production
 
-CMD ["node", "standalone/example-app/server.js"]
+CMD ["standalone/example-app/server.js"]
