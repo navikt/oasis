@@ -1,5 +1,3 @@
-import type { IdentityProvider } from "@navikt/texas";
-
 import { withCache } from "../../token-cache";
 import type { TokenResult } from "../../token-result";
 
@@ -15,7 +13,6 @@ export const requestAzureClientCredentialsToken = async (
   target: string,
 ): Promise<TokenResult> =>
   withCache(
-    (provider: IdentityProvider, target) =>
-      grantClientCredentialsToken(provider, target),
+    (provider, target) => grantClientCredentialsToken(provider, target),
     "client-credentials",
   )("azuread", target);

@@ -1,15 +1,15 @@
-import texas, { type IdentityProvider } from "@navikt/texas";
+import texas, { type TokenRequestIdentityProvider } from "@navikt/texas";
 
 import { failSpan, OtelTaxonomy, spanAsync } from "../../lib/otel";
 import { TokenResult } from "../../token-result";
 
 export type InternalClientCredientialsProvider = (
-  provider: IdentityProvider,
+  provider: TokenRequestIdentityProvider,
   target: string,
 ) => Promise<TokenResult>;
 
 export const grantClientCredentialsToken = async (
-  provider: IdentityProvider,
+  provider: TokenRequestIdentityProvider,
   target: string,
 ): Promise<TokenResult> => {
   return spanAsync("Token exchange (m2m)", async (span) => {
@@ -19,10 +19,10 @@ export const grantClientCredentialsToken = async (
     });
 
     try {
-      const { access_token } = await texas.token(
-        provider,
-        target as `api://${string}.${string}.${string}/.default`,
-      );
+      const { access_token } = await texas.token({
+        identity_provider: provider,
+        target: target as `api://${string}.${string}.${string}/.default`,
+      });
 
       return access_token
         ? TokenResult.Ok(access_token)
