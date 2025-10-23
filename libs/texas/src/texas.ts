@@ -40,7 +40,7 @@ export const texas = {
 
     if (!response.ok) {
       if (
-        response.status === 400 &&
+        (response.status === 400 || response.status === 500) &&
         response.headers.get("Content-Type") === "application/json"
       ) {
         const errorResponse = (await response.json()) as ErrorResponse;
@@ -64,7 +64,7 @@ export const texas = {
 
     if (!response.ok) {
       if (
-        response.status === 400 &&
+        (response.status === 400 || response.status === 500) &&
         response.headers.get("Content-Type") === "application/json"
       ) {
         const errorResponse = (await response.json()) as ErrorResponse;
