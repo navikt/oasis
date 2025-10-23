@@ -1,6 +1,6 @@
 {
   "name": "@navikt/texas",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "license": "MIT",
   "description": "An even simpler client that wraps fetch and provides proper types for using nais/texas directly.",
   "engineStrict": true,
