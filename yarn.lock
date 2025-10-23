@@ -700,6 +700,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mswjs/interceptors@npm:^0.39.5":
+  version: 0.39.8
+  resolution: "@mswjs/interceptors@npm:0.39.8"
+  dependencies:
+    "@open-draft/deferred-promise": "npm:^2.2.0"
+    "@open-draft/logger": "npm:^0.3.0"
+    "@open-draft/until": "npm:^2.0.0"
+    is-node-process: "npm:^1.2.0"
+    outvariant: "npm:^1.4.3"
+    strict-event-emitter: "npm:^0.5.1"
+  checksum: 10c0/0d07625ff1bbbf4b5ea702e164914490e26cc3754323f544429f843f5ad8b157194f6a650259cfd1bbdeb6003e1354f63be1d9bf483816aaa17d93ef4b321aaf
+  languageName: node
+  linkType: hard
+
 "@mswjs/interceptors@npm:^0.40.0":
   version: 0.40.0
   resolution: "@mswjs/interceptors@npm:0.40.0"
@@ -748,8 +762,10 @@ __metadata:
   dependencies:
     "@hey-api/openapi-ts": "npm:^0.85.2"
     "@types/node": "npm:^24.7.2"
+    nock: "npm:^14.0.10"
     tsup: "npm:^8.5.0"
     typescript: "npm:^5.9.3"
+    vitest: "npm:^3.2.4"
   languageName: unknown
   linkType: soft
 
@@ -3703,6 +3719,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-stringify-safe@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "json-stringify-safe@npm:5.0.1"
+  checksum: 10c0/7dbf35cd0411d1d648dceb6d59ce5857ec939e52e4afc37601aa3da611f0987d5cee5b38d58329ceddf3ed48bd7215229c8d52059ab01f2444a338bf24ed0f37
+  languageName: node
+  linkType: hard
+
 "json5@npm:^1.0.2":
   version: 1.0.2
   resolution: "json5@npm:1.0.2"
@@ -4234,6 +4257,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nock@npm:^14.0.10":
+  version: 14.0.10
+  resolution: "nock@npm:14.0.10"
+  dependencies:
+    "@mswjs/interceptors": "npm:^0.39.5"
+    json-stringify-safe: "npm:^5.0.1"
+    propagate: "npm:^2.0.0"
+  checksum: 10c0/4868ce7c3e6a51ee83b496a1305eb821ad89427eb9e09c3c431344d91fd49974717e214fe97548be7d5f9a8039fefc3602ffbaad036f3508dd2c143726e3cfb8
+  languageName: node
+  linkType: hard
+
 "node-fetch-native@npm:^1.6.6":
   version: 1.6.7
   resolution: "node-fetch-native@npm:1.6.7"
@@ -4670,6 +4704,13 @@ __metadata:
     object-assign: "npm:^4.1.1"
     react-is: "npm:^16.13.1"
   checksum: 10c0/59ece7ca2fb9838031d73a48d4becb9a7cc1ed10e610517c7d8f19a1e02fa47f7c27d557d8a5702bec3cfeccddc853579832b43f449e54635803f277b1c78077
+  languageName: node
+  linkType: hard
+
+"propagate@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "propagate@npm:2.0.1"
+  checksum: 10c0/01e1023b60ae4050d1a2783f976d7db702022dbdb70dba797cceedad8cfc01b3939c41e77032f8c32aa9d93192fe937ebba1345e8604e5ce61fd3b62ee3003b8
   languageName: node
   linkType: hard
 
