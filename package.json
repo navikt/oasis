@@ -9,7 +9,7 @@
   },
   "packageManager": "yarn@4.10.3",
   "scripts": {
-    "test": "yarn workspace @navikt/oasis test",
+    "test": "yarn workspaces foreach -Ap --no-private run test --run",
     "lint": "biome check",
     "lint:ci": "biome ci",
     "build:app": "yarn workspace example-app build",
