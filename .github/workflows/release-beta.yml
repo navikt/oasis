@@ -1,10 +1,9 @@
-name: Release 4.1.0 next
+name: Release 4.1.0 beta
 
 on:
   push:
     branches:
       - main
-      - navikt/texas
 
 permissions:
   contents: read
@@ -36,12 +35,12 @@ jobs:
 
       - run: yarn build:lib
 
-      - run: yarn npm publish --tag next
+      - run: yarn npm publish --tag beta
         working-directory: libs/texas
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: yarn npm publish --tag next
+      - run: yarn npm publish --tag beta
         working-directory: libs/oasis
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

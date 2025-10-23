@@ -1,6 +1,6 @@
 {
   "name": "@navikt/oasis",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "license": "MIT",
   "description": "A simple nais/texas client for token management in a nais application",
   "engineStrict": true,
