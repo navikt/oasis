@@ -8,8 +8,25 @@ permissions:
   contents: read
 
 jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+    steps:
+      - uses: actions/checkout@v5
+      - run: corepack enable
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: yarn --immutable
+      - run: yarn lint
+      - run: yarn build:lib && yarn test
+
   build:
     runs-on: ubuntu-latest
+    needs: verify
     permissions:
       contents: "read"
       packages: "write"
@@ -23,15 +40,20 @@ jobs:
           cache: npm
 
       - run: yarn --immutable
-      - run: yarn test
-      - run: yarn lint
 
-     # TODO: set version before build (for otel version)
+      - name: Bump version before build, because OTEL uses the lib version
+        run: yarn workspaces foreach -Ap version ${{ github.event.release.tag_name }}
+
       - run: yarn build:lib
 
-     # TODO: Deploy @navikt/texas and @navikt/oasis together
-      - run: |
-          npm version -w oasis --allow-same-version --no-git-tag-version ${{ github.event.release.tag_name }}
-          yarn npm publish -w oasis
+      - name: Publish @navikt/texas first
+        run: yarn npm publish
+        working-directory: libs/texas
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish @navikt/oasis with new @navikt/texas as dependency
+        run: yarn npm publish
+        working-directory: libs/oasis
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
