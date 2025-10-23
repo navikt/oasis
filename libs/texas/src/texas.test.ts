@@ -3,6 +3,7 @@ import nock from "nock";
 import { expect, test } from "vitest";
 
 import { texas } from "./texas";
+import type { FancyTokenExchangeRequest } from "./types";
 import type {
   IntrospectRequest,
   IntrospectResponse,
@@ -43,7 +44,7 @@ test("sanity: correct types, URL and payload for token exchange (OBO)", async ()
   nock(env.host)
     .post(env.exchange, {
       identity_provider: "azuread",
-      target: "dev-gcp:joda:neida",
+      target: "api://dev-gcp.joda.neida/.default",
       user_token: "foo-bar-baz",
     } satisfies TokenExchangeRequest)
     .reply(
@@ -57,7 +58,7 @@ test("sanity: correct types, URL and payload for token exchange (OBO)", async ()
 
   const result = await texas.exchange({
     identity_provider: "azuread",
-    target: "dev-gcp:joda:neida",
+    target: "api://dev-gcp.joda.neida/.default",
     user_token: "foo-bar-baz",
   });
 
@@ -87,6 +88,45 @@ test("sanity: correct types, URL and payload for token request (M2M)", async () 
   });
 
   expect(result.access_token).toBe("obo-token");
+});
+
+test("types: token exachenge (OBO) payloads", () => {
+  const types: FancyTokenExchangeRequest[] = [
+    {
+      identity_provider: "azuread",
+      target: "api://dev-gcp.my-app.namespace/.default",
+      user_token: "foo-bar-baz",
+    } satisfies FancyTokenExchangeRequest,
+    {
+      identity_provider: "azuread",
+      // @ts-expect-error Forgot .default
+      target: "api://dev-gcp.my-app.namespace",
+      user_token: "foo-bar-baz",
+    } satisfies FancyTokenExchangeRequest,
+    {
+      identity_provider: "azuread",
+      target: "https://graph.microsoft.com/.default",
+      user_token: "foo-bar-baz",
+    } satisfies FancyTokenExchangeRequest,
+    {
+      identity_provider: "azuread",
+      target: "https://graph.microsoft.com/User.Read",
+      user_token: "foo-bar-baz",
+    } satisfies FancyTokenExchangeRequest,
+    {
+      identity_provider: "tokenx",
+      target: "dev-gcp:joda:neida",
+      user_token: "foo-bar-baz",
+    } satisfies FancyTokenExchangeRequest,
+    {
+      identity_provider: "tokenx",
+      // @ts-expect-error Wrong Env
+      target: "gcp-dev:joda:neida",
+      user_token: "foo-bar-baz",
+    } satisfies FancyTokenExchangeRequest,
+  ];
+
+  expect(types).toBeTruthy();
 });
 
 function setTexasMockEnv(): {
