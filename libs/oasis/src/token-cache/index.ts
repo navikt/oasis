@@ -1,5 +1,4 @@
 import { createHash } from "node:crypto";
-import type { IdentityProvider } from "@navikt/texas";
 import { Counter } from "prom-client";
 
 import type { InternalClientCredientialsProvider } from "../token-exchange/m2m/exchange";
@@ -50,18 +49,20 @@ function getCache() {
   return cache;
 }
 
-export function withCache(provider: InternalOboProvider): InternalOboProvider;
 export function withCache(
-  provider: InternalClientCredientialsProvider,
+  oboProvider: InternalOboProvider,
+): InternalOboProvider;
+export function withCache(
+  oboProvider: InternalClientCredientialsProvider,
   variant: "client-credentials",
 ): InternalClientCredientialsProvider;
 export function withCache(
   oboProvider: InternalOboProvider | InternalClientCredientialsProvider,
 ): InternalOboProvider | InternalClientCredientialsProvider {
   return async (
-    provider: IdentityProvider,
-    scopeOrToken: string,
-    audienceOrNothing: string,
+    provider,
+    scopeOrToken,
+    audienceOrNothing,
   ): Promise<TokenResult> => {
     const cache = getCache();
     const key = sha256(scopeOrToken + audienceOrNothing);
@@ -73,22 +74,25 @@ export function withCache(
     }
 
     prometheus.cacheMisses.labels({ provider }).inc();
-    return oboProvider(provider, scopeOrToken, audienceOrNothing).then(
-      (result) => {
-        if (result.ok) {
-          try {
-            const leeway = 5; // seconds
-            const ttl = expiresIn(result.token) - leeway;
-            if (ttl > 0) {
-              cache.set(key, result.token, ttl);
-            }
-          } catch (e) {
-            console.warn(e);
+    return oboProvider(
+      // biome-ignore lint/suspicious/noExplicitAny: TypeScript does not enjoy HoF + string literal unions
+      provider as any,
+      scopeOrToken,
+      audienceOrNothing,
+    ).then((result) => {
+      if (result.ok) {
+        try {
+          const leeway = 5; // seconds
+          const ttl = expiresIn(result.token) - leeway;
+          if (ttl > 0) {
+            cache.set(key, result.token, ttl);
           }
+        } catch (e) {
+          console.warn(e);
         }
+      }
 
-        return result;
-      },
-    );
+      return result;
+    });
   };
 }

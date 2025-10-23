@@ -1,4 +1,4 @@
-import type { IdentityProvider } from "@navikt/texas";
+import type { TokenExchangeIdentityProvider } from "@navikt/texas";
 
 import { stripBearer } from "../../lib/utils";
 import { withCache } from "../../token-cache";
@@ -19,7 +19,7 @@ export const requestAzureOboToken = async (
   audience: string,
 ): Promise<TokenResult> =>
   withCache(
-    withPrometheus((provider: IdentityProvider, token, target) =>
+    withPrometheus((provider: TokenExchangeIdentityProvider, token, target) =>
       grantOboToken(provider, token, target),
     ),
   )("azuread", token, audience);
@@ -36,7 +36,7 @@ export const requestTokenxOboToken = async (
   audience: string,
 ): Promise<TokenResult> =>
   withCache(
-    withPrometheus((provider: IdentityProvider, token, audience) =>
+    withPrometheus((provider: TokenExchangeIdentityProvider, token, audience) =>
       grantOboToken(provider, token, audience),
     ),
   )("tokenx", token, audience);

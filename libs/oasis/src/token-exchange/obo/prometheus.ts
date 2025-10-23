@@ -1,4 +1,4 @@
-import type { IdentityProvider } from "@navikt/texas";
+import type { TokenExchangeIdentityProvider } from "@navikt/texas";
 import { Counter, Histogram } from "prom-client";
 
 import type { InternalOboProvider } from "./exchange";
@@ -35,7 +35,7 @@ const prometheus = (global as AuthMetricsGlobal)[authMetricsSymbol];
 export function withPrometheus(
   oboProvider: InternalOboProvider,
 ): InternalOboProvider {
-  return async (provider: IdentityProvider, token, audience) => {
+  return async (provider: TokenExchangeIdentityProvider, token, audience) => {
     const measureTokenExchange = prometheus.tokenExchangeDurationHistogram
       .labels({ provider })
       .startTimer();

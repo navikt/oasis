@@ -1,16 +1,16 @@
-import texas, { type IdentityProvider } from "@navikt/texas";
+import texas, { type TokenExchangeIdentityProvider } from "@navikt/texas";
 
 import { failSpan, OtelTaxonomy, spanAsync } from "../../lib/otel";
 import { TokenResult } from "../../token-result";
 
 export type InternalOboProvider = (
-  provider: IdentityProvider,
+  provider: TokenExchangeIdentityProvider,
   token: string,
   target: string,
 ) => Promise<TokenResult>;
 
 export const grantOboToken: (
-  provider: IdentityProvider,
+  provider: TokenExchangeIdentityProvider,
   token: string,
   target: string,
 ) => Promise<TokenResult> = async (provider, token, target) => {
@@ -21,7 +21,11 @@ export const grantOboToken: (
     });
 
     try {
-      const { access_token } = await texas.exchange(token, target, provider);
+      const { access_token } = await texas.exchange({
+        identity_provider: provider,
+        user_token: token,
+        target: target,
+      });
 
       return access_token
         ? TokenResult.Ok(access_token)

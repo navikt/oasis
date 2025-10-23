@@ -1,6 +1,7 @@
+import { getTexasConfig } from "./config";
+import type { FancyTokenExchangeRequest, FancyTokenRequest } from "./types";
 import type {
   ErrorResponse,
-  IdentityProvider,
   IntrospectRequest,
   IntrospectResponse,
   TokenExchangeRequest,
@@ -10,17 +11,13 @@ import type {
 
 export const texas = {
   introspect: async (
-    token: string,
-    provider: IdentityProvider,
+    payload: IntrospectRequest,
   ): Promise<IntrospectResponse> => {
     const config = getTexasConfig();
     const response = await fetch(config.introspection, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        identity_provider: provider,
-        token: token,
-      } satisfies IntrospectRequest),
+      body: JSON.stringify(payload satisfies IntrospectRequest),
     });
 
     if (!response.ok) {
@@ -32,19 +29,13 @@ export const texas = {
     return (await response.json()) as IntrospectResponse;
   },
   exchange: async (
-    token: string,
-    target: string,
-    provider: IdentityProvider,
+    payload: FancyTokenExchangeRequest,
   ): Promise<TokenResponse> => {
     const config = getTexasConfig();
     const response = await fetch(config.exchange, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        target: target,
-        identity_provider: provider,
-        user_token: token,
-      } satisfies TokenExchangeRequest),
+      body: JSON.stringify(payload satisfies TokenExchangeRequest),
     });
 
     if (!response.ok) {
@@ -63,18 +54,12 @@ export const texas = {
 
     return (await response.json()) as TokenResponse;
   },
-  token: async (
-    provider: IdentityProvider,
-    target: `api://${string}.${string}.${string}/.default`,
-  ): Promise<TokenResponse> => {
+  token: async (payload: FancyTokenRequest): Promise<TokenResponse> => {
     const config = getTexasConfig();
     const response = await fetch(config.token, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        identity_provider: provider,
-        target: target,
-      } satisfies TokenRequest),
+      body: JSON.stringify(payload satisfies TokenRequest),
     });
 
     if (!response.ok) {
@@ -93,22 +78,4 @@ export const texas = {
 
     return (await response.json()) as TokenResponse;
   },
-};
-
-const getTexasConfig = () => {
-  if (
-    !process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT ||
-    !process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT ||
-    !process.env.NAIS_TOKEN_ENDPOINT
-  ) {
-    throw Error(
-      "This ain't texas! Missing NAIS_TOKEN_-environment variables. Are you in NAIS?",
-    );
-  }
-
-  return {
-    introspection: process.env.NAIS_TOKEN_INTROSPECTION_ENDPOINT,
-    exchange: process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT,
-    token: process.env.NAIS_TOKEN_ENDPOINT,
-  };
 };
