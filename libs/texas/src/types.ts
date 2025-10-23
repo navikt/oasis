@@ -22,7 +22,9 @@ export type FancyTokenRequest = Omit<
   (
     | {
         identity_provider: "azuread";
-        target: `api://${string}.${string}.${string}/.default`;
+        target:
+          | `api://${string}.${string}.${string}/.default`
+          | `https://graph.microsoft.com/${".default" | `${string}.${string}`}`;
       }
     | {
         identity_provider: "maskinporten";
