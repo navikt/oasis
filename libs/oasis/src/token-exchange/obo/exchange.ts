@@ -1,7 +1,7 @@
 import texas, {
   type AzureAdTarget,
-  type TokenxTarget,
   type TokenExchangeIdentityProvider,
+  type TokenxTarget,
 } from "@navikt/texas";
 
 import { failSpan, OtelTaxonomy, spanAsync } from "../../lib/otel";
