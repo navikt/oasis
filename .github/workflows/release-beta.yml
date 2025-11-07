@@ -1,4 +1,4 @@
-name: Release 4.1.0 beta
+name: Release 4.2.0 beta
 
 on:
   push:
@@ -30,8 +30,8 @@ jobs:
       - name: Set beta version before build
         run: |
           TEMP_VERSION=$(date +'%Y%m%d%H%M%S')
-          jq --arg v "4.1.0-$TEMP_VERSION" '.version = $v' libs/texas/package.json > libs/texas/package.tmp.json && mv libs/texas/package.tmp.json libs/texas/package.json
-          jq --arg v "4.1.0-$TEMP_VERSION" '.version = $v' libs/oasis/package.json > libs/oasis/package.tmp.json && mv libs/oasis/package.tmp.json libs/oasis/package.json
+          jq --arg v "4.2.0-$TEMP_VERSION" '.version = $v' libs/texas/package.json > libs/texas/package.tmp.json && mv libs/texas/package.tmp.json libs/texas/package.json
+          jq --arg v "4.2.0-$TEMP_VERSION" '.version = $v' libs/oasis/package.json > libs/oasis/package.tmp.json && mv libs/oasis/package.tmp.json libs/oasis/package.json
 
       - run: yarn build:lib
 
