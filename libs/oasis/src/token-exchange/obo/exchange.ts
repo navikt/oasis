@@ -1,4 +1,8 @@
-import texas, { type TokenExchangeIdentityProvider } from "@navikt/texas";
+import texas, {
+  type AzureAdTarget,
+  type TokenxTarget,
+  type TokenExchangeIdentityProvider,
+} from "@navikt/texas";
 
 import { failSpan, OtelTaxonomy, spanAsync } from "../../lib/otel";
 import { TokenResult } from "../../token-result";
@@ -21,11 +25,19 @@ export const grantOboToken: (
     });
 
     try {
-      const { access_token } = await texas.exchange({
-        identity_provider: provider,
-        user_token: token,
-        target: target,
-      });
+      const { access_token } = await texas.exchange(
+        provider === "azuread"
+          ? {
+              identity_provider: provider,
+              user_token: token,
+              target: target as AzureAdTarget,
+            }
+          : {
+              identity_provider: provider,
+              user_token: token,
+              target: target as TokenxTarget,
+            },
+      );
 
       return access_token
         ? TokenResult.Ok(access_token)

@@ -1,4 +1,7 @@
-import texas, { type TokenRequestIdentityProvider } from "@navikt/texas";
+import texas, {
+  type AzureAdTarget,
+  type TokenRequestIdentityProvider,
+} from "@navikt/texas";
 
 import { failSpan, OtelTaxonomy, spanAsync } from "../../lib/otel";
 import { TokenResult } from "../../token-result";
@@ -21,7 +24,7 @@ export const grantClientCredentialsToken = async (
     try {
       const { access_token } = await texas.token({
         identity_provider: provider,
-        target: target as `api://${string}.${string}.${string}/.default`,
+        target: target as AzureAdTarget,
       });
 
       return access_token

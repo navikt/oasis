@@ -2,11 +2,11 @@ import type { TokenExchangeRequest, TokenRequest } from "./types.gen";
 
 type Environments = `${"dev" | "prod"}-${"gcp" | "fss"}`;
 
-type AzureAdTarget =
+export type AzureAdTarget =
   | `api://${Environments}.${string}.${string}/.default`
   | `https://graph.microsoft.com/${".default" | `${string}.${string}`}`;
 
-type TokenxTarget = `${Environments}:${string}:${string}`;
+export type TokenxTarget = `${Environments}:${string}:${string}`;
 
 export type TokenExchangeIdentityProvider = "azuread" | "tokenx";
 
