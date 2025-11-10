@@ -38,6 +38,6 @@
     "node-mocks-http": "^1.17.2",
     "tsup": "^8.5.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.7"
+    "vitest": "^4.0.8"
   }
 }
