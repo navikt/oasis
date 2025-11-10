@@ -308,9 +308,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:^0.87.0":
-  version: 0.87.0
-  resolution: "@hey-api/openapi-ts@npm:0.87.0"
+"@hey-api/openapi-ts@npm:^0.87.1":
+  version: 0.87.1
+  resolution: "@hey-api/openapi-ts@npm:0.87.1"
   dependencies:
     "@hey-api/codegen-core": "npm:^0.3.3"
     "@hey-api/json-schema-ref-parser": "npm:1.2.1"
@@ -324,7 +324,7 @@ __metadata:
     typescript: ">=5.5.3"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/0347052c5f46dacebcd588de62e4b8bcc5fd6a65d3637298942a3a1e92b4087eb252cd1c21c96cf5f087d54652fdcfae17fc40a825bfe69d1421c543c7271e91
+  checksum: 10c0/be4004f797b15057b7a11dc29bb47839ad3320445befb6883a4611ec0f9a21ba4127d40f238bd3a523ec8e95c18233d968e73e77fe51bd3189733857f00b08b2
   languageName: node
   linkType: hard
 
@@ -711,7 +711,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@navikt/texas@workspace:libs/texas"
   dependencies:
-    "@hey-api/openapi-ts": "npm:^0.87.0"
+    "@hey-api/openapi-ts": "npm:^0.87.1"
     "@types/node": "npm:^24.10.0"
     nock: "npm:^14.0.10"
     tsup: "npm:^8.5.0"
