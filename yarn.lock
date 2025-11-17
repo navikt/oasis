@@ -490,14 +490,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:^0.87.1":
-  version: 0.87.1
-  resolution: "@hey-api/openapi-ts@npm:0.87.1"
+"@hey-api/openapi-ts@npm:^0.87.5":
+  version: 0.87.5
+  resolution: "@hey-api/openapi-ts@npm:0.87.5"
   dependencies:
     "@hey-api/codegen-core": "npm:^0.3.3"
     "@hey-api/json-schema-ref-parser": "npm:1.2.1"
     ansi-colors: "npm:4.1.3"
-    c12: "npm:3.3.1"
+    c12: "npm:3.3.2"
     color-support: "npm:1.1.3"
     commander: "npm:14.0.1"
     open: "npm:10.2.0"
@@ -506,7 +506,7 @@ __metadata:
     typescript: ">=5.5.3"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/be4004f797b15057b7a11dc29bb47839ad3320445befb6883a4611ec0f9a21ba4127d40f238bd3a523ec8e95c18233d968e73e77fe51bd3189733857f00b08b2
+  checksum: 10c0/f1145b66e7def59000fc9c02b1e945904a7f078136730e3f0d1027ca921b973484e8b2552541c1f94c6415245e6de7c2877286e68430a183995e07e95c7d79a5
   languageName: node
   linkType: hard
 
@@ -893,7 +893,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@navikt/texas@workspace:libs/texas"
   dependencies:
-    "@hey-api/openapi-ts": "npm:^0.87.1"
+    "@hey-api/openapi-ts": "npm:^0.87.5"
     "@types/node": "npm:^24.10.0"
     nock: "npm:^14.0.10"
     tsup: "npm:^8.5.1"
@@ -1484,15 +1484,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"c12@npm:3.3.1":
-  version: 3.3.1
-  resolution: "c12@npm:3.3.1"
+"c12@npm:3.3.2":
+  version: 3.3.2
+  resolution: "c12@npm:3.3.2"
   dependencies:
     chokidar: "npm:^4.0.3"
     confbox: "npm:^0.2.2"
     defu: "npm:^6.1.4"
     dotenv: "npm:^17.2.3"
-    exsolve: "npm:^1.0.7"
+    exsolve: "npm:^1.0.8"
     giget: "npm:^2.0.0"
     jiti: "npm:^2.6.1"
     ohash: "npm:^2.0.11"
@@ -1501,11 +1501,11 @@ __metadata:
     pkg-types: "npm:^2.3.0"
     rc9: "npm:^2.1.2"
   peerDependencies:
-    magicast: ^0.3.5
+    magicast: "*"
   peerDependenciesMeta:
     magicast:
       optional: true
-  checksum: 10c0/37b70f838980eba3836ec9754b2c28e28d4eda272baefb1e22ff997ee7569a5f2a50acd41d65ea645969cbd66e5a8334f8634b2c264a8abd0af3caeee75e6351
+  checksum: 10c0/5d8df4509e2dcb26d880d99b5c01b66b2b8690b3bdb06f64d6bcac6802ffcc96b6ee0b3a604f0e471b1ebe3c147f16536b8c4544b314a4c6c287ca8a06af829c
   languageName: node
   linkType: hard
 
@@ -2091,6 +2091,13 @@ __metadata:
   version: 1.0.7
   resolution: "exsolve@npm:1.0.7"
   checksum: 10c0/4479369d0bd84bb7e0b4f5d9bc18d26a89b6dbbbccd73f9d383d14892ef78ddbe159e01781055342f83dc00ebe90044036daf17ddf55cc21e2cac6609aa15631
+  languageName: node
+  linkType: hard
+
+"exsolve@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "exsolve@npm:1.0.8"
+  checksum: 10c0/65e44ae05bd4a4a5d87cfdbbd6b8f24389282cf9f85fa5feb17ca87ad3f354877e6af4cd99e02fc29044174891f82d1d68c77f69234410eb8f163530e6278c67
   languageName: node
   linkType: hard
 
