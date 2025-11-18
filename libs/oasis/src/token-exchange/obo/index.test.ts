@@ -93,6 +93,16 @@ describe("request tokenX obo token", () => {
       >(texasEnvs.exchange, async ({ request }) => {
         const body = await request.json();
 
+        if (body.user_token.startsWith("Bearer ")) {
+          return HttpResponse.json(
+            {
+              error: "invalid_request",
+              error_description: "Invalid JWT token: header is malformed",
+            },
+            { status: 400, headers: { "Content-Type": "application/json" } },
+          );
+        }
+
         if (body.target === "error-audience") {
           return HttpResponse.json(
             {

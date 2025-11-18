@@ -1,6 +1,5 @@
 import type { TokenExchangeIdentityProvider } from "@navikt/texas";
 
-import { stripBearer } from "../../lib/utils";
 import { withCache } from "../../token-cache";
 import { TokenResult } from "../../token-result";
 
@@ -63,9 +62,9 @@ export const requestOboToken = async (
       "Multiple identity providers, use requestTokenxOboToken or requestAzureOboToken directly!",
     );
   } else if (tokenx) {
-    return requestTokenxOboToken(stripBearer(token), audience);
+    return requestTokenxOboToken(token, audience);
   } else if (azure) {
-    return requestAzureOboToken(stripBearer(token), audience);
+    return requestAzureOboToken(token, audience);
   } else {
     return TokenResult.Error(
       "No identity provider configured in your nais.yaml",

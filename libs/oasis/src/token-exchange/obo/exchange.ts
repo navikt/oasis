@@ -5,6 +5,7 @@ import texas, {
 } from "@navikt/texas";
 
 import { failSpan, OtelTaxonomy, spanAsync } from "../../lib/otel";
+import { stripBearer } from "../../lib/utils";
 import { TokenResult } from "../../token-result";
 
 export type InternalOboProvider = (
@@ -29,12 +30,12 @@ export const grantOboToken: (
         provider === "azuread"
           ? {
               identity_provider: provider,
-              user_token: token,
+              user_token: stripBearer(token),
               target: target as AzureAdTarget,
             }
           : {
               identity_provider: provider,
-              user_token: token,
+              user_token: stripBearer(token),
               target: target as TokenxTarget,
             },
       );
