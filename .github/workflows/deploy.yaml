@@ -12,7 +12,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - run: corepack enable
       - uses: actions/setup-node@v6
         with:
@@ -31,7 +31,7 @@ jobs:
       contents: "read"
       id-token: "write"
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: nais/docker-build-push@v0
         id: docker-build-push
         with:
@@ -54,7 +54,7 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
@@ -74,7 +74,7 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
