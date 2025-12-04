@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@navikt/oasis": "*",
-    "next": "^15.5.4",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "next": "^16.0.7",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
   },
   "devDependencies": {
     "@types/react": "^19.2.2",
