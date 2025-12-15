@@ -469,33 +469,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/codegen-core@npm:^0.3.3":
-  version: 0.3.3
-  resolution: "@hey-api/codegen-core@npm:0.3.3"
+"@hey-api/codegen-core@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@hey-api/codegen-core@npm:0.4.0"
+  dependencies:
+    ansi-colors: "npm:4.1.3"
+    color-support: "npm:1.1.3"
   peerDependencies:
     typescript: ">=5.5.3"
-  checksum: 10c0/86cf50e3e2587404af092f9ec7cb44332899abc00aef8299c2c563772d9dcafe10f65c45b2cc25d2057ac0a39abf2f67b6e6b7dd41e6e42a3418d7d3b5b152a5
+  checksum: 10c0/131cb6e3a82acb64b3f576d5df6231c7c0f016e011732751879c113adb007750f98a1ffb41916008b0113c335f42cc7c51f873d2c284d253181a01bf51ac4135
   languageName: node
   linkType: hard
 
-"@hey-api/json-schema-ref-parser@npm:1.2.1":
-  version: 1.2.1
-  resolution: "@hey-api/json-schema-ref-parser@npm:1.2.1"
+"@hey-api/json-schema-ref-parser@npm:1.2.2":
+  version: 1.2.2
+  resolution: "@hey-api/json-schema-ref-parser@npm:1.2.2"
   dependencies:
     "@jsdevtools/ono": "npm:^7.1.3"
     "@types/json-schema": "npm:^7.0.15"
-    js-yaml: "npm:^4.1.0"
+    js-yaml: "npm:^4.1.1"
     lodash: "npm:^4.17.21"
-  checksum: 10c0/686a5c655afe0e037f4a6146fd21e730eb79a22e8ea5a6bd5ec991c6da6232459e063d221dc98df3460b3161694d57cf8cd67da391632425c7c7d666b4ed686e
+  checksum: 10c0/7c396d753117ac6c36b4801e8ad06c669483edf23c025a0a8524019f85b07c5bfa11bfcda931ca0b0fe5d6a17af1802a873325f8b527c403b74b425ee2c893e7
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:^0.88.0":
-  version: 0.88.0
-  resolution: "@hey-api/openapi-ts@npm:0.88.0"
+"@hey-api/openapi-ts@npm:^0.89.0":
+  version: 0.89.0
+  resolution: "@hey-api/openapi-ts@npm:0.89.0"
   dependencies:
-    "@hey-api/codegen-core": "npm:^0.3.3"
-    "@hey-api/json-schema-ref-parser": "npm:1.2.1"
+    "@hey-api/codegen-core": "npm:^0.4.0"
+    "@hey-api/json-schema-ref-parser": "npm:1.2.2"
     ansi-colors: "npm:4.1.3"
     c12: "npm:3.3.2"
     color-support: "npm:1.1.3"
@@ -506,7 +509,7 @@ __metadata:
     typescript: ">=5.5.3"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/cb917e13c3f37269382afe7ee891afb6535aa67f00d69bd14fceca7fc495a6bdd2c821553f886ad2a8a70ba4ba1fed32620a181bff7430f6c88e3c4b90ef2247
+  checksum: 10c0/94f7a6a7827b59e73b17a23ce5e59189fe4972bc4541d7e296d7a9d71c56b5e78143c2a274f2ed4ba73374abd9b18aa8af4d3162fdabb555ee7ab5c94e3c3eb7
   languageName: node
   linkType: hard
 
@@ -912,7 +915,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@navikt/texas@workspace:libs/texas"
   dependencies:
-    "@hey-api/openapi-ts": "npm:^0.88.0"
+    "@hey-api/openapi-ts": "npm:^0.89.0"
     "@types/node": "npm:^24.10.0"
     nock: "npm:^14.0.10"
     tsup: "npm:^8.5.1"
@@ -2439,7 +2442,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.1.0":
+"js-yaml@npm:^4.1.1":
   version: 4.1.1
   resolution: "js-yaml@npm:4.1.1"
   dependencies:
