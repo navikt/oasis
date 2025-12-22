@@ -493,9 +493,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:^0.89.0":
-  version: 0.89.0
-  resolution: "@hey-api/openapi-ts@npm:0.89.0"
+"@hey-api/openapi-ts@npm:^0.89.2":
+  version: 0.89.2
+  resolution: "@hey-api/openapi-ts@npm:0.89.2"
   dependencies:
     "@hey-api/codegen-core": "npm:^0.4.0"
     "@hey-api/json-schema-ref-parser": "npm:1.2.2"
@@ -504,12 +504,12 @@ __metadata:
     color-support: "npm:1.1.3"
     commander: "npm:14.0.2"
     open: "npm:11.0.0"
-    semver: "npm:7.7.2"
+    semver: "npm:7.7.3"
   peerDependencies:
     typescript: ">=5.5.3"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/94f7a6a7827b59e73b17a23ce5e59189fe4972bc4541d7e296d7a9d71c56b5e78143c2a274f2ed4ba73374abd9b18aa8af4d3162fdabb555ee7ab5c94e3c3eb7
+  checksum: 10c0/2256025922498928d4beebe17181dfe05c91878aea5592719cd7e90eb992665965b03a99c64007beebde6657541e9bac746f809bd2a2148c72fb27064837bcba
   languageName: node
   linkType: hard
 
@@ -915,7 +915,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@navikt/texas@workspace:libs/texas"
   dependencies:
-    "@hey-api/openapi-ts": "npm:^0.89.0"
+    "@hey-api/openapi-ts": "npm:^0.89.2"
     "@types/node": "npm:^24.10.0"
     nock: "npm:^14.0.10"
     tsup: "npm:^8.5.1"
@@ -3444,16 +3444,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.7.2":
-  version: 7.7.2
-  resolution: "semver@npm:7.7.2"
-  bin:
-    semver: bin/semver.js
-  checksum: 10c0/aca305edfbf2383c22571cb7714f48cadc7ac95371b4b52362fb8eeffdfbc0de0669368b82b2b15978f8848f01d7114da65697e56cd8c37b0dab8c58e543f9ea
-  languageName: node
-  linkType: hard
-
-"semver@npm:^7.3.5, semver@npm:^7.7.3":
+"semver@npm:7.7.3, semver@npm:^7.3.5, semver@npm:^7.7.3":
   version: 7.7.3
   resolution: "semver@npm:7.7.3"
   bin:
