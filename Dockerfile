@@ -14,7 +14,7 @@ RUN yarn --immutable
 RUN yarn build:lib
 RUN yarn build:app
 
-FROM gcr.io/distroless/nodejs24-debian12@sha256:cdf42f994cee425970f30a0d0e37112dcc800737dde7bba50415612702b399af AS runtime
+FROM gcr.io/distroless/nodejs24-debian12@sha256:a372d09952e185540260d95bd717632af9d61c482acac224da6dde0ddb3d2f01 AS runtime
 
 WORKDIR /app
 
