@@ -469,15 +469,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/codegen-core@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@hey-api/codegen-core@npm:0.4.0"
+"@hey-api/codegen-core@npm:^0.5.2":
+  version: 0.5.2
+  resolution: "@hey-api/codegen-core@npm:0.5.2"
   dependencies:
     ansi-colors: "npm:4.1.3"
     color-support: "npm:1.1.3"
   peerDependencies:
     typescript: ">=5.5.3"
-  checksum: 10c0/131cb6e3a82acb64b3f576d5df6231c7c0f016e011732751879c113adb007750f98a1ffb41916008b0113c335f42cc7c51f873d2c284d253181a01bf51ac4135
+  checksum: 10c0/448857f83e7591b2af3daf8a26d23dad5347739f89ba139a513c4db07cd2b8ca2b4ddfbfd7670a7658ff7baf7e6c6dc29a8df9bb5d9bf3d87e59854768f915b6
   languageName: node
   linkType: hard
 
@@ -493,14 +493,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:^0.89.2":
-  version: 0.89.2
-  resolution: "@hey-api/openapi-ts@npm:0.89.2"
+"@hey-api/openapi-ts@npm:^0.90.4":
+  version: 0.90.4
+  resolution: "@hey-api/openapi-ts@npm:0.90.4"
   dependencies:
-    "@hey-api/codegen-core": "npm:^0.4.0"
+    "@hey-api/codegen-core": "npm:^0.5.2"
     "@hey-api/json-schema-ref-parser": "npm:1.2.2"
     ansi-colors: "npm:4.1.3"
-    c12: "npm:3.3.2"
+    c12: "npm:3.3.3"
     color-support: "npm:1.1.3"
     commander: "npm:14.0.2"
     open: "npm:11.0.0"
@@ -509,7 +509,7 @@ __metadata:
     typescript: ">=5.5.3"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/2256025922498928d4beebe17181dfe05c91878aea5592719cd7e90eb992665965b03a99c64007beebde6657541e9bac746f809bd2a2148c72fb27064837bcba
+  checksum: 10c0/87a1107d8a0974110a4fd455622eac6decf249d0a8dec177a210dc50c750482fd254fa5dd4c86f9dbf09d83f8db5e9ad3b83de3b8a48bd49013d969d60d345da
   languageName: node
   linkType: hard
 
@@ -915,7 +915,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@navikt/texas@workspace:libs/texas"
   dependencies:
-    "@hey-api/openapi-ts": "npm:^0.89.2"
+    "@hey-api/openapi-ts": "npm:^0.90.4"
     "@types/node": "npm:^24.10.0"
     nock: "npm:^14.0.10"
     tsup: "npm:^8.5.1"
@@ -1515,11 +1515,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"c12@npm:3.3.2":
-  version: 3.3.2
-  resolution: "c12@npm:3.3.2"
+"c12@npm:3.3.3":
+  version: 3.3.3
+  resolution: "c12@npm:3.3.3"
   dependencies:
-    chokidar: "npm:^4.0.3"
+    chokidar: "npm:^5.0.0"
     confbox: "npm:^0.2.2"
     defu: "npm:^6.1.4"
     dotenv: "npm:^17.2.3"
@@ -1536,7 +1536,7 @@ __metadata:
   peerDependenciesMeta:
     magicast:
       optional: true
-  checksum: 10c0/5d8df4509e2dcb26d880d99b5c01b66b2b8690b3bdb06f64d6bcac6802ffcc96b6ee0b3a604f0e471b1ebe3c147f16536b8c4544b314a4c6c287ca8a06af829c
+  checksum: 10c0/5b2ac937175717df62fc74ce7fe38685ebd02b3fa94e9cc05be9630d3e5d7f1ec437413d23d63ec0d2eaffcfeda824fb14d3d0fab3df522e60a8b4b3e32a4a33
   languageName: node
   linkType: hard
 
@@ -1587,6 +1587,15 @@ __metadata:
   dependencies:
     readdirp: "npm:^4.0.1"
   checksum: 10c0/a58b9df05bb452f7d105d9e7229ac82fa873741c0c40ddcc7bb82f8a909fbe3f7814c9ebe9bc9a2bef9b737c0ec6e2d699d179048ef06ad3ec46315df0ebe6ad
+  languageName: node
+  linkType: hard
+
+"chokidar@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "chokidar@npm:5.0.0"
+  dependencies:
+    readdirp: "npm:^5.0.0"
+  checksum: 10c0/42fc907cb2a7ff5c9e220f84dae75380a77997f851c2a5e7865a2cf9ae45dd407a23557208cdcdbf3ac8c93341135a1748e4c48c31855f3bfa095e5159b6bdec
   languageName: node
   linkType: hard
 
@@ -3287,6 +3296,13 @@ __metadata:
   version: 4.1.2
   resolution: "readdirp@npm:4.1.2"
   checksum: 10c0/60a14f7619dec48c9c850255cd523e2717001b0e179dc7037cfa0895da7b9e9ab07532d324bfb118d73a710887d1e35f79c495fa91582784493e085d18c72c62
+  languageName: node
+  linkType: hard
+
+"readdirp@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "readdirp@npm:5.0.0"
+  checksum: 10c0/faf1ec57cff2020f473128da3f8d2a57813cc3a08a36c38cae1c9af32c1579906cc50ba75578043b35bade77e945c098233665797cf9730ba3613a62d6e79219
   languageName: node
   linkType: hard
 
