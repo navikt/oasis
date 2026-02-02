@@ -469,47 +469,74 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/codegen-core@npm:^0.5.2":
-  version: 0.5.2
-  resolution: "@hey-api/codegen-core@npm:0.5.2"
+"@hey-api/codegen-core@npm:0.6.1":
+  version: 0.6.1
+  resolution: "@hey-api/codegen-core@npm:0.6.1"
   dependencies:
+    "@hey-api/types": "npm:0.1.3"
     ansi-colors: "npm:4.1.3"
+    c12: "npm:3.3.3"
     color-support: "npm:1.1.3"
   peerDependencies:
     typescript: ">=5.5.3"
-  checksum: 10c0/448857f83e7591b2af3daf8a26d23dad5347739f89ba139a513c4db07cd2b8ca2b4ddfbfd7670a7658ff7baf7e6c6dc29a8df9bb5d9bf3d87e59854768f915b6
+  checksum: 10c0/b92e63dadeada81302480e3ac2173658e7c07ed8ab1c0d2a3581e2d29e937dbe6a8e3d3caa4c04b056f36dec2c0de9059750e268449f5379e3c9d5672df47146
   languageName: node
   linkType: hard
 
-"@hey-api/json-schema-ref-parser@npm:1.2.2":
-  version: 1.2.2
-  resolution: "@hey-api/json-schema-ref-parser@npm:1.2.2"
+"@hey-api/json-schema-ref-parser@npm:1.2.3":
+  version: 1.2.3
+  resolution: "@hey-api/json-schema-ref-parser@npm:1.2.3"
   dependencies:
     "@jsdevtools/ono": "npm:^7.1.3"
     "@types/json-schema": "npm:^7.0.15"
     js-yaml: "npm:^4.1.1"
     lodash: "npm:^4.17.21"
-  checksum: 10c0/7c396d753117ac6c36b4801e8ad06c669483edf23c025a0a8524019f85b07c5bfa11bfcda931ca0b0fe5d6a17af1802a873325f8b527c403b74b425ee2c893e7
+  checksum: 10c0/d083beb98c05a57d07bae28c29d562451919ad2107ded629fe11b1a3346ddc4f652fcaf7b8fbb6acbe1999a12e7d4346ad34de3ab43fec3c44d59a3920add5ea
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:^0.90.4":
-  version: 0.90.4
-  resolution: "@hey-api/openapi-ts@npm:0.90.4"
+"@hey-api/openapi-ts@npm:^0.91.1":
+  version: 0.91.1
+  resolution: "@hey-api/openapi-ts@npm:0.91.1"
   dependencies:
-    "@hey-api/codegen-core": "npm:^0.5.2"
-    "@hey-api/json-schema-ref-parser": "npm:1.2.2"
+    "@hey-api/codegen-core": "npm:0.6.1"
+    "@hey-api/json-schema-ref-parser": "npm:1.2.3"
+    "@hey-api/shared": "npm:0.1.1"
+    "@hey-api/types": "npm:0.1.3"
     ansi-colors: "npm:4.1.3"
-    c12: "npm:3.3.3"
     color-support: "npm:1.1.3"
     commander: "npm:14.0.2"
-    open: "npm:11.0.0"
-    semver: "npm:7.7.3"
   peerDependencies:
     typescript: ">=5.5.3"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/87a1107d8a0974110a4fd455622eac6decf249d0a8dec177a210dc50c750482fd254fa5dd4c86f9dbf09d83f8db5e9ad3b83de3b8a48bd49013d969d60d345da
+  checksum: 10c0/7eba264cf2409deb400034a917e144c36ab587734e2f344fa489576aa6855c1a0ec6dd17cde4c7843938c2d407dbbbf25023129ed2473986491249f5f8093e8c
+  languageName: node
+  linkType: hard
+
+"@hey-api/shared@npm:0.1.1":
+  version: 0.1.1
+  resolution: "@hey-api/shared@npm:0.1.1"
+  dependencies:
+    "@hey-api/codegen-core": "npm:0.6.1"
+    "@hey-api/json-schema-ref-parser": "npm:1.2.3"
+    "@hey-api/types": "npm:0.1.3"
+    ansi-colors: "npm:4.1.3"
+    cross-spawn: "npm:7.0.6"
+    open: "npm:11.0.0"
+    semver: "npm:7.7.3"
+  peerDependencies:
+    typescript: ">=5.5.3"
+  checksum: 10c0/9f22abdb871ab927faf5092e9c3e467d5f9242656fa543833e7c7d649db279480b485803092f46f8b441a4fcd633d16a2c51ee4b55996f793d2203bc6e9e47e2
+  languageName: node
+  linkType: hard
+
+"@hey-api/types@npm:0.1.3":
+  version: 0.1.3
+  resolution: "@hey-api/types@npm:0.1.3"
+  peerDependencies:
+    typescript: ">=5.5.3"
+  checksum: 10c0/346862e300068cfa3c4c91b95adb11bd37b2e8eedf9db5ee37ccd8fcbd4919e32caa7b12630091d1a4e8924821b7595d9f12deb2ea37f7d0f255e424d9e7d726
   languageName: node
   linkType: hard
 
@@ -915,7 +942,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@navikt/texas@workspace:libs/texas"
   dependencies:
-    "@hey-api/openapi-ts": "npm:^0.90.4"
+    "@hey-api/openapi-ts": "npm:^0.91.1"
     "@types/node": "npm:^24.10.0"
     nock: "npm:^14.0.10"
     tsup: "npm:^8.5.1"
@@ -1742,7 +1769,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-spawn@npm:^7.0.6":
+"cross-spawn@npm:7.0.6, cross-spawn@npm:^7.0.6":
   version: 7.0.6
   resolution: "cross-spawn@npm:7.0.6"
   dependencies:
