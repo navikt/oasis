@@ -52,6 +52,21 @@ describe("parseAzureUserToken", () => {
     expect(res.groups).toEqual(["group1", "group2"]);
   });
 
+  it("should Æ, Ø, Å?!", async () => {
+    const res = parseAzureUserToken(
+      await token({
+        oid: "oid",
+        NAVident: "navident",
+        preferred_username: "username",
+        name: "Blåbærgrød Hanssen",
+        groups: ["group1", "group2"],
+      }),
+    );
+
+    expectOK(res);
+    expect(res.name).toBe("Blåbærgrød Hanssen");
+  });
+
   it("should not be OK when values are missing", async () => {
     const res = parseAzureUserToken(
       await token({
