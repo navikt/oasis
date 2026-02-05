@@ -21,6 +21,7 @@ export const validateIdportenToken = (
   });
 
 export type AzurePayload = {
+  oid: string;
   NAVident: string;
   name: string;
   preferred_username: string;

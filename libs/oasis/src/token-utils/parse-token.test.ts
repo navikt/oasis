@@ -36,6 +36,7 @@ describe("parseAzureUserToken", () => {
   it("should return expected values in NAVident", async () => {
     const res = parseAzureUserToken(
       await token({
+        oid: "oid",
         NAVident: "navident",
         preferred_username: "username",
         name: "name",
@@ -44,6 +45,7 @@ describe("parseAzureUserToken", () => {
     );
 
     expectOK(res);
+    expect(res.oid).toBe("oid");
     expect(res.name).toBe("name");
     expect(res.NAVident).toBe("navident");
     expect(res.preferred_username).toBe("username");

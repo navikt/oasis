@@ -46,6 +46,7 @@ export function parseAzureUserToken(token: string): ParseResult<AzurePayload> {
     const payload = decodeJwt(token);
 
     if (
+      typeof payload.oid === "string" &&
       typeof payload.preferred_username === "string" &&
       typeof payload.name === "string" &&
       typeof payload.NAVident === "string" &&
@@ -54,6 +55,7 @@ export function parseAzureUserToken(token: string): ParseResult<AzurePayload> {
     ) {
       return {
         ok: true,
+        oid: payload.oid,
         NAVident: payload.NAVident,
         preferred_username: payload.preferred_username,
         name: payload.name,
