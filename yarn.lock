@@ -315,17 +315,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/codegen-core@npm:0.7.1":
-  version: 0.7.1
-  resolution: "@hey-api/codegen-core@npm:0.7.1"
+"@hey-api/codegen-core@npm:0.7.4":
+  version: 0.7.4
+  resolution: "@hey-api/codegen-core@npm:0.7.4"
   dependencies:
-    "@hey-api/types": "npm:0.1.3"
+    "@hey-api/types": "npm:0.1.4"
     ansi-colors: "npm:4.1.3"
     c12: "npm:3.3.3"
     color-support: "npm:1.1.3"
-  peerDependencies:
-    typescript: ">=5.5.3"
-  checksum: 10c0/f8bd16dca37539fa91852a01a0ba2d346bca9dd8b10f53519ce88e7b42cc1152f90e8d0338f5b00cb48b95a0c0105dbdd6b5193f63e7c715f8234b8a97455799
+  checksum: 10c0/0afc2c462f109d6eb1523298c72794b27ea2065916f2088fd61521524541b5ef170bea14b08165e581331533f45b7c79b81a6f0319ae839b16348270102a4593
   languageName: node
   linkType: hard
 
@@ -340,48 +338,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:^0.94.0":
-  version: 0.94.0
-  resolution: "@hey-api/openapi-ts@npm:0.94.0"
+"@hey-api/openapi-ts@npm:^0.94.4":
+  version: 0.94.4
+  resolution: "@hey-api/openapi-ts@npm:0.94.4"
   dependencies:
-    "@hey-api/codegen-core": "npm:0.7.1"
+    "@hey-api/codegen-core": "npm:0.7.4"
     "@hey-api/json-schema-ref-parser": "npm:1.3.1"
-    "@hey-api/shared": "npm:0.2.2"
-    "@hey-api/types": "npm:0.1.3"
+    "@hey-api/shared": "npm:0.2.5"
+    "@hey-api/types": "npm:0.1.4"
     ansi-colors: "npm:4.1.3"
     color-support: "npm:1.1.3"
     commander: "npm:14.0.3"
+    get-tsconfig: "npm:4.13.6"
   peerDependencies:
-    typescript: ">=5.5.3"
+    typescript: ">=5.5.3 || 6.0.1-rc"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/91e549e1bee931362f84f19d99bbb7cc05e0d8c46d9a21590c1db1745481d349e29b998fbdfeacd29d4df953ce3e1c774bd093e446f7685c3b1e40c7355e9054
+  checksum: 10c0/2708e5053a7b41a86432da1425400a343ae55db3afda73ac7e19dbcb3e05293792f32cac160b1c912a07fa609357051d2417bda06a6ee0c080b6bbf9aa2fb1ac
   languageName: node
   linkType: hard
 
-"@hey-api/shared@npm:0.2.2":
-  version: 0.2.2
-  resolution: "@hey-api/shared@npm:0.2.2"
+"@hey-api/shared@npm:0.2.5":
+  version: 0.2.5
+  resolution: "@hey-api/shared@npm:0.2.5"
   dependencies:
-    "@hey-api/codegen-core": "npm:0.7.1"
+    "@hey-api/codegen-core": "npm:0.7.4"
     "@hey-api/json-schema-ref-parser": "npm:1.3.1"
-    "@hey-api/types": "npm:0.1.3"
+    "@hey-api/types": "npm:0.1.4"
     ansi-colors: "npm:4.1.3"
     cross-spawn: "npm:7.0.6"
     open: "npm:11.0.0"
     semver: "npm:7.7.3"
-  peerDependencies:
-    typescript: ">=5.5.3"
-  checksum: 10c0/141c5e8a7950b3d403d6396eadcce34483faba76ca1ab0f7e25d61e2b4c19497b2be77e9faf2f23643d8d1e88d835dcc15a02cb0f4325b6c21e07f7d48595e13
+  checksum: 10c0/5ca5d857ea9185e6c512b8a3620ae1587d131faa7d5408f77b42e62f887b9ec2e5f4d011d3c4476ad02ede181269f816b313483081058b4eab040ff0e3c67cb5
   languageName: node
   linkType: hard
 
-"@hey-api/types@npm:0.1.3":
-  version: 0.1.3
-  resolution: "@hey-api/types@npm:0.1.3"
-  peerDependencies:
-    typescript: ">=5.5.3"
-  checksum: 10c0/346862e300068cfa3c4c91b95adb11bd37b2e8eedf9db5ee37ccd8fcbd4919e32caa7b12630091d1a4e8924821b7595d9f12deb2ea37f7d0f255e424d9e7d726
+"@hey-api/types@npm:0.1.4":
+  version: 0.1.4
+  resolution: "@hey-api/types@npm:0.1.4"
+  checksum: 10c0/9c7ae0a8b479728466bd3e129ae5e1de74bae89a21fd5b54e90682ad0ab7e2f7c9d4579af2c9419db62f101b06fabc2b20f016380c6eae11b204d4dd10e9f605
   languageName: node
   linkType: hard
 
@@ -798,7 +793,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@navikt/texas@workspace:libs/texas"
   dependencies:
-    "@hey-api/openapi-ts": "npm:^0.94.0"
+    "@hey-api/openapi-ts": "npm:^0.94.4"
     "@types/node": "npm:^24.10.0"
     nock: "npm:^14.0.11"
     tsup: "npm:^8.5.1"
@@ -2175,6 +2170,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"get-tsconfig@npm:4.13.6":
+  version: 4.13.6
+  resolution: "get-tsconfig@npm:4.13.6"
+  dependencies:
+    resolve-pkg-maps: "npm:^1.0.0"
+  checksum: 10c0/bab6937302f542f97217cbe7cbbdfa7e85a56a377bc7a73e69224c1f0b7c9ae8365918e55752ae8648265903f506c1705f63c0de1d4bab1ec2830fef3e539a1a
+  languageName: node
+  linkType: hard
+
 "giget@npm:^2.0.0":
   version: 2.0.0
   resolution: "giget@npm:2.0.0"
@@ -3332,6 +3336,13 @@ __metadata:
   version: 5.0.0
   resolution: "resolve-from@npm:5.0.0"
   checksum: 10c0/b21cb7f1fb746de8107b9febab60095187781137fd803e6a59a76d421444b1531b641bba5857f5dc011974d8a5c635d61cec49e6bd3b7fc20e01f0fafc4efbf2
+  languageName: node
+  linkType: hard
+
+"resolve-pkg-maps@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "resolve-pkg-maps@npm:1.0.0"
+  checksum: 10c0/fb8f7bbe2ca281a73b7ef423a1cbc786fb244bd7a95cbe5c3fba25b27d327150beca8ba02f622baea65919a57e061eb5005204daa5f93ed590d9b77463a567ab
   languageName: node
   linkType: hard
 
