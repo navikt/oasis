@@ -338,38 +338,49 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:^0.94.4":
-  version: 0.94.4
-  resolution: "@hey-api/openapi-ts@npm:0.94.4"
+"@hey-api/openapi-ts@npm:^0.94.5":
+  version: 0.94.5
+  resolution: "@hey-api/openapi-ts@npm:0.94.5"
   dependencies:
     "@hey-api/codegen-core": "npm:0.7.4"
     "@hey-api/json-schema-ref-parser": "npm:1.3.1"
-    "@hey-api/shared": "npm:0.2.5"
+    "@hey-api/shared": "npm:0.2.6"
+    "@hey-api/spec-types": "npm:0.1.0"
     "@hey-api/types": "npm:0.1.4"
     ansi-colors: "npm:4.1.3"
     color-support: "npm:1.1.3"
     commander: "npm:14.0.3"
     get-tsconfig: "npm:4.13.6"
   peerDependencies:
-    typescript: ">=5.5.3 || 6.0.1-rc"
+    typescript: ">=5.5.3 || >=6.0.0 || 6.0.1-rc"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/2708e5053a7b41a86432da1425400a343ae55db3afda73ac7e19dbcb3e05293792f32cac160b1c912a07fa609357051d2417bda06a6ee0c080b6bbf9aa2fb1ac
+  checksum: 10c0/1c1f3bae6f8477c2e172eba58e31afec9285215e4c411beef30cd9771ba8319c73a89a711fd8898f8d2c6db0bac05db5310ee8e9f160ad088426002684f952dd
   languageName: node
   linkType: hard
 
-"@hey-api/shared@npm:0.2.5":
-  version: 0.2.5
-  resolution: "@hey-api/shared@npm:0.2.5"
+"@hey-api/shared@npm:0.2.6":
+  version: 0.2.6
+  resolution: "@hey-api/shared@npm:0.2.6"
   dependencies:
     "@hey-api/codegen-core": "npm:0.7.4"
     "@hey-api/json-schema-ref-parser": "npm:1.3.1"
+    "@hey-api/spec-types": "npm:0.1.0"
     "@hey-api/types": "npm:0.1.4"
     ansi-colors: "npm:4.1.3"
     cross-spawn: "npm:7.0.6"
     open: "npm:11.0.0"
     semver: "npm:7.7.3"
-  checksum: 10c0/5ca5d857ea9185e6c512b8a3620ae1587d131faa7d5408f77b42e62f887b9ec2e5f4d011d3c4476ad02ede181269f816b313483081058b4eab040ff0e3c67cb5
+  checksum: 10c0/94f7c80df81329df65f9ab6b1259632504ae4f8ad67080358fa7fd17f27f1bba844920401b5ddf9aa82393fced2dffb1156ddb9c9e209a15c9e91b158658fe29
+  languageName: node
+  linkType: hard
+
+"@hey-api/spec-types@npm:0.1.0":
+  version: 0.1.0
+  resolution: "@hey-api/spec-types@npm:0.1.0"
+  dependencies:
+    "@hey-api/types": "npm:0.1.4"
+  checksum: 10c0/ce2572d30abb8e81ad8e8e582962a6af2819dd12bc64f5e077703f54b7563da8e508bc97c126fa149b5eb18776f184badc48d71ecbbddecf69ed5963696c7d29
   languageName: node
   linkType: hard
 
@@ -793,7 +804,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@navikt/texas@workspace:libs/texas"
   dependencies:
-    "@hey-api/openapi-ts": "npm:^0.94.4"
+    "@hey-api/openapi-ts": "npm:^0.94.5"
     "@types/node": "npm:^24.10.0"
     nock: "npm:^14.0.11"
     tsup: "npm:^8.5.1"
