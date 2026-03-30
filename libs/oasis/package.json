@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@navikt/texas": "workspace:^",
-    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/api": "^1.9.1",
     "jose": "^6.2.2",
     "prom-client": "^15.1.3"
   },
