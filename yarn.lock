@@ -338,13 +338,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:^0.94.5":
-  version: 0.94.5
-  resolution: "@hey-api/openapi-ts@npm:0.94.5"
+"@hey-api/openapi-ts@npm:^0.95.0":
+  version: 0.95.0
+  resolution: "@hey-api/openapi-ts@npm:0.95.0"
   dependencies:
     "@hey-api/codegen-core": "npm:0.7.4"
     "@hey-api/json-schema-ref-parser": "npm:1.3.1"
-    "@hey-api/shared": "npm:0.2.6"
+    "@hey-api/shared": "npm:0.3.0"
     "@hey-api/spec-types": "npm:0.1.0"
     "@hey-api/types": "npm:0.1.4"
     ansi-colors: "npm:4.1.3"
@@ -355,13 +355,13 @@ __metadata:
     typescript: ">=5.5.3 || >=6.0.0 || 6.0.1-rc"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/1c1f3bae6f8477c2e172eba58e31afec9285215e4c411beef30cd9771ba8319c73a89a711fd8898f8d2c6db0bac05db5310ee8e9f160ad088426002684f952dd
+  checksum: 10c0/eec0aaa7730d5b650713e374eb2d4c0e9dd4c52e23a3823cf46f6fd0f94c4fd0613da7df5b4a1c8792f120f447b206b29956da78aef2f76df06fa08855a4fb78
   languageName: node
   linkType: hard
 
-"@hey-api/shared@npm:0.2.6":
-  version: 0.2.6
-  resolution: "@hey-api/shared@npm:0.2.6"
+"@hey-api/shared@npm:0.3.0":
+  version: 0.3.0
+  resolution: "@hey-api/shared@npm:0.3.0"
   dependencies:
     "@hey-api/codegen-core": "npm:0.7.4"
     "@hey-api/json-schema-ref-parser": "npm:1.3.1"
@@ -371,7 +371,7 @@ __metadata:
     cross-spawn: "npm:7.0.6"
     open: "npm:11.0.0"
     semver: "npm:7.7.3"
-  checksum: 10c0/94f7c80df81329df65f9ab6b1259632504ae4f8ad67080358fa7fd17f27f1bba844920401b5ddf9aa82393fced2dffb1156ddb9c9e209a15c9e91b158658fe29
+  checksum: 10c0/64af351df3b0f45e0f0a4316a4d33632cdb555a804aa690dce3f974f7ba57bb9a5ac786bb1f226b85363258498b3361f96d27ef64f97fc008ea4952f848f4ef3
   languageName: node
   linkType: hard
 
@@ -804,7 +804,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@navikt/texas@workspace:libs/texas"
   dependencies:
-    "@hey-api/openapi-ts": "npm:^0.94.5"
+    "@hey-api/openapi-ts": "npm:^0.95.0"
     "@types/node": "npm:^24.10.0"
     nock: "npm:^14.0.11"
     tsup: "npm:^8.5.1"
