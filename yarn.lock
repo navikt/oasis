@@ -776,7 +776,7 @@ __metadata:
     "@navikt/texas": "workspace:^"
     "@opentelemetry/api": "npm:^1.9.1"
     "@types/node": "npm:^24.10.0"
-    jose: "npm:^6.2.2"
+    jose: "npm:^6.2.3"
     msw: "npm:^2.14.2"
     node-mocks-http: "npm:^1.17.2"
     prom-client: "npm:^15.1.3"
@@ -2066,7 +2066,7 @@ __metadata:
     "@navikt/oasis": "npm:*"
     "@types/react": "npm:^19.2.14"
     "@types/react-dom": "npm:^19.2.3"
-    jose: "npm:^6.2.2"
+    jose: "npm:^6.2.3"
     msw: "npm:^2.14.2"
     next: "npm:^16.2.4"
     react: "npm:^19.2.5"
@@ -2422,10 +2422,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^6.2.2":
-  version: 6.2.2
-  resolution: "jose@npm:6.2.2"
-  checksum: 10c0/201f4776d77eccd339de99fb3ba940fdf03db15e64be7a99b511e53c232e3f3818e3f21b95223d62f99315a2ab76b4251cedd94e067de56893e45273a8d2151b
+"jose@npm:^6.2.3":
+  version: 6.2.3
+  resolution: "jose@npm:6.2.3"
+  checksum: 10c0/aa91bccba22cc84d86308f833749bcb0b00441e35c24e0ac79abeac5f76dc62d47bdef9c1da6a0c609f5da6478595f52b252085888b89dbdb163861e40ea4188
   languageName: node
   linkType: hard
 
