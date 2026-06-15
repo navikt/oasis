@@ -28,7 +28,7 @@
     "gen:texas": "openapi-ts && biome format --write src/types.gen.ts"
   },
   "devDependencies": {
-    "@hey-api/openapi-ts": "^0.97.1",
+    "@hey-api/openapi-ts": "^0.98.2",
     "@types/node": "^24.10.0",
     "nock": "^14.0.15",
     "tsup": "^8.5.1",
