@@ -786,7 +786,7 @@ __metadata:
     "@types/node": "npm:^24.10.0"
     jose: "npm:^6.2.3"
     msw: "npm:^2.15.0"
-    node-mocks-http: "npm:^1.18.0"
+    node-mocks-http: "npm:^1.18.1"
     prom-client: "npm:^15.1.3"
     tsup: "npm:^8.5.1"
     typescript: "npm:^5.9.3"
@@ -3035,9 +3035,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-mocks-http@npm:^1.18.0":
-  version: 1.18.0
-  resolution: "node-mocks-http@npm:1.18.0"
+"node-mocks-http@npm:^1.18.1":
+  version: 1.18.1
+  resolution: "node-mocks-http@npm:1.18.1"
   dependencies:
     accepts: "npm:^1.3.7"
     content-disposition: "npm:^0.5.3"
@@ -3056,7 +3056,7 @@ __metadata:
       optional: true
     "@types/node":
       optional: true
-  checksum: 10c0/e45165adcf49451a00889d0ec38e6cdd21e29da49c588cc95e6d8b608d7751c7ad7b39bf5dd13f9be7651586ed2ec112907c2107eba7231125921a97d40199c0
+  checksum: 10c0/8163cf81688c7a45d2da6cd3c5222fe55ad625797521253bfce91c8453dba7238b843a78f3f086f15c46e66a8ec5745da3d2f358c51543384bf61e6389ca8d1d
   languageName: node
   linkType: hard
 
