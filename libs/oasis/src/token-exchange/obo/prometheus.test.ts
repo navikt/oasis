@@ -2,7 +2,7 @@ import {
   type MetricValue,
   type MetricValueWithName,
   register,
-} from "prom-client";
+} from "@prometheus-io/client";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { token } from "../../test/test-provider";

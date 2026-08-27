@@ -73,7 +73,7 @@ Gjør on-behalf-of-utveksling mot enten Azure eller Idporten, avhengig av verdie
 
 OBO-tokens caches i applikasjonens minne inntil det utløper.
 
-Prometheus-metrikker for OBO-utveksling er tilgjengelig gjennom biblioteket `"prom-client"`. Eksempelappen viser hvordan disse kan eksponeres med [config i nais.yaml](.nais/nais-idporten.yaml) og [endepunkt](example-app/pages/api/internal/metrics.ts). [Vi har et dashboard i Grafana hvor du kan utforske dine Prometheus-data](https://grafana.nav.cloud.nais.io/d/A-QjTBGSz/dagpenger-auth-token-exchange).
+Prometheus-metrikker for OBO-utveksling er tilgjengelig gjennom biblioteket `"@prometheus-io/client"`. Eksempelappen viser hvordan disse kan eksponeres med [config i nais.yaml](.nais/nais-idporten.yaml) og [endepunkt](example-app/pages/api/internal/metrics.ts). [Vi har et dashboard i Grafana hvor du kan utforske dine Prometheus-data](https://grafana.nav.cloud.nais.io/d/A-QjTBGSz/dagpenger-auth-token-exchange).
 
 #### Parametre
 

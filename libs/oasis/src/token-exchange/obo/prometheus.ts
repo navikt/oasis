@@ -1,5 +1,5 @@
 import type { TokenExchangeIdentityProvider } from "@navikt/texas";
-import { Counter, Histogram } from "prom-client";
+import { Counter, Histogram } from "@prometheus-io/client";
 
 import type { InternalOboProvider } from "./exchange";
 
