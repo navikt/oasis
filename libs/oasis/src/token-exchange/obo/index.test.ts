@@ -1,6 +1,6 @@
+import { register } from "@prometheus-io/client";
 import { HttpResponse, http } from "msw";
 import { type SetupServer, setupServer } from "msw/node";
-import { register } from "prom-client";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
 import { decodeJwt } from "../../lib/utils";

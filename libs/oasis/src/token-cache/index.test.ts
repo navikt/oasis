@@ -1,4 +1,4 @@
-import { type MetricValue, register } from "prom-client";
+import { type MetricValue, register } from "@prometheus-io/client";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { token } from "../test/test-provider";

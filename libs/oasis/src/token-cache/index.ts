@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { Counter } from "prom-client";
+import { Counter } from "@prometheus-io/client";
 
 import type { InternalClientCredientialsProvider } from "../token-exchange/m2m/exchange";
 import type { InternalOboProvider } from "../token-exchange/obo/exchange";
