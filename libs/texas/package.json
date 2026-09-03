@@ -32,7 +32,7 @@
     "@types/node": "^24.13.3",
     "nock": "^14.0.17",
     "tsup": "^8.5.1",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vitest": "^4.1.11"
   }
 }
