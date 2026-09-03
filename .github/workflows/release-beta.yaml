@@ -1,0 +1,74 @@
+name: Release beta
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-beta
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: "read"
+      packages: "write"
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # ratchet:step-security/harden-runner@v2.21.0
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # ratchet:actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - run: corepack enable
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # ratchet:actions/setup-node@v7.0.0
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com
+          package-manager-cache: false
+
+      - run: yarn --immutable
+      - run: yarn workspace @navikt/texas build
+      - run: yarn test
+      - run: yarn lint:ci
+
+      - name: Set beta version before build
+        run: |
+          set -euo pipefail
+
+          LATEST_TAG=$(git tag -l 'v*' --sort=-v:refname \
+            | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+            | head -n 1 || true)
+          BASE="${LATEST_TAG#v}"
+          BASE="${BASE:-0.0.0}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${BASE%%-*}"
+          MINOR=$((MINOR + 1))
+          BETA_VERSION="${MAJOR}.${MINOR}.0-$(date +'%Y%m%d%H%M%S')"
+
+          for pkg in libs/texas libs/oasis; do
+            jq --arg v "$BETA_VERSION" '.version = $v' "$pkg/package.json" > "$pkg/package.tmp.json"
+            mv "$pkg/package.tmp.json" "$pkg/package.json"
+          done
+
+          echo "Beta-versjon: $BETA_VERSION" >> "$GITHUB_STEP_SUMMARY"
+
+      - run: yarn build:lib
+
+      - run: yarn npm publish --tag beta
+        working-directory: libs/texas
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: yarn npm publish --tag beta
+        working-directory: libs/oasis
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

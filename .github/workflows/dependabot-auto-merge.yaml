@@ -2,25 +2,34 @@ name: Dependabot auto-merge
 on: pull_request
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
   dependabot:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: github.event.pull_request.user.login == 'dependabot[bot]'
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # ratchet:step-security/harden-runner@v2.21.0
+        with:
+          egress-policy: audit
+
       - name: Dependabot metadata
         id: metadata
-        uses: dependabot/fetch-metadata@v3.1.0
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # ratchet:dependabot/fetch-metadata@v3.1.0
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      # Major-oppdateringer krever manuell gjennomgang uansett økosystem. En ny
+      # major av en action eller pakke kan endre oppførsel eller eierskap, og
+      # dette er et auth-bibliotek mange team er avhengige av.
       - name: Enable auto-merge for Dependabot PRs
-        if: |
-          steps.metadata.outputs.update-type != 'version-update:semver-major' ||
-          steps.metadata.outputs.package-ecosystem == 'github_actions' ||
-          steps.metadata.outputs.dependency-names == 'no.nav.dagpenger:dp-version-catalog'
+        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
         run: gh pr merge --auto --squash "$PR_URL"
         env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

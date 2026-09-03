@@ -1,0 +1,12 @@
+changelog:
+  categories:
+    - title: 🚀 Endringer
+      labels:
+        - "*"
+      exclude:
+        labels:
+          - dependencies
+
+    - title: 📦 Avhengigheter
+      labels:
+        - dependencies

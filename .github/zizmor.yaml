@@ -1,0 +1,8 @@
+rules:
+  use-trusted-publishing:
+    # Trusted publishing (OIDC) støttes av npmjs.org, men ikke av GitHub Packages
+    # (npm.pkg.github.com), som er registeret vi publiserer til. Vi bruker derfor
+    # GITHUB_TOKEN med `packages: write`, som er den anbefalte mekanismen der.
+    ignore:
+      - release.yaml
+      - release-beta.yaml
