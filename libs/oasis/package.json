@@ -29,15 +29,15 @@
   "dependencies": {
     "@navikt/texas": "workspace:^",
     "@opentelemetry/api": "^1.9.1",
-    "@prometheus-io/client": "^0.16.0",
-    "jose": "^6.2.9"
+    "@prometheus-io/client": "^0.16.1",
+    "jose": "^6.2.10"
   },
   "devDependencies": {
-    "@types/node": "^24.10.0",
+    "@types/node": "^24.13.3",
     "msw": "^2.15.0",
     "node-mocks-http": "^1.18.1",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.11"
   }
 }

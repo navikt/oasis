@@ -6,6 +6,7 @@
         "lib": ["ES2022", "DOM"],
         "declaration": true,
         "declarationMap": true,
+        "types": ["node"],
         "sourceMap": true,
         "outDir": "dist",
         "strict": true,
@@ -14,7 +15,8 @@
         "noFallthroughCasesInSwitch": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "ignoreDeprecations": "6.0"
     },
     "include": ["src"],
     "exclude": ["dist", "node_modules", "**/*.test.ts"]
