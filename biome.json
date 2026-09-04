@@ -10,7 +10,12 @@
     "indentStyle": "space"
   },
   "files": {
-    "includes": ["./package.json", "./biome.json", ".lintstagedrc.mjs"]
+    "includes": [
+      "./package.json",
+      "./biome.json",
+      "./lintstagedrc.mjs",
+      "./libs/**/tsdown.config.ts"
+    ]
   },
   "linter": {
     "enabled": true,

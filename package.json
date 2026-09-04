@@ -1,19 +1,19 @@
 {
   "name": "oasis",
-  "license": "MIT",
   "private": true,
+  "packageManager": "yarn@4.18.0",
+  "license": "MIT",
   "engineStrict": true,
   "engines": {
     "node": "24"
   },
-  "packageManager": "yarn@4.18.0",
   "scripts": {
     "test": "yarn workspaces foreach -Ap --no-private run test --run",
     "lint": "biome check",
     "lint:ci": "biome ci",
     "build": "yarn workspaces foreach -At --no-private run build",
     "tsc": "yarn workspaces foreach -Ap run type-check",
-    "prepare": "husky"
+    "postinstall": "husky"
   },
   "workspaces": [
     "libs/*"

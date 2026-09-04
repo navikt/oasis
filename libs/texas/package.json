@@ -16,12 +16,12 @@
     "package.json",
     "dist"
   ],
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.mjs"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "lint": "biome check",
     "test": "vitest",
     "tsc": "tsc --pretty",
@@ -31,7 +31,7 @@
     "@hey-api/openapi-ts": "^0.99.0",
     "@types/node": "^25.9.5",
     "nock": "^14.0.17",
-    "tsup": "^8.5.1",
+    "tsdown": "0.22.14",
     "typescript": "^6.0.3",
     "vitest": "^4.1.11"
   }
