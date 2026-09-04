@@ -11,8 +11,7 @@
     "test": "yarn workspaces foreach -Ap --no-private run test --run",
     "lint": "biome check",
     "lint:ci": "biome ci",
-    "build:app": "yarn workspace example-app build",
-    "build:lib": "yarn workspaces foreach -At --no-private run build",
+    "build": "yarn workspaces foreach -At --no-private run build",
     "tsc": "yarn workspaces foreach -Ap run type-check",
     "prepare": "husky"
   },

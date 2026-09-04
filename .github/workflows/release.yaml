@@ -133,7 +133,7 @@ jobs:
 
       - run: yarn --immutable
       - run: yarn lint:ci
-      - run: yarn build:lib && yarn test
+      - run: yarn build && yarn test
 
   publish:
     name: Publiser til GitHub Packages
@@ -167,7 +167,7 @@ jobs:
           VERSION: ${{ needs.version.outputs.version }}
         run: yarn workspaces foreach --no-private -At version -i "$VERSION"
 
-      - run: yarn build:lib
+      - run: yarn build
 
       - name: Publish @navikt/texas first
         run: yarn npm publish

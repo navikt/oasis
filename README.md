@@ -2,7 +2,7 @@
 
 Bibliotek for å validere tokens fra [Wonderwall](https://doc.nais.io/security/auth/wonderwall) og utføre On-Behalf-Of (OBO) Exchange mot både ~Azure~ [Entra](https://doc.nais.io/security/auth/azure-ad/) og [TokenX](https://doc.nais.io/security/auth/tokenx/).
 
-![OBO](/img/obo.jpg)
+![OBO](/img/obo.png)
 
 ## Installasjon
 
@@ -214,10 +214,10 @@ Node 24 kreves. Bruker du [mise](https://mise.jdx.dev/), gir `mise install` rikt
 | `yarn test`         | Kjører tester i alle pakker |
 | `yarn lint`         | Sjekker formatering og lint med Biome |
 | `yarn lint --write` | Retter det som kan rettes automatisk |
-| `yarn build:lib`    | Bygger begge bibliotekene |
+| `yarn build`    | Bygger begge bibliotekene |
 | `yarn tsc`          | Kjører TypeScript uten å bygge |
 
-`libs/oasis` avhenger av `libs/texas`, så kjør `yarn build:lib` (eller `yarn workspace @navikt/texas build`) før du kjører tester lokalt første gang.
+`libs/oasis` avhenger av `libs/texas`, så kjør `yarn build` (eller `yarn workspace @navikt/texas build`) før du kjører tester lokalt første gang.
 
 ### Sende en pull request
 

@@ -64,7 +64,7 @@ jobs:
 
           echo "Beta-versjon: $BETA_VERSION" >> "$GITHUB_STEP_SUMMARY"
 
-      - run: yarn build:lib
+      - run: yarn build
 
       - run: yarn npm publish --tag beta
         working-directory: libs/texas
