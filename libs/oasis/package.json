@@ -24,7 +24,7 @@
     "build": "tsup",
     "test": "vitest",
     "lint": "biome check",
-    "type-check": "tsc --pretty --noEmit"
+    "tsc": "tsc --pretty"
   },
   "dependencies": {
     "@navikt/texas": "workspace:^",

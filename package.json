@@ -13,7 +13,7 @@
     "lint:ci": "biome ci",
     "build:app": "yarn workspace example-app build",
     "build:lib": "yarn workspaces foreach -At --no-private run build",
-    "type-check": "yarn workspaces foreach -Ap run type-check",
+    "tsc": "yarn workspaces foreach -Ap run type-check",
     "prepare": "husky"
   },
   "workspaces": [
@@ -24,11 +24,5 @@
     "@biomejs/biome": "2.5.11",
     "husky": "^9.1.7",
     "lint-staged": "^17.4.1"
-  },
-  "lint-staged": {
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-      "biome format --write --no-errors-on-unmatched",
-      "biome lint --write --no-errors-on-unmatched"
-    ]
   }
 }

@@ -10,7 +10,7 @@
     "indentStyle": "space"
   },
   "files": {
-    "includes": ["./package.json", "./biome.json"]
+    "includes": ["./package.json", "./biome.json", ".lintstagedrc.mjs"]
   },
   "linter": {
     "enabled": true,

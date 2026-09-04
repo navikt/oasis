@@ -24,7 +24,7 @@
     "build": "tsup",
     "lint": "biome check",
     "test": "vitest",
-    "type-check": "tsc --pretty --noEmit",
+    "tsc": "tsc --pretty",
     "gen:texas": "openapi-ts && biome format --write src/types.gen.ts"
   },
   "devDependencies": {
