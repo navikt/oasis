@@ -33,7 +33,7 @@
     "jose": "^6.2.10"
   },
   "devDependencies": {
-    "@types/node": "^24.13.3",
+    "@types/node": "^25.9.5",
     "msw": "^2.15.0",
     "node-mocks-http": "^1.18.1",
     "tsup": "^8.5.1",
