@@ -1,0 +1,53 @@
+name: zizmor Scan PR
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  zizmor-scan-pr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # ratchet:step-security/harden-runner@v2.21.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # ratchet:actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # ratchet:astral-sh/setup-uv@v10.0.1
+
+      - name: Run zizmor security analysis
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Running zizmor security analysis..."
+
+          if uvx zizmor@1.30.0 .; then
+            echo "✅ Zizmor analysis completed successfully - no security issues found!"
+          else
+            exit_code=$?
+            echo "❌ Zizmor analysis failed with exit code: $exit_code"
+            case $exit_code in
+              11) echo "🔵 Informational level security findings detected" ;;
+              12) echo "🟡 Low level security findings detected" ;;
+              13) echo "🟠 Medium level security findings detected" ;;
+              14) echo "🔴 High level security findings detected" ;;
+              *) echo "⚠️  Unknown error occurred during analysis" ;;
+            esac
+            echo "Please review the output above and fix the security issues before merging this PR."
+            exit $exit_code
+          fi
