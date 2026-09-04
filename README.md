@@ -2,7 +2,7 @@
 
 Bibliotek for å validere tokens fra [Wonderwall](https://doc.nais.io/security/auth/wonderwall) og utføre On-Behalf-Of (OBO) Exchange mot både ~Azure~ [Entra](https://doc.nais.io/security/auth/azure-ad/) og [TokenX](https://doc.nais.io/security/auth/tokenx/).
 
-![OBO](/img/obo.jpg)
+![OBO](/img/obo.png)
 
 ## Installasjon
 
