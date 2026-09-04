@@ -73,8 +73,8 @@ jobs:
             exit 1
           else
             # Taggen settes på commiten workflowen kjører fra. Uten denne
-            # sjekken ville en release startet fra en tilfeldig branch gitt
-            # en tagg som peker utenfor main.
+            # sjekken ville en release startet fra en annen gren gitt en tagg
+            # som peker utenfor main.
             if [ "$REF_NAME" != "$DEFAULT_BRANCH" ]; then
               echo "Release må kjøres fra ${DEFAULT_BRANCH}, ikke ${REF_NAME}" >&2
               exit 1
