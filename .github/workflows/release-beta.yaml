@@ -51,8 +51,11 @@ jobs:
           BASE="${LATEST_TAG#v}"
           BASE="${BASE:-0.0.0}"
           IFS='.' read -r MAJOR MINOR PATCH <<< "${BASE%%-*}"
-          MINOR=$((MINOR + 1))
-          BETA_VERSION="${MAJOR}.${MINOR}.0-$(date +'%Y%m%d%H%M%S')"
+          # Patch-bump framfor minor: betaen skal sortere over siste stabile,
+          # men uten å love en minor som kanskje aldri kommer. Neste release
+          # er som regel en patch.
+          PATCH=$((PATCH + 1))
+          BETA_VERSION="${MAJOR}.${MINOR}.${PATCH}-$(date +'%Y%m%d%H%M%S')"
 
           for pkg in libs/texas libs/oasis; do
             jq --arg v "$BETA_VERSION" '.version = $v' "$pkg/package.json" > "$pkg/package.tmp.json"
