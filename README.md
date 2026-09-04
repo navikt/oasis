@@ -223,17 +223,15 @@ Node 24 kreves. Bruker du [mise](https://mise.jdx.dev/), gir `mise install` rikt
 
 1. Lag en gren fra `main`.
 2. Skriv tester for endringen. Auth-logikk bør ha tester for både gyldige og ugyldige tokens.
-3. Kjør `yarn lint` og `yarn test` lokalt. En pre-commit-hook kjører `type-check` og lint-staged automatisk.
-4. Opprett en PR mot `main`. Da kjører tester, lint, build og en zizmor-sikkerhetsskann.
+3. Kjør `yarn lint` og `yarn test` lokalt.
+4. Opprett en PR mot `main`. Tester, lint, build og sikkerhetsskann kjører automatisk.
 5. Endringen må godkjennes av [@navikt/oasis-maintainers](https://github.com/orgs/navikt/teams/oasis-maintainers).
 
-Endrer du workflows, kjør `uvx zizmor@1.30.0 .` lokalt — skannen må være grønn før merge.
+Endrer du noe under `.github/workflows/`, kjør `uvx zizmor@1.30.0 .` lokalt. Skannen må være grønn, og nye actions skal SHA-pinnes.
 
 #### PR-tittelen blir til release notes
 
-PR-er squash-merges, og tittelen havner ordrett i release notes for neste versjon. Den leses av team i hele Nav som skal vurdere om de bør oppgradere — så skriv den for dem, ikke for deg selv.
-
-Beskriv hva endringen gjør, sett fra utsiden:
+PR-er squash-merges, og tittelen havner ordrett i release notes. Beskriv hva endringen gjør:
 
 | I stedet for | Skriv |
 | --- | --- |
@@ -241,48 +239,30 @@ Beskriv hva endringen gjør, sett fra utsiden:
 | `oppdater oasis` | `Støtt flere audiences i requestOboToken` |
 | `wip` | `Fjern deprecated prom-client til fordel for @prometheus-io/client` |
 
-Du trenger ikke merke PR-en med noe. Dependabot-PR-er havner automatisk under «Avhengigheter», alt annet under «Endringer».
+Du trenger ikke merke PR-en. Dependabot havner under «Avhengigheter», alt annet under «Endringer».
 
 ### Teste mot en ekte applikasjon
 
-`example-app` deployes til dev-gcp ved hver merge til `main`, i to varianter (Azure AD og ID-porten). Den fungerer som en integrasjonstest mot ekte Nav-auth:
-
-- https://oasis-azure.intern.dev.nav.no
-- https://oasis-idporten.intern.dev.nav.no
-
-Hver merge til `main` publiserer også en betaversjon av begge pakkene med `beta`-taggen, slik at du kan teste en endring i din egen applikasjon før den slippes:
+Hver merge til `main` publiserer en betaversjon, så du kan teste endringen i din egen app før den slippes:
 
 ```bash
 npm install @navikt/oasis@beta
 ```
 
+`example-app` deployes samtidig til dev-gcp: [Azure AD](https://oasis-azure.intern.dev.nav.no) og [ID-porten](https://oasis-idporten.intern.dev.nav.no).
+
 ### Release
 
-Krever maintainer-tilgang.
+Krever maintainer-tilgang. To måter å starte samme workflow:
 
-1. Gå til **Actions → Release → Run workflow**.
-2. Velg `patch`, `minor` eller `major`. Neste versjon utledes fra siste tagg.
-3. Workflowen kjører lint, test og build, publiserer `@navikt/texas` og `@navikt/oasis` til GitHub Packages, committer versjonsbumpen til `main` (`chore(release): vX.Y.Z`), og lager taggen `vX.Y.Z` med tilhørende GitHub Release og release notes.
+- **UI:** Actions → Release → Run workflow, med `main` valgt. Velg `patch`, `minor` eller `major`.
+- **CLI**, hvis du vil sette versjonen selv: `git tag v5.0.0 && git push origin v5.0.0`
 
-Versjonsnummeret utledes fra siste tagg, og `package.json` i begge pakkene holdes synkronisert med den publiserte versjonen. Taggen lages først etter vellykket publisering, så en feilet build etterlater verken tagg eller versjonscommit.
+Workflowen kjører lint, test og build, publiserer begge pakkene til GitHub Packages, og lager en GitHub Release med release notes generert fra PR-titlene.
 
-Release notes genereres automatisk fra PR-titler siden forrige tagg, gruppert etter `.github/release.yaml`. Se [PR-tittelen blir til release notes](#pr-tittelen-blir-til-release-notes).
+`version` i `libs/*/package.json` holdes ikke i sync med taggen automatisk — bump den manuelt i en egen PR.
 
-Trenger du en versjon som ikke følger patch/minor/major — for eksempel et hopp eller en prerelease — pusher du taggen manuelt. Da kjører den samme flyten:
-
-```bash
-git tag v5.0.0 && git push origin v5.0.0
-```
-
-### Sikkerhet i workflows
-
-Workflowene skannes med [zizmor](https://docs.zizmor.sh/). `zizmor-scan-pr.yaml` kjører på hver PR og feiler ved nye funn, mens `zizmor-schedule.yaml` kjører ukentlig og laster opp resultater til Security-fanen. Unntak konfigureres i `.github/zizmor.yaml`, med begrunnelse for hvert unntak. Kjør skannen lokalt med `uvx zizmor@1.30.0 .` — samme versjon som i CI.
-
-Alle actions er SHA-pinnet, og alle jobber starter med [harden-runner](https://github.com/step-security/harden-runner) i `audit`-modus, som logger utgående nettverkstrafikk uten å blokkere den. Når trafikkmønsteret er kjent fra jobbloggen, kan enkeltjobber strammes til `egress-policy: block` med en eksplisitt `allowed-endpoints`-liste. Begynn med `publish`-jobben i `release.yaml`, der en kompromittert avhengighet har størst konsekvens.
-
-Jobber som publiserer pakker (`release.yaml` og `release-beta.yaml`) kjører uten avhengighetscache. En forgiftet cache kan ellers injisere kode i artefakten som publiseres. PR- og deploy-jobber beholder cachen, der gevinsten er reell og risikoen lav.
-
-Fant du et sikkerhetsproblem i selve biblioteket? Meld fra på Slack framfor å opprette en offentlig issue.
+Fant du et sikkerhetsproblem i biblioteket? Meld fra på Slack framfor å opprette en offentlig issue.
 
 ---
 
