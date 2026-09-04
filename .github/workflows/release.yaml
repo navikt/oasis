@@ -51,6 +51,7 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           REF_NAME: ${{ github.ref_name }}
           INPUT_BUMP: ${{ inputs.bump }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
           set -euo pipefail
 
@@ -71,6 +72,14 @@ jobs:
             echo "Uventet trigger: $EVENT_NAME" >&2
             exit 1
           else
+            # Taggen settes på commiten workflowen kjører fra. Uten denne
+            # sjekken ville en release startet fra en annen gren gitt en tagg
+            # som peker utenfor main.
+            if [ "$REF_NAME" != "$DEFAULT_BRANCH" ]; then
+              echo "Release må kjøres fra ${DEFAULT_BRANCH}, ikke ${REF_NAME}" >&2
+              exit 1
+            fi
+
             BASE="${LATEST_TAG#v}"
             BASE="${BASE:-0.0.0}"
             IFS='.' read -r MAJOR MINOR PATCH <<< "${BASE%%-*}"
@@ -153,7 +162,7 @@ jobs:
 
       - run: yarn --immutable
 
-      - name: Bump version before build, because OTEL uses the lib version
+      - name: Sett versjon i arbeidskopien før build (OTEL leser lib-versjonen)
         env:
           VERSION: ${{ needs.version.outputs.version }}
         run: yarn workspaces foreach --no-private -At version -i "$VERSION"
@@ -173,7 +182,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
-    name: Commit versjon, tagg og opprett release
+    name: Tagg og opprett release
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: [version, publish]
@@ -185,73 +194,24 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # ratchet:actions/checkout@v7.0.1
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.repository.default_branch }}
-          persist-credentials: false
-
-      - name: Commit version bump to default branch
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ needs.version.outputs.version }}
-          TAG: ${{ needs.version.outputs.tag }}
-          BRANCH: ${{ github.event.repository.default_branch }}
-        run: |
-          set -euo pipefail
-
-          for pkg in libs/texas libs/oasis; do
-            jq --arg v "$VERSION" '.version = $v' "$pkg/package.json" > "$pkg/package.tmp.json"
-            mv "$pkg/package.tmp.json" "$pkg/package.json"
-          done
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          if git diff --quiet -- libs/texas/package.json libs/oasis/package.json; then
-            echo "package.json er allerede på ${VERSION}, ingen commit nødvendig"
-          else
-            git add libs/texas/package.json libs/oasis/package.json
-            git commit -m "chore(release): ${TAG}"
-
-            # Pakkene er allerede publisert på dette tidspunktet. Har main
-            # beveget seg imens, rebaser og prøv igjen framfor å la releasen
-            # feile med publiserte pakker uten tagg.
-            for attempt in 1 2 3; do
-              if git -c credential.helper= \
-                     -c credential.helper='!f(){ echo username=x-access-token; echo "password=${GH_TOKEN}"; };f' \
-                     push origin "HEAD:${BRANCH}"; then
-                break
-              fi
-              if [ "$attempt" = "3" ]; then
-                echo "Klarte ikke pushe versjonsbump etter 3 forsøk" >&2
-                exit 1
-              fi
-              echo "Push avvist, rebaser mot ${BRANCH} (forsøk ${attempt})"
-              git -c credential.helper= \
-                  -c credential.helper='!f(){ echo username=x-access-token; echo "password=${GH_TOKEN}"; };f' \
-                  fetch origin "${BRANCH}"
-              git rebase "origin/${BRANCH}"
-            done
-
-            echo "Versjon ${VERSION} committet til ${BRANCH}" >> "$GITHUB_STEP_SUMMARY"
-          fi
-
-      - name: Create and push tag
+      - name: Create tag
         if: github.event_name == 'workflow_dispatch'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
           TAG: ${{ needs.version.outputs.tag }}
+          SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          git tag -a "$TAG" -m "$TAG"
-          git -c credential.helper= \
-              -c credential.helper='!f(){ echo username=x-access-token; echo "password=${GH_TOKEN}"; };f' \
-              push origin "refs/tags/${TAG}"
+          gh api "repos/${GH_REPO}/git/refs" \
+            -f "ref=refs/tags/${TAG}" \
+            -f "sha=${SHA}" > /dev/null
+          echo "Tagget ${SHA} som ${TAG}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
           TAG: ${{ needs.version.outputs.tag }}
           PREVIOUS_TAG: ${{ needs.version.outputs.previous_tag }}
         run: |
