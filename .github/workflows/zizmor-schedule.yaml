@@ -32,7 +32,15 @@ jobs:
       - name: Perform zizmor analysis
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: uvx zizmor@1.30.0 --format=sarif . > results.sarif
+        run: |
+          set -uo pipefail
+          # zizmor gir exit 0 med --format=sarif selv når den finner noe, så en
+          # exit != 0 her betyr at selve kjøringen feilet. Uten sjekken ville
+          # upload-sarif fått en tom fil og feilet med en misvisende melding.
+          if ! uvx zizmor@1.30.0 --format=sarif . > results.sarif; then
+            echo "zizmor-kjøringen feilet, ingen SARIF å laste opp" >&2
+            exit 1
+          fi
 
       - name: Upload zizmor analysis results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@cdf488f595d80d6e07e03d4674febd5ab45fa938 # ratchet:github/codeql-action/upload-sarif@v4.37.9
