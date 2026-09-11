@@ -30,7 +30,7 @@
     "@navikt/texas": "workspace:^",
     "@opentelemetry/api": "^1.9.1",
     "@prometheus-io/client": "^0.16.1",
-    "jose": "^6.2.10"
+    "jose": "^6.2.11"
   },
   "devDependencies": {
     "@types/node": "^25.9.5",

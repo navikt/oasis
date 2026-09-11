@@ -286,7 +286,7 @@ __metadata:
     "@opentelemetry/api": "npm:^1.9.1"
     "@prometheus-io/client": "npm:^0.16.1"
     "@types/node": "npm:^25.9.5"
-    jose: "npm:^6.2.10"
+    jose: "npm:^6.2.11"
     msw: "npm:^2.15.0"
     node-mocks-http: "npm:^1.18.1"
     tsdown: "npm:0.22.14"
@@ -1381,10 +1381,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^6.2.10":
-  version: 6.2.10
-  resolution: "jose@npm:6.2.10"
-  checksum: 10c0/799fd8d3d92fe748ebe1f57dbd3dfd917d2e61d9fb39912c72cc674ae61d69414b7cc0ce773df8a0160e849926fc31853aec9caab88c481563d5a8ab6558e107
+"jose@npm:^6.2.11":
+  version: 6.2.11
+  resolution: "jose@npm:6.2.11"
+  checksum: 10c0/ea919004e50a1b1fc8351b0f2983e2c7be0acac58dde802643e6692c9cd2fa6034b7505974ad9b6ec750363d5e3c36a713773011cd2e31f068a6f5f0f3085696
   languageName: node
   linkType: hard
 
