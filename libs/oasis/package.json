@@ -36,7 +36,7 @@
     "@types/node": "^25.9.5",
     "msw": "^2.15.0",
     "node-mocks-http": "^1.18.1",
-    "tsdown": "0.22.14",
+    "tsdown": "0.23.0",
     "typescript": "^7.0.2",
     "vitest": "^4.1.11"
   }
