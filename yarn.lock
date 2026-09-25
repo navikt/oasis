@@ -285,7 +285,7 @@ __metadata:
     "@navikt/texas": "workspace:^"
     "@opentelemetry/api": "npm:^1.9.1"
     "@prometheus-io/client": "npm:^0.16.1"
-    "@types/node": "npm:^25.9.5"
+    "@types/node": "npm:^25.9.7"
     jose: "npm:^6.2.12"
     msw: "npm:^2.15.0"
     node-mocks-http: "npm:^1.18.1"
@@ -300,7 +300,7 @@ __metadata:
   resolution: "@navikt/texas@workspace:libs/texas"
   dependencies:
     "@hey-api/openapi-ts": "npm:^0.99.0"
-    "@types/node": "npm:^25.9.5"
+    "@types/node": "npm:^25.9.7"
     nock: "npm:^14.0.17"
     tsdown: "npm:0.23.0"
     typescript: "npm:^7.0.2"
@@ -642,12 +642,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^25.9.5":
-  version: 25.9.5
-  resolution: "@types/node@npm:25.9.5"
+"@types/node@npm:^25.9.7":
+  version: 25.9.7
+  resolution: "@types/node@npm:25.9.7"
   dependencies:
     undici-types: "npm:>=7.24.0 <7.24.7"
-  checksum: 10c0/addbfe55f14d6a7f149a8796c2fca68463ac6caf911c623f552d07385691d36c0669a9c38724350d0e958131827d59a63c18781e753dede8113a903dd62b7932
+  checksum: 10c0/455891a50ac28558eeccdf7439b887bb8923aa11c2c4efd900d8f8b4e3c1d204905290abd72f80425d1e39793c404b45ac70814c4831e12034cf0ce503ebe981
   languageName: node
   linkType: hard
 
