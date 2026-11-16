@@ -205,7 +205,9 @@ corepack enable
 yarn install
 ```
 
-Node 24 kreves. Bruker du [mise](https://mise.jdx.dev/), gir `mise install` riktig versjon.
+Node 26 kreves. Bruker du [mise](https://mise.jdx.dev/), gir `mise install` riktig versjon.
+
+Nytt i node 26 er at `corepack` må installeres manuelt, så om `corepack` ikke finnes må du kjøre en `npm i -g corepack`.
 
 ### Nyttige kommandoer
 
