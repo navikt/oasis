@@ -29,10 +29,11 @@
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.99.0",
-    "@types/node": "^25.9.7",
-    "nock": "^14.0.17",
-    "tsdown": "0.23.0",
+    "@types/node": "^26.6.6",
+    "nock": "^15.0.6",
+    "tsdown": "0.23.7",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.11"
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
   }
 }
