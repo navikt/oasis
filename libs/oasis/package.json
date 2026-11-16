@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@navikt/texas": "workspace:^",
-    "@opentelemetry/api": "^1.9.1",
+    "@opentelemetry/api": "^1.10.0",
     "@prometheus-io/client": "^0.16.1",
     "jose": "^6.2.17"
   },
