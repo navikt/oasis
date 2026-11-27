@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
-    "msw": "^3.0.5",
+    "msw": "^3.0.7",
     "node-mocks-http": "^1.18.1",
     "tsdown": "0.23.7",
     "typescript": "^7.0.2",
